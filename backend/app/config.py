@@ -1,6 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import AnyHttpUrl, Field, SecretStr
-from typing import List
+from pydantic import Field, SecretStr
 
 class Settings(BaseSettings):
     # Application
