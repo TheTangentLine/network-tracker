@@ -1,0 +1,11 @@
+# To install all packages: pip install -r requirements.txt
+
+fastapi
+uvicorn[standard]
+
+python-jose
+passlib
+pydantic_settings
+
+motor
+beanie
