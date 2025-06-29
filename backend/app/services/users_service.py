@@ -35,7 +35,7 @@ async def register(input: UserRegister):
 # ----------------------- Login -------------------------->
 
 async def login(input: UserLogin) -> dict:
-\
+
     user = await User.find_one(User.username == input.username)
 
     # Check if username does not exist and if the password is not validated
