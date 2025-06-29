@@ -2,7 +2,7 @@ from beanie import Document
 
 class User(Document):
     username: str
-    phone: int
+    phone: str
     email: str
     password: str
     nationality: str

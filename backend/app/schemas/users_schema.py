@@ -33,3 +33,12 @@ class UserLogin(BaseModel):
 
     class Config: 
         from_attributes = True
+
+# ------------------------ Read -------------------------->
+
+class UserRead(BaseModel):
+    username: str
+    email: str
+    
+    class Config: 
+        from_attributes = True

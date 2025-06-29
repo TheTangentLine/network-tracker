@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import Field, SecretStr
+from pydantic import Field
 
 class Settings(BaseSettings):
     # Application
@@ -10,12 +10,15 @@ class Settings(BaseSettings):
     MONGODB_URI: str = Field(..., description="MongoDB connection URI")
     MONGODB_DB: str = Field(..., description="MongoDB database name")
 
-    # Security (required)
-    ACCESS_SECRET_KEY: SecretStr = Field(...)
-    REFRESH_SECRET_KEY: SecretStr = Field(...)
+    # JWT (required)
+    ACCESS_SECRET_KEY: str = Field(...)
+    REFRESH_SECRET_KEY: str = Field(...)
     ALGORITHM: str = Field(...)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(...)
     REFRESH_TOKEN_EXPIRE_MINUTES: int = Field(...)
+
+    # HASHING
+    HASHING: str = Field(...)
 
     # CORS (required)
     CORS_ORIGINS: str = Field(...)
