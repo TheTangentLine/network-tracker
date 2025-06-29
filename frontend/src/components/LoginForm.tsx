@@ -40,13 +40,24 @@ const LoginForm = () => {
                 />
             </div>
 
-            <div>
-                <button
-                    className="bg-emerald-700 w-3xs text-white font-bold text-xl p-4 rounded-2xl mt-6 cursor-pointer
+            <button
+                className="bg-emerald-700 w-3xs text-white font-bold text-xl p-4 rounded-2xl mt-6 cursor-pointer
                                         hover:scale-110 duration-155">
-                    Sign in
-                </button>
+                Sign in
+            </button>
+
+            <div className="mt-5">
+                <label>
+                    Haven't got an account?
+                </label>
+                <a
+                    href="/register"
+                    className="text-emerald-950 font-bold underline pl-2 cursor-pointer hover:text-xl duration-155"
+                >
+                    Register
+                </a>
             </div>
+
         </form>
     )
 }
