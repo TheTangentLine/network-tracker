@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --font-montserrat: Montserrat;
+  --font-montserrat-bold: Montserrat-bold;
+}
+
+@font-face {
+  font-family: Montserrat;
+  src: url(../font/Montserrat/Montserrat-Regular.ttf) format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Montserrat-bold;
+  src: url(../font/Montserrat/Montserrat-Bold.ttf) format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
