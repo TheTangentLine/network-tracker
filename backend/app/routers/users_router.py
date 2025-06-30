@@ -3,37 +3,32 @@ from fastapi import APIRouter, HTTPException
 from app.models.users_model import *
 from app.schemas.users_schema import *
 
-from app.services.users_service import *
+from app.services.users_services import *
 
 # ------------------------- Router ------------------------>
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-# ------------------------- Register ------------------------->
+# ------------------------- Create ------------------------->
 
-@router.post("/register")
-async def register_user(input: UserRegister):
-    try:
-        await register(input)
-        return {"message": "User registered successfully"}
-    except:
-        raise HTTPException(status_code=400, detail="Failed to register user") 
+@router.post("/create")
+async def create_user(input: UserRegister):
+    pass
 
-# ------------------------- Login ------------------------->
+# ------------------------- Read ------------------------->
 
-@router.post("/login")
-async def login_user(input: UserLogin):
-    try:
-        user_data = await login(input)
-        return user_data
-    except:
-        raise HTTPException(status_code=400, detail="Failed to login")
-    
-# --------------------- Get current user ------------------>
+@router.post("/read")
+async def read_user(input: UserRead):
+    pass
 
-@router.get("/me")
-async def get_current_user():
-    try:
-        user_data = get_current()
-    except:
-        raise HTTPException(status_code=400, detail="Failed to get user data")
+# ------------------------- Update ------------------------->
+
+@router.put("/update")
+async def update_user(input):
+    pass
+
+# ------------------------- Delete ------------------------->
+
+@router.delete("/delete")
+async def delete_user(input):
+    pass
