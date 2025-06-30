@@ -2,6 +2,7 @@ from fastapi import HTTPException
 
 from app.schemas.users_schema import *
 from app.models.users_model import User
+from .users_services import create
 
 from app.core.security.hashing import verify_password, hash_password
 from app.core.security.jwt import create_access_token, create_refresh_token, verify_access_token
@@ -9,30 +10,7 @@ from app.core.security.jwt import create_access_token, create_refresh_token, ver
 # ----------------------- Register ------------------------>
 
 async def register(input: UserRegister):
-
-    # Check if username and email and phone are unique
-    if await User.find_one(User.username == input.username):
-        raise HTTPException(status_code=409, detail="Username has existed")
-    
-    if await User.find_one(User.phone == input.phone):
-        raise HTTPException(status_code=409, detail="Phone number has existed")
-    
-    if await User.find_one(User.email == input.email):
-        raise HTTPException(status_code=409, detail="Email has existed")
-
-    # Create user
-    user = User(
-        username=input.username,
-        phone=input.phone,
-        email=input.email,
-        password=hash_password(input.password),
-        nationality=input.nationality
-    )
-
-    # Save user into database
-    await user.insert()
-
-    return {"message": "User registered successfully"}
+    return await create(input)
 
 # ----------------------- Login -------------------------->
 

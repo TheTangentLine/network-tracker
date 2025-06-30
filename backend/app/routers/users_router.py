@@ -13,22 +13,26 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/create")
 async def create_user(input: UserRegister):
-    pass
+    created_user = await create(input)
+    return created_user
 
 # ------------------------- Read ------------------------->
 
 @router.post("/read")
 async def read_user(input: UserRead):
-    pass
+    user = await read_by_username(input)
+    return user
 
 # ------------------------- Update ------------------------->
 
 @router.put("/update")
-async def update_user(input):
-    pass
+async def update_user(input: UserUpdate):
+    updated_user = await update(input)
+    return updated_user
 
 # ------------------------- Delete ------------------------->
 
 @router.delete("/delete")
-async def delete_user(input):
-    pass
+async def delete_user(input: UserDelete):
+    deleted_user = await delete(input)
+    return deleted_user
