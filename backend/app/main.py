@@ -1,11 +1,13 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from fastapi.middleware.cors import CORSMiddleware
+from .core.middlewares.cors import cors
+from .core.middlewares.auth_middlewares import auth_middleware
 
 from .config import settings
 from .database import init_db, close_db
 
+from .routers.auth_router import router as auth_router
 from .routers.users_router import router as users_router
 
 # ------------------------- Lifespan ------------------------>
@@ -27,15 +29,14 @@ app = FastAPI(
 # -------------------------- Middlewares ------------------------->
 
 # CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[settings.CORS_ORIGINS],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+cors(app)
+
+# Authentication
+app.middleware("http")(auth_middleware)
+
 
 # ------------------------- Routers -------------------------->
 
 # Include routers
+app.include_router(auth_router)
 app.include_router(users_router)

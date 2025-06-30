@@ -4,6 +4,7 @@ from app.schemas.users_schema import *
 from app.models.users_model import User
 
 from app.core.security.hashing import verify_password, hash_password
+from app.core.security.jwt import create_access_token, create_refresh_token, verify_access_token
 
 # ----------------------- Register ------------------------>
 
@@ -31,6 +32,7 @@ async def register(input: UserRegister):
     # Save user into database
     await user.insert()
 
+    return {"message": "User registered successfully"}
 
 # ----------------------- Login -------------------------->
 
@@ -44,13 +46,20 @@ async def login(input: UserLogin) -> dict:
     if not verify_password(input.password, user.password):
         raise HTTPException(status_code=401, detail="Wrong password")
     
+    payload = UserRead(username=user.username, email=user.email)
+    access_token = create_access_token(payload)
+    refresh_token = create_refresh_token(payload)
+
     return {
-        "access_token": "",
-        "refresh_token": "",
+        "access_token_data": access_token,
+        "refresh_token_data": refresh_token,
         "user": user
     }
 
 # --------------------- Get current user ---------------->
 
-async def get_current():
-    pass
+def get_current(token: str):
+    response_data = verify_access_token(token)
+    user_data = UserRead(**response_data).model_dump()
+    return user_data
+
