@@ -42,3 +42,23 @@ class UserRead(BaseModel):
     
     class Config: 
         from_attributes = True
+
+# ------------------------ Update ------------------------>
+
+class UserUpdate(BaseModel):
+    username: str | None = None
+    phone: str | None = None
+    email: EmailStr | None = None
+    password: str | None
+    nationality: str | None = None
+
+    class Config:
+        from_attributes = True
+
+# ------------------------ Delete ------------------------>
+
+class UserDelete(BaseModel):
+    username: str
+
+    class Config:
+        from_attributes = True
