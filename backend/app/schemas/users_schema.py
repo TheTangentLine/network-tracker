@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
-
+from typing import Annotated
 
 '''
 
@@ -16,29 +16,34 @@ from pydantic import BaseModel, EmailStr, Field
 # ------------------------- Register ------------------------>
 
 class UserRegister(BaseModel):
-    username: str
-    phone: str
-    email: str
-    password: str
-    nationality: str
-
-    class Config: 
-        from_attributes = True
+    username: Annotated[str, Field(min_length=3, max_length=50)]
+    phone: Annotated[str, Field(min_length=10, max_length=15)]
+    email: Annotated[EmailStr, Field()]
+    password: Annotated[str, Field(min_length=6)]
+    nationality: Annotated[str, Field()]
 
 # ------------------------- Login ------------------------>
 
 class UserLogin(BaseModel):
-    username: str
-    password: str
-
-    class Config: 
-        from_attributes = True
+    username: Annotated[str, Field(min_length=3, max_length=50)]  
+    password: Annotated[str, Field(min_length=6)]
 
 # ------------------------ Read -------------------------->
 
 class UserRead(BaseModel):
-    username: str
-    email: str
-    
-    class Config: 
-        from_attributes = True
+    username: Annotated[str, Field(min_length=3, max_length=50)]  
+    email: Annotated[EmailStr, Field()]
+
+# ------------------------ Update ------------------------>
+
+class UserUpdate(BaseModel):
+    username: Annotated[str, Field(min_length=3, max_length=50)]  
+    phone: Annotated[str, Field(min_length=10, max_length=15)] | None = None
+    email: Annotated[EmailStr, Field()] | None = None
+    password: Annotated[str, Field(min_length=6)] | None = None
+    nationality: Annotated[str, Field()] | None = None
+
+# ------------------------ Delete ------------------------>
+
+class UserDelete(BaseModel):
+    username: Annotated[str, Field(min_length=3, max_length=50)]  
