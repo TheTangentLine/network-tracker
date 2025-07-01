@@ -1,10 +1,8 @@
-from typing import Optional
 from beanie import Document
-from bson import ObjectId
 
 class User(Document):
-    username: str
-    phone: str
-    email: str
+    username: str  # Unique
+    phone: str     # Unique
+    email: str     # Unique
     password: str
     nationality: str
