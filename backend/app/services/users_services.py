@@ -1,5 +1,5 @@
-from bson import ObjectId
 from fastapi import HTTPException
+from bson import ObjectId
 
 from app.schemas.users_schema import *
 from app.models.users_model import User
