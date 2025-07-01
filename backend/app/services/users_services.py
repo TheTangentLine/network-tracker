@@ -1,9 +1,10 @@
+from bson import ObjectId
 from fastapi import HTTPException
 
 from app.schemas.users_schema import *
 from app.models.users_model import User
 
-from app.core.security.hashing import verify_password, hash_password
+from app.core.security.hashing import hash_password
 
 # ------------------------- Create ------------------------->
 
@@ -34,12 +35,19 @@ async def create(input: UserRegister):
 
 # ------------------------- Read ------------------------->
 
-async def read_by_username(input: UserRead):
+async def read_by_id(input: str):
+    # Validate ObjectId format
+    if not ObjectId.is_valid(input):
+        raise HTTPException(status_code=400, detail="Invalid user ID format")
+    
     # Check if user exists
-    user = await User.find_one(User.username == input.username)
+    user = await User.find_one(User.id == ObjectId(input))
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    return user
+    return UserRead(
+        username=user.username,
+        email=user.email
+    )
 
 # ------------------------- Update ------------------------->
 
