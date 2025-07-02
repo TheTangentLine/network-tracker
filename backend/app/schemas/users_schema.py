@@ -10,7 +10,6 @@ from typing import Annotated
         - Password
         - Nationality
 
-
 '''
 
 # ------------------------- Register ------------------------>

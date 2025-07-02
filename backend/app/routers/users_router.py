@@ -18,9 +18,9 @@ async def create_user(input: UserRegister):
 
 # ------------------------- Read ------------------------->
 
-@router.post("/read")
-async def read_user(input: UserRead):
-    user = await read_by_username(input)
+@router.post("/read/{input}")
+async def read_user(input: str):
+    user = await read_by_id(input)
     return user
 
 # ------------------------- Update ------------------------->
