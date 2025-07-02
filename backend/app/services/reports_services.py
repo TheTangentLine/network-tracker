@@ -2,20 +2,29 @@ from fastapi import APIRouter, HTTPException
 from bson import ObjectId
 
 from app.schemas.reports_schema import *
-from app.models.reports_model import Report
+from app.models.reports_model import *
 
 # ------------------------- Create ------------------------->
 
 async def create(input: ReportCreate):
+
+    # Validate ObjectId format
+    if not ObjectId.is_valid(input.user_id):
+        raise HTTPException(status_code=400, detail="Invalid report ID format")
+    
     data = Report(
         user_id=input.user_id,
-        number_of_devices=input.number_of_devices,
-        upload_speed=input.upload_speed,
-        download_speed=input.download_speed,
-        latency=input.latency,
+        router_data=RouterData(
+            number_of_devices=input.router_data.number_of_devices,
+            ip_address=input.router_data.ip_address
+        ),
+        network_data=NetworkData(
+            upload_speed=input.network_data.upload_speed,
+            download_speed=input.network_data.download_speed,
+            latency=input.network_data.latency
+        ),
         date=input.date,
         time=input.time,
-        ip_address=input.ip_address
     )
     await data.insert()
     return {"message": "Report created successfully"}
