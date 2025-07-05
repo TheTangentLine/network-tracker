@@ -13,8 +13,8 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/create")
 async def create_user(input: UserRegister):
-    created_user = await create(input)
-    return created_user
+    returned_message = await create(input)
+    return returned_message
 
 # ------------------------- Read ------------------------->
 

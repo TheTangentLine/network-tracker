@@ -5,6 +5,8 @@ from app.core.security.jwt import verify_access_token, refresh_access_token
 UNPROTECTED_PATHS = [
     "/auth/login",
     "/auth/register",
+    "/auth/logout",
+    "/auth/me",
     "/openapi.json",
     "/docs",
     "/docs/oauth2-redirect",
@@ -15,7 +17,7 @@ async def auth_middleware(request: Request, call_next):
 
     if request.url.path in UNPROTECTED_PATHS:
         return await call_next(request)
-    
+
     access_token = request.cookies.get("access_token")
     refresh_token = request.cookies.get("refresh_token")
 
