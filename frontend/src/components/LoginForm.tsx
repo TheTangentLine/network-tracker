@@ -1,12 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import useLogin from "../hooks/useLogin";
+
+import { FaSignInAlt } from "react-icons/fa";
+
+import type { UserLogin } from "../entities/User";
+import useAuth from "../hooks/useAuth";
 
 const LoginForm = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [user, setUser] = useState<UserLogin>({ username: '', password: '' });
+    const { login, error, loading } = useLogin();
+    const { user: authUser } = useAuth();
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (authUser) {
+            navigate('/testing')
+        }
+    }, [])
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(username, password)
+        const authUser = await login(user);
+        if (authUser) {
+            navigate('/testing');
+        }
     }
 
     return (
@@ -22,8 +41,8 @@ const LoginForm = () => {
                     className="h-12 w-xl border-1 rounded-xl p-2"
                     type="text"
                     placeholder="Enter your username or email"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={user.username}
+                    onChange={(e) => setUser({ ...user, username: e.target.value })}
                 />
             </div>
 
@@ -35,16 +54,20 @@ const LoginForm = () => {
                     className="h-12 w-xl border-1 rounded-xl p-2 mb-4"
                     type="password"
                     placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={user.password}
+                    onChange={(e) => setUser({ ...user, password: e.target.value })}
                 />
             </div>
 
             <button
-                className="bg-emerald-700 w-3xs text-white font-bold text-xl p-4 rounded-2xl mt-6 cursor-pointer
-                                        hover:scale-110 duration-155">
-                Sign in
+                className="flex items-center justify-center bg-emerald-700 w-3xs text-white font-bold text-xl p-4 rounded-2xl mt-6 cursor-pointer
+                hover:scale-110 duration-155">
+                {loading ? "Loading..." : <><FaSignInAlt className="mr-4" /> Sign In</>}
             </button>
+
+            {error && <p className="font-bold text-red-600 mt-5">
+                {error}
+            </p>}
 
             <div className="mt-5">
                 <label>
@@ -57,7 +80,6 @@ const LoginForm = () => {
                     Register
                 </a>
             </div>
-
         </form>
     )
 }
