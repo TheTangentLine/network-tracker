@@ -1,6 +1,8 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
 
+from typing import List
+
 class Settings(BaseSettings):
     # Application
     APP_NAME: str = "Network Tracker"
@@ -21,7 +23,7 @@ class Settings(BaseSettings):
     HASHING: str = Field(...)
 
     # CORS (required)
-    CORS_ORIGINS: str = Field(...)
+    CORS_ORIGINS: List[str] = Field(...)
 
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -1,7 +1,6 @@
 import LoginForm from "../components/LoginForm";
 
 const LoginPage = () => {
-
     return (
         <>
             <div className="min-h-screen flex flex-col items-center justify-center font-montserrat">
