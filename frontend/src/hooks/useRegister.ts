@@ -6,17 +6,20 @@ export default function useRegister() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-
-    const handleRegister = async (userData: UserRegister) => {
+    const handleRegister = async (userData: UserRegister): Promise<boolean> => {
         setLoading(true);
-        register(userData)
-            .catch(e => {
-                setError(e.response.data.detail || 'An error occurred during registration');
-                return null;
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        setError(null);
+
+        try {
+            await register(userData);
+            return true;        // success
+        } catch (e: any) {
+            // capture error message from response or fallback
+            setError(e.response?.data?.detail || 'An error occurred during registration');
+            return false;       // failure
+        } finally {
+            setLoading(false);
+        }
     };
 
     return { register: handleRegister, error, loading };
