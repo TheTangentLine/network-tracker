@@ -19,5 +19,5 @@ export default function useRegister() {
             });
     };
 
-    return { handleRegister, error, loading };
+    return { register: handleRegister, error, loading };
 }
