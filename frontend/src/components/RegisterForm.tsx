@@ -1,10 +1,22 @@
-import React, { useState } from "react";
-import { z } from "zod";
+// ---- Hooks ----
+import React, { useState, useEffect } from "react";
 import useRegister from "../hooks/useRegister";
+
+// ---- Components ----
+import InputFieldComponent from "./InputField";
+
+// ---- Entities ----
 import type { UserRegister } from "../entities/User";
+
+// ---- Icons ----
 import { FaSignInAlt } from "react-icons/fa";
 
-// Zod schema for form validation
+// ---- Validation ----
+import { z } from "zod";
+import { useNavigate } from "react-router-dom";
+
+// ----------------------------------- Zod for validation ------------------------------->
+
 const registerSchema = z
     .object({
         username: z
@@ -25,7 +37,14 @@ const registerSchema = z
         path: ["repassword"],
     });
 
+type FieldErrors = Record<string, string>;
+
+// ===================================== Main components =====================================>
+
 const RegisterForm = () => {
+
+    // ----------------------------------- State management ----------------------------------->
+
     const [user, setUser] = useState<UserRegister>({
         username: "",
         phone: "",
@@ -34,151 +53,152 @@ const RegisterForm = () => {
         nationality: "Vietnam",
     });
     const [repassword, setRepassword] = useState("");
-    const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+    const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
     const { register, error, loading } = useRegister();
+
+    const navigate = useNavigate()
+
+    // ---------------s-------------------- Live validation ------------------------------------>
+
+    useEffect(() => {
+        const data = { ...user, repassword };
+        const result = registerSchema.safeParse(data);
+        if (result.success) {
+            setFieldErrors({});
+        } else {
+            const flat = result.error.flatten().fieldErrors as Record<string, string[]>;
+            const errors: FieldErrors = {};
+            Object.entries(flat).forEach(([field, msgs]) => {
+                const val = (data as any)[field] as string;
+                if (msgs && msgs.length > 0 && val.trim() !== "") {
+                    errors[field] = msgs[0];
+                }
+            });
+            setFieldErrors(errors);
+        }
+    }, [user, repassword]);
+
+    // ---------------------------------- Determine validity ------------------------------------>
+
+    const isFormValid = registerSchema.safeParse({ ...user, repassword }).success;
+
+    // ---------------------------------- Handle submission ----------------------------------->
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Validate against Zod schema
-        const result = registerSchema.safeParse({ ...user, repassword });
-        if (!result.success) {
-            // Cast to allow dynamic indexing
-            const flattened = result.error.flatten().fieldErrors as Record<string, string[]>;
-            const errors: { [key: string]: string } = {};
-            Object.keys(flattened).forEach((field) => {
-                const msgs = flattened[field];
-                if (msgs && msgs[0]) errors[field] = msgs[0];
-            });
-            setFieldErrors(errors);
-            return;
-        }
-
-        setFieldErrors({});
-        const { repassword: _, ...validData } = result.data;
-        await register(validData);
+        if (!isFormValid) return;
+        const { repassword: _rp, ...validData } = registerSchema.parse({ ...user, repassword });
+        const data = await register(validData);
+        if (data && !loading)
+            navigate('/login')
     };
 
-    const isFormValid = Object.keys(fieldErrors).length === 0;
+    // ================================ Rendering =====================================>
 
     return (
         <form
             className="flex flex-col items-center justify-center shadow-2xl rounded-3xl shadow-green-400 p-12 m-2"
             onSubmit={handleSubmit}
         >
-            {/** Username Field **/}
-            <div className="flex flex-col">
-                <label className="text-xl font-bold p-2">Username</label>
-                <input
-                    className="h-12 w-xl border-1 rounded-xl p-2"
-                    type="text"
-                    placeholder="Enter your username"
-                    value={user.username}
-                    onChange={(e) => setUser({ ...user, username: e.target.value })}
-                />
-                {fieldErrors.username && (
-                    <span className="text-red-600">{fieldErrors.username}</span>
-                )}
-            </div>
+            {/** -------------------------- Username -------------------------------  **/}
 
-            {/** Phone Field **/}
-            <div className="flex flex-col">
-                <label className="text-xl font-bold p-2 mt-4">Phone</label>
-                <input
-                    className="h-12 w-xl border-1 rounded-xl p-2"
-                    type="text"
-                    placeholder="Enter your phone number"
-                    value={user.phone}
-                    onChange={(e) => setUser({ ...user, phone: e.target.value })}
-                />
-                {fieldErrors.phone && (
-                    <span className="text-red-600">{fieldErrors.phone}</span>
-                )}
-            </div>
+            <InputFieldComponent
+                label="Username"
+                value={user.username}
+                onChange={(val) => setUser(prev => ({ ...prev, username: val }))}
+                type="text"
+                placeholder="Enter your username"
+                error={fieldErrors.username}
+            />
 
-            {/** Email Field **/}
-            <div className="flex flex-col">
-                <label className="text-xl font-bold p-2 mt-4">Email</label>
-                <input
-                    className="h-12 w-xl border-1 rounded-xl p-2"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={user.email}
-                    onChange={(e) => setUser({ ...user, email: e.target.value })}
-                />
-                {fieldErrors.email && (
-                    <span className="text-red-600">{fieldErrors.email}</span>
-                )}
-            </div>
+            {/** -------------------------- Phone -------------------------------  **/}
 
-            {/** Password Field **/}
-            <div className="flex flex-col">
-                <label className="text-xl font-bold p-2 mt-4">Password</label>
-                <input
-                    className="h-12 w-xl border-1 rounded-xl p-2"
-                    type="password"
-                    placeholder="Enter your password"
-                    value={user.password}
-                    onChange={(e) => setUser({ ...user, password: e.target.value })}
-                />
-                {fieldErrors.password && (
-                    <span className="text-red-600">{fieldErrors.password}</span>
-                )}
-            </div>
+            <InputFieldComponent
+                label="Phone"
+                value={user.phone}
+                onChange={(val) => setUser(prev => ({ ...prev, phone: val }))}
+                type="text"
+                placeholder="Enter your phone number"
+                error={fieldErrors.phone}
+            />
 
-            {/** Re-enter Password **/}
-            <div className="flex flex-col">
-                <label className="text-xl font-bold p-2 mt-4">Re-enter Password</label>
-                <input
-                    className="h-12 w-xl border-1 rounded-xl p-2"
-                    type="password"
-                    placeholder="Re-enter your password"
-                    value={repassword}
-                    onChange={(e) => setRepassword(e.target.value)}
-                />
-                {fieldErrors.repassword && (
-                    <span className="text-red-600">{fieldErrors.repassword}</span>
-                )}
-            </div>
+            {/** -------------------------- Email -------------------------------  **/}
 
-            {/** Nationality Field **/}
-            <div className="flex flex-col">
-                <label className="text-xl font-bold p-2 mt-4">Nationality</label>
+            <InputFieldComponent
+                label="Email"
+                value={user.email}
+                onChange={(val) => setUser(prev => ({ ...prev, email: val }))}
+                type="email"
+                placeholder="Enter your email"
+                error={fieldErrors.email}
+            />
+
+            {/** -------------------------- Password -------------------------------  **/}
+
+            <InputFieldComponent
+                label="Password"
+                value={user.password}
+                onChange={(val) => setUser(prev => ({ ...prev, password: val }))}
+                type="password"
+                placeholder="Enter your password"
+                error={fieldErrors.password}
+            />
+
+            {/** -------------------------- Re-enter the password -------------------------------  **/}
+
+            <InputFieldComponent
+                label="Re-enter Password"
+                value={repassword}
+                onChange={(val) => setRepassword(val)}
+                type="password"
+                placeholder="Re-enter your password"
+                error={fieldErrors.repassword}
+            />
+
+            {/** -------------------------- Nationality -------------------------------  **/}
+
+            <div className="flex flex-col mb-4">
+                <label className="text-xl font-bold p-2">Nationality</label>
                 <select
-                    className="h-12 w-xl border-1 rounded-xl p-2 mb-4"
+                    className="h-12 w-xl border-1 rounded-xl p-2 mb-2"
                     value={user.nationality}
-                    onChange={(e) => setUser({ ...user, nationality: e.target.value })}
+                    onChange={(e) => setUser(prev => ({ ...prev, nationality: e.target.value }))}
                 >
                     <option value="">Select nationality</option>
                     <option value="Vietnam">Vietnam</option>
                     <option value="Australia">Australia</option>
                 </select>
                 {fieldErrors.nationality && (
-                    <span className="text-red-600">{fieldErrors.nationality}</span>
+                    <span className="text-red-600 mt-2">{fieldErrors.nationality}</span>
                 )}
             </div>
 
-            {/** Submit Button **/}
+            {/** -------------------------- Button -------------------------------  **/}
+
             <button
-                className="flex items-center justify-center bg-emerald-700 w-3xs text-white font-bold text-xl p-4 rounded-2xl mt-6 cursor-pointer
-                hover:scale-110 duration-155 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                className="flex items-center justify-center bg-emerald-700 w-3xs text-white font-bold text-xl p-4 rounded-2xl mt-6 cursor-pointer hover:scale-110 duration-155 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={loading || !isFormValid}
             >
                 {loading ? "Loading..." : <><FaSignInAlt className="mr-4" /> Sign Up</>}
             </button>
 
+            {/** -------------------------- Error -------------------------------  **/}
+
             {error && <p className="font-bold text-red-600 mt-5">{error}</p>}
 
+            {/** -------------------------- Direct to Login Page -------------------------------  **/}
+
             <div className="mt-5">
-                <label>
-                    Already got an account?
-                </label>
+                <label>Already got an account?</label>
                 <a
                     href="/login"
                     className="text-emerald-950 font-bold underline pl-2 cursor-pointer hover:text-xl duration-155"
                 >
-                    Sign in
+                    Sign In
                 </a>
             </div>
+
+            {/** ------------------------------------------------------------------------------- **/}
         </form>
     );
 };
