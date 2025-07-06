@@ -25,6 +25,7 @@ const registerSchema = z
             .max(50, { message: "Username must be 3-50 characters." }),
         phone: z
             .string()
+            .regex(/^[0-9]+$/, { message: "Phone must contain only numbers." })
             .min(10, { message: "Phone must be 10-15 characters." })
             .max(15, { message: "Phone must be 10-15 characters." }),
         email: z.string().email({ message: "Invalid email address." }),
