@@ -1,5 +1,7 @@
 from fastapi import HTTPException
 
+from app.schemas.users_schema import UserRead
+
 from jose import jwt
 from datetime import datetime, timedelta, timezone
 
@@ -17,7 +19,7 @@ REFRESH_TOKEN_EXPIRE_MINUTES=settings.REFRESH_TOKEN_EXPIRE_MINUTES
 
 # ------------------------ Access Token -------------------------------->
 
-def create_access_token(input) -> dict:
+def create_access_token(input: UserRead) -> dict:
     payload = input.model_dump()
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
@@ -38,7 +40,7 @@ def verify_access_token(token: str) -> dict:
 
 # ------------------------ Refresh Token ------------------------------>
 
-def create_refresh_token(input) -> dict:
+def create_refresh_token(input: UserRead) -> dict:
     payload = input.model_dump()
     expire = datetime.now(timezone.utc) + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
 
@@ -60,6 +62,6 @@ def verify_refresh_token(token: str) -> dict:
 # ------------------------ Token Refresh ------------------------------>
 
 def refresh_access_token(input: str) -> dict:
-    payload = verify_refresh_token(input)
+    payload = UserRead(**verify_refresh_token(input))
     new_access_token = create_access_token(payload)
     return new_access_token
