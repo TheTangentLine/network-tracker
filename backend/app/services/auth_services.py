@@ -4,7 +4,7 @@ from app.schemas.users_schema import *
 from app.models.users_model import User
 from .users_services import create
 
-from app.core.security.hashing import verify_password, hash_password
+from app.core.security.hashing import verify_password
 from app.core.security.jwt import create_access_token, create_refresh_token, verify_access_token
 
 # ----------------------- Register ------------------------>

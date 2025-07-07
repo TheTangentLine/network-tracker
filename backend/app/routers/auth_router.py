@@ -4,7 +4,7 @@ from app.models.users_model import *
 from app.schemas.users_schema import *
 
 from app.services.auth_services import *
-
+from app.core.security.jwt import refresh_access_token
 
 # ------------------------- Router ------------------------>
 
@@ -57,9 +57,24 @@ async def log_out(response: Response):
 # --------------------- Get current user ------------------>
 
 @router.get("/me")
-async def get_current_user(request: Request):
+async def get_current_user(request: Request, response: Response):
     access_token = request.cookies.get("access_token")
-    if not access_token:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+    refresh_token = request.cookies.get("refresh_token")
+
+    if not refresh_token:
+        raise HTTPException(status_code=404, detail="Your login session has ended. Please login again")
+    if not access_token or not verify_access_token(access_token):
+        refreshed_data = refresh_access_token(refresh_token)
+        access_token = refreshed_data['access_token']
+        expire_time = refreshed_data['exp']
+        response.set_cookie (
+            key="access_token",
+            value=access_token,
+            expires=expire_time,
+            httponly=True,
+            secure=True,
+            samesite="lax"
+        )
+
     user_data = get_current(access_token)
     return user_data

@@ -26,8 +26,8 @@ const registerSchema = z
         phone: z
             .string()
             .regex(/^[0-9]+$/, { message: "Phone must contain only numbers." })
-            .min(10, { message: "Phone must be 10-15 characters." })
-            .max(15, { message: "Phone must be 10-15 characters." }),
+            .min(10, { message: "Please enter a valid phone number." })
+            .max(15, { message: "Please enter a valid phone number." }),
         email: z.string().email({ message: "Invalid email address." }),
         password: z.string().min(6, { message: "Password must be at least 6 characters." }),
         repassword: z.string().nonempty({ message: "Passwords do not match." }),
