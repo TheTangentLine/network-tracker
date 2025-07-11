@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import useLogin from "../hooks/useLogin";
-import useAuth from "../hooks/useAuth";
 
 // ---- Components ----
 import InputFieldComponent from "./InputField";
@@ -15,6 +14,7 @@ import { FaSignInAlt } from "react-icons/fa";
 
 // ---- Validation ----
 import { z } from "zod";
+import useFetch from "../hooks/useFetch";
 
 // ----------------------------------- Zod for validation ------------------------------->
 
@@ -33,7 +33,7 @@ const LoginForm = () => {
     // ----------------------------------- State management ----------------------------------->
 
     const [user, setUser] = useState<UserLogin>({ username: "", password: "" });
-    const { user: authUser } = useAuth();
+    const { user: authUser } = useFetch();
 
     const { login, error, loading } = useLogin();
     const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
