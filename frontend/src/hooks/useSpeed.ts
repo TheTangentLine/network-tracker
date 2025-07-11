@@ -1,53 +1,35 @@
-// src/hooks/useSpeed.ts
+import { useState } from 'react'
+import type { SpeedTestResult } from '../entities/Network'
 
-import { useState, useCallback } from 'react'
-import type { SpeedTestMode, SpeedTestResult } from '../entities/Network'
-import { downloadSpeed, uploadSpeed } from '../services/internetService'
+import { checkDownload, checkUpload, checkPing } from '../utils/checkSpeed'
 
-export interface UseSpeed {
-    result: SpeedTestResult | null
-    loading: boolean
-    error: Error | null
-    runDownload: (mode: SpeedTestMode) => Promise<void>
-    runUpload: (mode: SpeedTestMode, file: Blob) => Promise<void>
-}
+import type { HttpServer } from 'vite'
 
-export function useSpeed(): UseSpeed {
+export function useSpeed() {
     const [result, setResult] = useState<SpeedTestResult | null>(null)
+    const [mode, setMode] = useState<string>("")
+
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<Error | null>(null)
+    const [error, setError] = useState<string>("")
 
-    const runDownload = useCallback(
-        async (mode: SpeedTestMode) => {
-            setLoading(true)
-            setError(null)
-            try {
-                const res = await downloadSpeed(mode)
-                setResult(res)
-            } catch (err: any) {
-                setError(err)
-            } finally {
-                setLoading(false)
-            }
-        },
-        []
-    )
+    // Run both tests and store result
+    const runTest = async () => {
+        setLoading(true);
+        setError("");
+        try {
+            const ping = await checkPing()
+            const download_mbps = await checkDownload(mode)
+            const upload_mbps = await checkUpload(mode)
 
-    const runUpload = useCallback(
-        async (mode: SpeedTestMode, file: Blob) => {
-            setLoading(true)
-            setError(null)
-            try {
-                const res = await uploadSpeed(mode, file)
-                setResult(res)
-            } catch (err: any) {
-                setError(err)
-            } finally {
-                setLoading(false)
-            }
-        },
-        []
-    )
+            setResult({ ping, download_mbps, upload_mbps })
+            console.log(result)
 
-    return { result, loading, error, runDownload, runUpload }
+        } catch (e: HttpServer) {
+            setError(e.response.detail || "Error")
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return { result, mode, loading, error, setMode, runTest }
 }
