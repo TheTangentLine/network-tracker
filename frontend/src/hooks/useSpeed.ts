@@ -7,7 +7,6 @@ import type { HttpServer } from 'vite'
 
 export function useSpeed() {
     const [result, setResult] = useState<SpeedTestResult | null>(null)
-    const [mode, setMode] = useState<string>("")
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string>("")
@@ -18,11 +17,10 @@ export function useSpeed() {
         setError("");
         try {
             const ping = await checkPing()
-            const download_mbps = await checkDownload(mode)
-            const upload_mbps = await checkUpload(mode)
+            const download_mbps = await checkDownload()
+            const upload_mbps = await checkUpload()
 
             setResult({ ping, download_mbps, upload_mbps })
-            console.log(result)
 
         } catch (e: HttpServer) {
             setError(e.response.detail || "Error")
@@ -31,5 +29,5 @@ export function useSpeed() {
         }
     }
 
-    return { result, mode, loading, error, setMode, runTest }
+    return { result, loading, error, runTest }
 }

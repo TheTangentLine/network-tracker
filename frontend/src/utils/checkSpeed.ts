@@ -12,13 +12,11 @@ export const checkPing = async () => {
 
 // ----------------- Check Download Speed ----------------->
 
-export const checkDownload = async (mode: string) => {
-    const downloadData = await downloadSpeed(mode)
+export const checkDownload = async () => {
+    const downloadData = await downloadSpeed()
     const durationSec = (performance.now() - downloadData.start) / 1000
 
-    const bytes = mode === 'slow'
-        ? 5 * 1024 * 1024
-        : 1 * 1024 * 1024
+    const bytes = 10 * 1024 * 1024
 
     const mbps = (bytes * 8) / durationSec / 1024 / 1024
     return mbps
@@ -26,10 +24,9 @@ export const checkDownload = async (mode: string) => {
 
 // ------------------ Check Upload Speed ------------------->
 
-export const checkUpload = async (mode: string) => {
+export const checkUpload = async () => {
 
-    const sizeMB = mode === 'slow' ? 10 : 5
-    const totalBytes = sizeMB * 1024 * 1024
+    const totalBytes = 10 * 1024 * 1024
     const buffer = generateRandomBuffer(totalBytes)
     const blob = new Blob([buffer])
 

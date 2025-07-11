@@ -11,9 +11,9 @@ export async function ping() {
 
 // ---------------- Check Download Speed ------------------->
 
-export async function downloadSpeed(mode: string) {
+export async function downloadSpeed() {
     const start = performance.now()
-    const response = await apiClient.post<ArrayBuffer>(`/speed/download/${mode}`)
+    const response = await apiClient.post<ArrayBuffer>('/speed/download')
     return { start, response }
 }
 
