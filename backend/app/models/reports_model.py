@@ -13,7 +13,7 @@ class RouterData(Document):
 class NetworkData(Document):
     upload_speed: float
     download_speed: float
-    latency: float
+    ping: float
 
 # ========================== Main model =========================>
 

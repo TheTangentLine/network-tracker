@@ -16,9 +16,9 @@ function App() {
           <Routes>
 
             // Public route
-            <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/" element={<AuthDirect />} />
+            <Route path="/login" element={<LoginPage />} />
 
             // Private route
             <Route

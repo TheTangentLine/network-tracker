@@ -8,6 +8,8 @@ passlib
 pydantic_settings
 pydantic[email]
 
+python-multipart
+
 bcrypt
 
 motor
