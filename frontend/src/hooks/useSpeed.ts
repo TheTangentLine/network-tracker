@@ -21,7 +21,6 @@ export function useSpeed() {
             const upload_mbps = await checkUpload()
 
             setResult({ ping, download_mbps, upload_mbps })
-            console.log(result)
 
         } catch (e: HttpServer) {
             setError(e.response.detail || "Error")
