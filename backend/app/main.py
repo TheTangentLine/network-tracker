@@ -10,6 +10,7 @@ from .database import init_db, close_db
 from .routers.auth_router import router as auth_router
 from .routers.users_router import router as users_router
 from .routers.reports_router import router as reports_router
+from .routers.speed_router import router as speed_router
 
 # ------------------------- Lifespan ------------------------>
 
@@ -42,3 +43,4 @@ app.middleware("http")(auth_middleware)
 app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(reports_router)
+app.include_router(speed_router)
