@@ -7,6 +7,12 @@ from app.services.speed_services import upload_speed, generate_data
 
 router = APIRouter(prefix='/speed', tags=['internet speed'])
 
+# --------------------- Ping ------------------>
+
+@router.get("/ping")
+async def ping():
+    return {"ping": "pong"}
+
 # --------------------- Upload ---------------->
 
 @router.post("/upload")
@@ -15,13 +21,7 @@ async def check_upload_speed(file: UploadFile):
 
 # --------------------- Download --------------------->
 
-@router.post("/download/{mode}")
-async def check_download_speed(mode: str):
-    return StreamingResponse(generate_data(mode), media_type="application/octet-stream")
-
-# --------------------- Ping ------------------>
-
-@router.get("/ping")
-async def ping():
-    return {"ping": "pong"}
+@router.post("/download")
+async def check_download_speed():
+    return StreamingResponse(generate_data(), media_type="application/octet-stream")
 

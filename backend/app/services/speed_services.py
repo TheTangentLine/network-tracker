@@ -21,15 +21,12 @@ async def upload_speed(file: UploadFile):
 
 # -------------------- Check download speed --------------------->
 
-async def generate_data(mode):
-
-    # Determine size of file
-    size_mb = 10 if mode == 'slow' else 5
+async def generate_data():
 
     # Generate random file
     MB = 1024 * 1024 # 1 mb = 1024 * 1024 bytes
     chunk = os.urandom(MB)  
-    total_size = size_mb * MB  
+    total_size = 10 * MB  
 
     # Send chunk files - Maximum 5 times
     bytes_sent = 0
