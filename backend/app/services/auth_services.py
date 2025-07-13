@@ -36,7 +36,9 @@ async def login(input: UserLogin) -> dict:
 
 # --------------------- Get current user ---------------->
 
-def get_current(token: str):
+def get_current(token: str | None):
+    if not token:
+        raise HTTPException(status_code=401, detail="Please log in again.")
     response_data = verify_access_token(token)
     user_data = UserRead(**response_data).model_dump()
     return user_data

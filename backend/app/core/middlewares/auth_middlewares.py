@@ -6,7 +6,6 @@ UNPROTECTED_PATHS = [
     "/auth/login",
     "/auth/register",
     "/auth/logout",
-    "/auth/me",
     "/openapi.json",
     "/docs",
     "/docs/oauth2-redirect",
@@ -14,6 +13,9 @@ UNPROTECTED_PATHS = [
 ]
 
 async def auth_middleware(request: Request, call_next):
+
+    if request.method.upper() == "OPTIONS":
+        return await call_next(request)
 
     if request.url.path in UNPROTECTED_PATHS:
         return await call_next(request)
@@ -36,7 +38,7 @@ async def auth_middleware(request: Request, call_next):
             value=access_token,
             expires=expire_time,
             httponly=True,
-            secure=True,
+            secure=False,
             samesite="lax"
         )
         return response
