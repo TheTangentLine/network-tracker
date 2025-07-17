@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import type { SpeedTestResult } from '../entities/Network'
+import type { SpeedTestResult } from '../../entities/Network'
 
-import { checkDownload, checkUpload, checkPing } from '../utils/checkSpeed'
+import { checkDownload, checkUpload, checkPing } from '../../utils/checkSpeed'
 
 import type { HttpServer } from 'vite'
 
@@ -29,5 +29,5 @@ export function useSpeed() {
         }
     }
 
-    return { result, loading, error, runTest }
+    return { result, setResult, loading, error, runTest }
 }

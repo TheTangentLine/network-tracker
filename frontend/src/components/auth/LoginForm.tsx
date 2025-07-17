@@ -1,20 +1,20 @@
 // ---- Hooks ----
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import useLogin from "../hooks/useLogin";
+import useLogin from "../../hooks/auth/useLogin";
 
 // ---- Components ----
 import InputFieldComponent from "./InputField";
 
 // ---- Entities ----
-import type { UserLogin } from "../entities/User";
+import type { UserLogin } from "../../entities/User";
 
 // ---- Icons ----
 import { FaSignInAlt } from "react-icons/fa";
 
 // ---- Validation ----
 import { z } from "zod";
-import useFetch from "../hooks/useFetch";
+import useFetch from "../../hooks/auth/useFetch";
 
 // ----------------------------------- Zod for validation ------------------------------->
 

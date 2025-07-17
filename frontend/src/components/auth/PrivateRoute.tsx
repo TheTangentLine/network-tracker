@@ -1,6 +1,6 @@
 import { type JSX } from 'react';
 import { Navigate } from 'react-router-dom';
-import useFetch from '../hooks/useFetch';
+import useFetch from '../../hooks/auth/useFetch';
 
 export default function PrivateRoute({ children }: { children: JSX.Element }) {
     const { user, loading } = useFetch();

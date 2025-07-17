@@ -1,7 +1,7 @@
 import React from "react";
 
 // ---- Components ----
-import type { InputField } from "../entities/Field";
+import type { InputField } from "../../entities/Field";
 
 // ---- Icons ----
 import { GoEyeClosed } from "react-icons/go";

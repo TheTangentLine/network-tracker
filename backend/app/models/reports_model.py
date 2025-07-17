@@ -1,27 +1,17 @@
 from beanie import Document
-from bson import ObjectId
-
-
-# ========================== Router Data ========================>
-
-class RouterData(Document):
-    number_of_devices: int
-    ip_address: str
+from pydantic import BaseModel
 
 # ========================== Network Data =========================>
 
-class NetworkData(Document):
+class NetworkData(BaseModel):
+    ping: float
     upload_speed: float
     download_speed: float
-    ping: float
 
 # ========================== Main model =========================>
 
 class Report(Document):
-    user_id: str 
-
-    # Routers related
-    router_data: RouterData  
+    user_id: str
 
     # Network related
     network_data: NetworkData  

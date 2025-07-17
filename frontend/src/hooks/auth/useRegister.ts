@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { register } from '../services/authService';
-import type { UserRegister } from '../entities/User';
+import { register } from '../../services/authService';
+import type { UserRegister } from '../../entities/User';
 
 export default function useRegister() {
     const [error, setError] = useState<string | null>(null);

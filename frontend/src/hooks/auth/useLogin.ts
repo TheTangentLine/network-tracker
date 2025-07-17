@@ -2,9 +2,9 @@ import { useState } from 'react';
 import useAuth from './useAuth';
 import { useNavigate } from 'react-router-dom';
 
-import type { UserLogin } from '../entities/User';
+import type { UserLogin } from '../../entities/User';
 
-import { login } from '../services/authService';
+import { login } from '../../services/authService';
 
 
 export default function useLogin() {
