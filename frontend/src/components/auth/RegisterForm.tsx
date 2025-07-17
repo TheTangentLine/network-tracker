@@ -1,12 +1,12 @@
 // ---- Hooks ----
 import React, { useState, useEffect } from "react";
-import useRegister from "../hooks/useRegister";
+import useRegister from "../../hooks/auth/useRegister";
 
 // ---- Components ----
 import InputFieldComponent from "./InputField";
 
 // ---- Entities ----
-import type { UserRegister } from "../entities/User";
+import type { UserRegister } from "../../entities/User";
 
 // ---- Icons ----
 import { FaSignInAlt } from "react-icons/fa";

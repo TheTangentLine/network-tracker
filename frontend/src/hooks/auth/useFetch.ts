@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useAuth from "./useAuth";
-import { fetchUser } from "../services/authService";
+import { fetchUser } from "../../services/authService";
 
 export default function useFetch() {
     const { user, setUser, skipFetch } = useAuth();
