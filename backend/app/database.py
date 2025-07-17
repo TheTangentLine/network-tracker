@@ -3,7 +3,7 @@ from beanie import init_beanie
 from .config import settings
 
 from .models.users_model import User
-from .models.reports_model import Report, NetworkData
+from .models.reports_model import Report
 
 # -------------------- Module level variable --------------------->
 
@@ -18,8 +18,7 @@ async def init_db() -> None:
         database=client[settings.MONGODB_DB],
         document_models=[
             User,
-            Report,
-            NetworkData
+            Report
         ],
     )
 

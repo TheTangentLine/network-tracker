@@ -1,6 +1,5 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
-from app.models.reports_model import Report
 from app.schemas.reports_schema import *
 
 from app.services.reports_services import *
@@ -26,6 +25,11 @@ async def read_report(report_id: str):
 @router.get("/read/{user_id}/all")
 async def read_all_reports(user_id: str):
     reports = await read_all_by_id(user_id)
+    return reports
+
+@router.get("/read")
+async def read_by_username(username: str, page: int):
+    reports = await read_by_name(username, page)
     return reports
 
 # ------------------------- Delete ------------------------->
