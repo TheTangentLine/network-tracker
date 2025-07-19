@@ -1,99 +1,135 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useReadReports } from "../../hooks/reports/useReadReports";
-
 import { generatePageNumbers } from "../../utils/generatePageNumber";
 import { MdDelete } from "react-icons/md";
 import { TbMessageChatbotFilled } from "react-icons/tb";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFilePdf, FaSearch } from "react-icons/fa";
+
+import { useFilter } from '../../hooks/reports/useFilter'
+import FilterArea from "./FilterArea";
 
 const History: React.FC = () => {
-
     const { page, totalPages, setPage, data, readReports } = useReadReports();
 
+    const { filter, setFilter } = useFilter();
+    const [searchText, setSearchText] = useState<string>("")
+
     useEffect(() => {
-        readReports();
+        readReports(filter, searchText);
     }, [page]);
 
-    // 2) Buttons only need to update the page
     const handlePageClick = (newPage: number) => {
         setPage(newPage);
-        window.scrollTo({
-            top: 0
-        });
+        window.scrollTo({ top: 0 });
     };
 
     const listOfPages = generatePageNumbers(page, totalPages);
+
     return (
         <>
-            {/* <form className='flex flex-row space-x-3 mb-10'>
-                <input
-                    className="bg-gray-200 text-2xl rounded-xl p-2 w-2xl"
-                    type='text'
-                    placeholder="Search for result"
-                />
-                <button className="text-xl bg-green-600 rounded-2xl font-montserrat-bold text-white px-5">Search</button>
+            {/* Search Bar */}
+            <form
+                onSubmit={e => {
+                    e.preventDefault();
+                    setPage(1);
+                    readReports(filter, searchText);
+                }}
+                className="flex space-x-2 mb-7"
+            >
+                <div className="relative flex-1">
+                    <input
+                        value={searchText}
+                        onChange={e => setSearchText(e.target.value)}
+                        type="text"
+                        placeholder="Search for result"
+                        className="w-full bg-gray-200 text-xl rounded-xl p-2 pl-10"
+                    />
+                    <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600" />
+                </div>
+                <button
+                    type="submit"
+                    className="text-xl bg-green-600 rounded-2xl font-montserrat-bold text-white px-5 cursor-pointer hover:bg-green-800 duration-300"
+                >
+                    Search
+                </button>
             </form>
-            <div>
-                <p>filter</p>
-            </div> */}
-            <div className="flex flex-col items-center w-full h-full">
-                {/* Grid for history: 5 columns (Ping, Upload, Download, Date, Time) */}
-                <div className="grid grid-cols-6 gap-0.5 text-center bg-white rounded-xl drop-shadow-xl drop-shadow-emerald-400 w-full mb-10 overflow-hidden">
-                    {/* Header Row */}
-                    <div className="flex font-montserrat-bold text-2xl items-center justify-center bg-green-800 text-white p-2">Ping</div>
-                    <div className="flex font-montserrat-bold text-2xl items-center justify-center bg-green-800 text-white p-2">Upload</div>
-                    <div className="flex font-montserrat-bold text-2xl items-center justify-center bg-green-800 text-white p-2">Download</div>
-                    <div className="flex font-montserrat-bold text-2xl items-center justify-center bg-green-800 text-white p-2">Date</div>
-                    <div className="flex font-montserrat-bold text-2xl items-center justify-center bg-green-800 text-white p-2">Time</div>
-                    <div className="flex font-montserrat-bold text-2xl items-center justify-center bg-green-800 text-white p-2">Action</div>
 
-                    {/* Data Rows */}
-                    {data.map((d, idx) => (
-                        <React.Fragment key={d._id}>
-                            <div className={`p-2 bg-emerald-${idx % 2 == 0 ? 50 : 100}`}>{d.network_data.ping.toFixed(2)} ms</div>
-                            <div className={`p-2 bg-emerald-${idx % 2 == 0 ? 50 : 100}`}>{d.network_data.upload_speed.toFixed(2)} Mbps</div>
-                            <div className={`p-2 bg-emerald-${idx % 2 == 0 ? 50 : 100}`}>{d.network_data.download_speed.toFixed(2)} Mbps</div>
-                            <div className={`p-2 bg-emerald-${idx % 2 == 0 ? 50 : 100}`}>{d.date}</div>
-                            <div className={`p-2 bg-emerald-${idx % 2 == 0 ? 50 : 100}`}>{d.time}</div>
-                            <div className={`flex flex-row space-x-5 justify-center text-2xl text-emerald-900 p-2 bg-emerald-${idx % 2 == 0 ? 50 : 100}`}>
-                                <button className="cursor-pointer"><MdDelete /></button>
-                                <button className="cursor-pointer"><TbMessageChatbotFilled /></button>
-                                <button className="cursor-pointer text-xl"><FaFilePdf /></button>
-                            </div>
-                        </React.Fragment>
+
+
+            {/* Filters */}
+            <FilterArea
+                sortDate={filter.sortDate}
+                sortMetric={filter.sortMetric}
+                dateStart={filter.dateStart}
+                dateEnd={filter.dateEnd}
+                onChangeSortDate={(value: 'latest' | 'oldest' | '') => setFilter({ ...filter, sortDate: value })}
+                onChangeMetric={(value: 'ping' | 'upload' | 'download' | '') => setFilter({ ...filter, sortMetric: value })}
+                onChangeDateStart={(value: string) => setFilter({ ...filter, dateStart: value })}
+                onChangeDateEnd={(value: string) => setFilter({ ...filter, dateEnd: value })}
+            />
+
+
+
+            {/* Data Grid */}
+
+            <div className="flex flex-col items-center w-full h-full">
+                <div className="grid grid-cols-6 gap-0.5 text-center bg-white rounded-xl drop-shadow-xl drop-shadow-emerald-400 w-full mb-10 overflow-hidden">
+                    {/* Header */}
+                    {["Ping", "Upload", "Download", "Date", "Time", "Action"].map(header => (
+                        <div
+                            key={header}
+                            className="flex items-center justify-center bg-green-800 text-white text-xl font-montserrat-bold p-2"
+                        >
+                            {header}
+                        </div>
                     ))}
+
+                    {/* Rows */}
+                    {data.map((d, idx) => {
+                        const bgColor = idx % 2 === 0 ? "bg-emerald-50" : "bg-emerald-100";
+                        return (
+                            <React.Fragment key={d._id}>
+                                <div className={`${bgColor} p-2`}>{d.network_data.ping.toFixed(2)} ms</div>
+                                <div className={`${bgColor} p-2`}>{d.network_data.upload_speed.toFixed(2)} Mbps</div>
+                                <div className={`${bgColor} p-2`}>{d.network_data.download_speed.toFixed(2)} Mbps</div>
+                                <div className={`${bgColor} p-2`}>{d.date}</div>
+                                <div className={`${bgColor} p-2`}>{d.time}</div>
+                                <div className={`${bgColor} flex justify-center space-x-5 p-2 text-2xl text-emerald-900`}>
+                                    <button><MdDelete /></button>
+                                    <button><TbMessageChatbotFilled /></button>
+                                    <button><FaFilePdf /></button>
+                                </div>
+                            </React.Fragment>
+                        );
+                    })}
                 </div>
 
-                {/* Page Buttons */}
+
+
+
+
+                {/* Pagination */}
                 <div className="flex space-x-3 mt-6">
                     {listOfPages.map((p, idx) =>
                         p !== -1 ? (
                             <button
                                 key={p}
-                                className={`
-                                text-white
-                                h-10 w-10 rounded-4xl cursor-pointer
-                                ${page === p ? "bg-emerald-900 " : "bg-emerald-600"}
-                                hover:bg-emerald-900 transition
-                            `}
                                 onClick={() => handlePageClick(p)}
+                                className={`h-10 w-10 rounded-full text-white ${page === p ? "bg-emerald-900" : "bg-emerald-600"
+                                    } hover:bg-emerald-900 transition`}
                             >
                                 {p}
                             </button>
                         ) : (
-                            <p
-                                key={`ellipsis-${idx}`}
-                                className="h-10 w-10 flex items-center justify-center text-2xl"
-                            >
+                            <span key={`ellipsis-${idx}`} className="h-10 w-10 flex items-center justify-center text-2xl">
                                 …
-                            </p>
+                            </span>
                         )
                     )}
                 </div>
             </div>
         </>
-
     );
-}
+};
 
 export default History;
