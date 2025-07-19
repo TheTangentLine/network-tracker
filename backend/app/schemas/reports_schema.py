@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Annotated
+from typing import Annotated, Literal
 
 '''
 
@@ -36,6 +36,13 @@ class ReportRead(BaseModel):
     network_data: NetworkData
     date: Annotated[str, Field(min_length=10, max_length=10)]  # Format YYYY-MM-DD
     time: Annotated[str, Field(min_length=5, max_length=5)]   # Format HH:MM
+
+
+class ReportFilter(BaseModel):
+    sortDate: bool = True
+    sortMetric: Literal['ping', 'upload', 'download', ''] = ''
+    dateStart: str
+    dateEnd: str
 
 
 # ------------------------- Delete ------------------------>
