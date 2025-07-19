@@ -3,6 +3,7 @@ import { useState } from "react";
 import { readReport } from "../../services/reportsService";
 
 import type { Report } from "../../entities/Report";
+import type { Filter } from "../../entities/Filter"
 
 import useAuth from "../auth/useAuth";
 
@@ -18,11 +19,11 @@ export function useReadReports() {
     const [data, setData] = useState<Report[]>([])
 
 
-    const readReports = async () => {
+    const readReports = async (filter: Filter | undefined, searchText: string) => {
         setLoading(true);
         setError("");
         try {
-            const dataReturned = (await readReport(user?.username, page)).data
+            const dataReturned = (await readReport(user?.username, page, filter, searchText)).data
             const reportData = dataReturned.list_user
             const pageData = dataReturned.total_pages
 
