@@ -1,6 +1,7 @@
 import math
 from fastapi import HTTPException
 from bson import ObjectId
+import pymongo
 
 from app.schemas.reports_schema import *
 
@@ -58,8 +59,7 @@ async def read_all_by_id(input: str):
         raise HTTPException(status_code=404, detail="No reports found for this user")
     return user_reports
 
-# Read by username and pagination
-async def read_by_name(username: str, page: int):
+async def read_by_name(username: str, page: int, sortDate: str = "", sortMetric: str = "", dateStart: str = "", dateEnd: str = "", searchText: str = ""):
     LIMIT = 10
     number_offset = 10 * (page - 1)
 
@@ -69,17 +69,65 @@ async def read_by_name(username: str, page: int):
     
     user_id = str(user.id)
 
+    # Base query for the user
     base_queries = Report.find(Report.user_id == user_id)
 
+    # Search filter
+    if searchText != '':
+        base_queries = base_queries.find(
+            {
+                "$or": [
+                    {"network_data.ping": {"$regex": searchText, "$options": "i"}},
+                    {"network_data.upload_speed": {"$regex": searchText, "$options": "i"}},
+                    {"network_data.download_speed": {"$regex": searchText, "$options": "i"}},
+                    {"date": {"$regex": searchText, "$options": "i"}},
+                    {"time": {"$regex": searchText, "$options": "i"}}
+                ]
+            }
+        )
+
+    # Date range filter
+    if dateStart != '':
+        base_queries = base_queries.find(Report.date >= dateStart)
+
+    if dateEnd != '':
+        base_queries = base_queries.find(Report.date <= dateEnd)
+
+    # Sorting by Date (oldest or newest first)
+    sort_params = []
+    if sortDate:
+        if sortDate == 'oldest':
+            sort_params.append((Report.date, pymongo.ASCENDING))  # Ascending order for oldest first
+            sort_params.append((Report.time, pymongo.ASCENDING))  # Ascending order for oldest first
+        else:
+            sort_params.append((Report.date, pymongo.DESCENDING))  # Descending order for newest first
+            sort_params.append((Report.time, pymongo.DESCENDING))  # Ascending order for oldest first
+
+    # Sorting by metrics (ping, upload, download)
+    if sortMetric:
+        if sortMetric == 'ping':
+            sort_params.append((Report.network_data.ping, pymongo.DESCENDING))  # Descending order for ping
+        elif sortMetric == 'upload':
+            sort_params.append((Report.network_data.upload_speed, pymongo.DESCENDING))  # Descending order for upload speed
+        elif sortMetric == 'download':
+            sort_params.append((Report.network_data.download_speed, pymongo.DESCENDING))  # Descending order for download speed
+
+    # Apply sorting
+    if sort_params:
+        base_queries = base_queries.sort(sort_params)
+
+    # Count total users and calculate total pages
     total_users = await base_queries.count()
     total_pages = math.ceil(total_users / LIMIT)
 
+    # Pagination: Skip offset and apply limit
     list_user = await base_queries.skip(number_offset).limit(LIMIT).to_list()
 
     return {
         "total_pages": total_pages,
         "list_user": list_user
     }
+
 
 
 # ------------------------- Delete ------------------------->

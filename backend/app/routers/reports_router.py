@@ -28,8 +28,8 @@ async def read_all_reports(user_id: str):
     return reports
 
 @router.get("/read")
-async def read_by_username(username: str, page: int):
-    reports = await read_by_name(username, page)
+async def read_by_username(username: str, page: int, sortDate = "", sortMetric: str = "", dateStart: str = "", dateEnd: str = "", searchText: str = ""):
+    reports = await read_by_name(username, page, sortDate, sortMetric, dateStart, dateEnd, searchText)
     return reports
 
 # ------------------------- Delete ------------------------->
