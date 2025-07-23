@@ -59,7 +59,7 @@ const NetworkTest: React.FC = () => {
             <div className="w-full h-screen flex flex-col items-center justify-center font-montserrat text-4xl">
                 {/* Speed Test Result */}
                 <div className="grid mb-8 w-2xl h-70 rounded-4xl bg-gray-200 p-5 shadow-emerald-700 shadow-2xl">
-                    <div className="flex flex-row">
+                    <div className="flex flex-row justify-between p-3">
                         <label className="font-bold mr-10">Ping:</label>
                         <p>
                             {speedLoading ? (
@@ -73,7 +73,7 @@ const NetworkTest: React.FC = () => {
                             )}
                         </p>
                     </div>
-                    <div className="flex flex-row">
+                    <div className="flex flex-row justify-between p-3">
                         <label className="font-bold mr-10">Download speed:</label>
                         <p>
                             {speedLoading ? (
@@ -87,7 +87,7 @@ const NetworkTest: React.FC = () => {
                             )}
                         </p>
                     </div>
-                    <div className="flex flex-row">
+                    <div className="flex flex-row justify-between p-3">
                         <label className="font-bold mr-10">Upload speed:</label>
                         <p>
                             {speedLoading ? (
