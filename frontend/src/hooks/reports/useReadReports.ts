@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { readReport } from "../../services/reportsService";
+import { deleteReport, readReport } from "../../services/reportsService";
 
 import type { Report } from "../../entities/Report";
 import type { Filter } from "../../entities/Filter"
@@ -39,5 +39,21 @@ export function useReadReports() {
         }
     }
 
-    return { page, totalPages, data, setPage, loading, error, readReports }
+    const deleteReports = async (id: string) => {
+        setLoading(true);
+        setError("");
+        try {
+            await deleteReport(id)
+            const newData = data.filter(report => report._id !== id);
+            setData(newData);
+        }
+        catch (e: any) {
+            setError(e.response.data.detail)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
+    return { page, totalPages, data, setData, setPage, loading, error, readReports, deleteReports }
 }

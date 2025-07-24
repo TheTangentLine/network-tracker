@@ -34,7 +34,7 @@ async def read_by_username(username: str, page: int, sortDate = "", sortMetric: 
 
 # ------------------------- Delete ------------------------->
 
-@router.delete("/delete")
+@router.post("/delete")
 async def delete_report(input: ReportDelete):
     deleted_report = await delete(input)
     return deleted_report

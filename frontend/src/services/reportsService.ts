@@ -11,3 +11,7 @@ export async function readReport(username: string | undefined, page: number, fil
     const baseString = generateUrlQuery(username, page, filter, searchText);
     return apiClient.get(baseString);
 }
+
+export async function deleteReport(id: string) {
+    return apiClient.post('/reports/delete', { id })
+}
