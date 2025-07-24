@@ -135,15 +135,12 @@ async def read_by_name(username: str, page: int, sortDate: str = "", sortMetric:
 async def delete(input: ReportDelete):
     
     # Validate ObjectId format for MongoDB
-    if not ObjectId.is_valid(input.report_id):
+    if not ObjectId.is_valid(input.id):
         raise HTTPException(status_code=400, detail="Invalid report ID format")
-    if not ObjectId.is_valid(input.user_id):
-        raise HTTPException(status_code=400, detail="Invalid user ID format")
     
     # Find the report by id and user_id
     report = await Report.find_one(
-        Report.id == ObjectId(input.report_id),
-        Report.user_id == ObjectId(input.user_id)
+        Report.id == ObjectId(input.id)
     )
     if not report:
         raise HTTPException(status_code=404, detail="Report not found")

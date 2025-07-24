@@ -48,5 +48,4 @@ class ReportFilter(BaseModel):
 # ------------------------- Delete ------------------------>
 
 class ReportDelete(BaseModel):
-    report_id: Annotated[str, Field()]  # MongoDB str as string
-    user_id: Annotated[str, Field()]
+    id: Annotated[str, Field()]  # MongoDB str as string
