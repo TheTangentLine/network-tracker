@@ -14,3 +14,5 @@ bcrypt
 
 motor
 beanie
+
+xhtml2pdf
