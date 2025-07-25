@@ -3,8 +3,8 @@ export interface Report {
     user_id: string;
     network_data: {
         ping: number;
-        upload_speed: number;
-        download_speed: number;
+        upload_mbps: number;
+        download_mbps: number;
     };
     date: string;
     time: string;

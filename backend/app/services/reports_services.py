@@ -20,8 +20,8 @@ async def create(input: ReportCreate):
         user_id=str(user.id),
         network_data=NetworkData(
             ping=input.network_data.ping,
-            upload_speed=input.network_data.upload_mbps,
-            download_speed=input.network_data.download_mbps,
+            upload_mbps=input.network_data.upload_mbps,
+            download_mbps=input.network_data.download_mbps,
         ),
         date=input.date,
         time=input.time,
@@ -59,6 +59,8 @@ async def read_all_by_id(input: str):
         raise HTTPException(status_code=404, detail="No reports found for this user")
     return user_reports
 
+
+
 async def read_by_name(username: str, page: int, sortDate: str = "", sortMetric: str = "", dateStart: str = "", dateEnd: str = "", searchText: str = ""):
     LIMIT = 10
     number_offset = 10 * (page - 1)
@@ -78,8 +80,8 @@ async def read_by_name(username: str, page: int, sortDate: str = "", sortMetric:
             {
                 "$or": [
                     {"network_data.ping": {"$regex": searchText, "$options": "i"}},
-                    {"network_data.upload_speed": {"$regex": searchText, "$options": "i"}},
-                    {"network_data.download_speed": {"$regex": searchText, "$options": "i"}},
+                    {"network_data.upload_mbps": {"$regex": searchText, "$options": "i"}},
+                    {"network_data.download_mbps": {"$regex": searchText, "$options": "i"}},
                     {"date": {"$regex": searchText, "$options": "i"}},
                     {"time": {"$regex": searchText, "$options": "i"}}
                 ]
@@ -108,9 +110,9 @@ async def read_by_name(username: str, page: int, sortDate: str = "", sortMetric:
         if sortMetric == 'ping':
             sort_params.append((Report.network_data.ping, pymongo.DESCENDING))  # Descending order for ping
         elif sortMetric == 'upload':
-            sort_params.append((Report.network_data.upload_speed, pymongo.DESCENDING))  # Descending order for upload speed
+            sort_params.append((Report.network_data.upload_mbps, pymongo.DESCENDING))  # Descending order for upload speed
         elif sortMetric == 'download':
-            sort_params.append((Report.network_data.download_speed, pymongo.DESCENDING))  # Descending order for download speed
+            sort_params.append((Report.network_data.download_mbps, pymongo.DESCENDING))  # Descending order for download speed
 
     # Apply sorting
     if sort_params:

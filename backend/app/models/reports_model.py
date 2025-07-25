@@ -5,8 +5,8 @@ from pydantic import BaseModel
 
 class NetworkData(BaseModel):
     ping: float
-    upload_speed: float
-    download_speed: float
+    upload_mbps: float
+    download_mbps: float
 
 # ========================== Main model =========================>
 
