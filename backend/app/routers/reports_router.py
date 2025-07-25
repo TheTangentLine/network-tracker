@@ -1,8 +1,13 @@
 from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
 
 from app.schemas.reports_schema import *
 
 from app.services.reports_services import *
+from app.services.convert_to_pdf_services import *
+
+import io
+
 
 # ------------------------- Router ------------------------->
 
@@ -38,3 +43,10 @@ async def read_by_username(username: str, page: int, sortDate = "", sortMetric: 
 async def delete_report(input: ReportDelete):
     deleted_report = await delete(input)
     return deleted_report
+
+# --------------------- Convert to PDF ----------------------->
+
+@router.post("/genpdf")
+async def generate_pdf(input: NetworkData):
+    file_returned = convert_to_pdf(input)
+    return StreamingResponse(io.BytesIO(file_returned), media_type="application/pdf")
