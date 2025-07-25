@@ -1,6 +1,6 @@
 import apiClient from "./apiClient";
 import { generateUrlQuery } from "../utils/urlQuery";
-import type { SpeedTestReport } from "../entities/Network";
+import type { SpeedTestReport, SpeedTestResult } from "../entities/Network";
 import type { Filter } from "../entities/Filter"
 
 export async function saveReport(data: SpeedTestReport) {
@@ -13,5 +13,9 @@ export async function readReport(username: string | undefined, page: number, fil
 }
 
 export async function deleteReport(id: string) {
-    return apiClient.post('/reports/delete', { id })
+    return apiClient.post('/reports/delete', { id });
+}
+
+export async function generatePdfFile(input: SpeedTestResult) {
+    return apiClient.post('/reports/genpdf', input);
 }

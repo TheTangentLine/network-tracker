@@ -1,9 +1,10 @@
 import { useState } from "react";
 
-import { deleteReport, readReport } from "../../services/reportsService";
+import { deleteReport, readReport, generatePdfFile } from "../../services/reportsService";
 
 import type { Report } from "../../entities/Report";
 import type { Filter } from "../../entities/Filter"
+import type { SpeedTestResult } from "../../entities/Network";
 
 import useAuth from "../auth/useAuth";
 
@@ -17,6 +18,9 @@ export function useReadReports() {
     const [totalPages, setTotalPages] = useState<number>(0);
 
     const [data, setData] = useState<Report[]>([])
+
+    const [previewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
+    const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
 
 
     const readReports = async (filter: Filter | undefined, searchText: string) => {
@@ -55,5 +59,41 @@ export function useReadReports() {
         }
     }
 
-    return { page, totalPages, data, setData, setPage, loading, error, readReports, deleteReports }
+    const generatePdf = async (input: SpeedTestResult) => {
+        setLoading(true);
+        setError("");
+        try {
+            const response = await generatePdfFile(input);
+            if (response.status === 200 && response.data) {
+                const pdfFile = new Blob([response.data], { type: "application/pdf" });
+                setPdfBlob(pdfFile);
+                setPreviewModalOpen(true); // Open the modal to preview the PDF
+            } else {
+                setError("Failed to generate PDF.");
+            }
+        } catch (e: any) {
+            setError(e.response?.data?.detail || "Failed to generate PDF");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const handleSavePdf = () => {
+        if (pdfBlob) {
+            const url = window.URL.createObjectURL(pdfBlob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Network_Speed_Report.pdf";
+            link.click();
+        }
+    }
+
+
+    return {
+        page, totalPages, data, setData, setPage, loading, error, readReports, deleteReports, previewModalOpen,
+        pdfBlob,
+        setPreviewModalOpen,
+        generatePdf,
+        handleSavePdf,
+    }
 }
