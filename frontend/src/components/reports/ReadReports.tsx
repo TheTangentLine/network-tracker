@@ -7,9 +7,15 @@ import { FaFilePdf, FaSearch } from "react-icons/fa";
 
 import { useFilter } from '../../hooks/reports/useFilter'
 import FilterArea from "./FilterArea";
+import type { SpeedTestResult } from "../../entities/Network";
+import PdfPreviewModal from "./PdfPreviewModal";
 
 const History: React.FC = () => {
-    const { page, totalPages, setPage, data, readReports, deleteReports } = useReadReports();
+    const { page, totalPages, setPage, data, readReports, deleteReports, previewModalOpen,
+        pdfBlob,
+        setPreviewModalOpen,
+        generatePdf,
+        handleSavePdf, } = useReadReports();
 
     const { filter, setFilter } = useFilter();
     const [searchText, setSearchText] = useState<string>("")
@@ -27,10 +33,20 @@ const History: React.FC = () => {
         deleteReports(id);
     }
 
+    const handleGeneratePdf = (input: SpeedTestResult) => {
+        generatePdf(input);
+    }
+
     const listOfPages = generatePageNumbers(page, totalPages);
 
     return (
         <>
+            <PdfPreviewModal
+                isOpen={previewModalOpen}
+                pdfBlob={pdfBlob}
+                onClose={() => setPreviewModalOpen(false)}
+                onSave={handleSavePdf}
+            />
             {/* Search Bar */}
             <form
                 onSubmit={e => {
@@ -97,14 +113,14 @@ const History: React.FC = () => {
                                 return (
                                     <React.Fragment key={d._id}>
                                         <div className={`${bgColor} p-2`}>{d.network_data.ping.toFixed(2)} ms</div>
-                                        <div className={`${bgColor} p-2`}>{d.network_data.upload_speed.toFixed(2)} Mbps</div>
-                                        <div className={`${bgColor} p-2`}>{d.network_data.download_speed.toFixed(2)} Mbps</div>
+                                        <div className={`${bgColor} p-2`}>{d.network_data.upload_mbps.toFixed(2)} Mbps</div>
+                                        <div className={`${bgColor} p-2`}>{d.network_data.download_mbps.toFixed(2)} Mbps</div>
                                         <div className={`${bgColor} p-2`}>{d.date}</div>
                                         <div className={`${bgColor} p-2`}>{d.time}</div>
                                         <div className={`${bgColor} flex justify-center space-x-5 p-2 text-2xl text-emerald-900`}>
                                             <button onClick={() => handleDelete(d._id)} className="cursor-pointer"><MdDelete /></button>
-                                            <button><TbMessageChatbotFilled /></button>
-                                            <button><FaFilePdf /></button>
+                                            <button ><TbMessageChatbotFilled /></button>
+                                            <button onClick={() => handleGeneratePdf(d.network_data)} className="cursor-pointer text-xl"><FaFilePdf /></button>
                                         </div>
                                     </React.Fragment>
                                 );
