@@ -16,11 +16,13 @@ async def register(input: UserRegister):
 
 async def login(input: UserLogin) -> dict:
 
-    user = await User.find_one(User.username == input.username)
+    userName = await User.find_one(User.username == input.username)
+    userEmail = await User.find_one(User.email == input.username)
+    user = userName if userName is not None else userEmail
 
     # Check if username does not exist and if the password is not validated
     if user is None:
-        raise HTTPException(status_code=401, detail="Username does not exist")
+        raise HTTPException(status_code=401, detail="Username or email does not exist")
     if not verify_password(input.password, user.password):
         raise HTTPException(status_code=401, detail="Wrong password")
     

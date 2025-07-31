@@ -24,7 +24,7 @@ class UserRegister(BaseModel):
 # ------------------------- Login ------------------------>
 
 class UserLogin(BaseModel):
-    username: Annotated[str, Field(min_length=3, max_length=50)]  
+    username: Annotated[str, Field(min_length=3, max_length=50)]  = ""
     password: Annotated[str, Field(min_length=6)]
 
 # ------------------------ Read -------------------------->
