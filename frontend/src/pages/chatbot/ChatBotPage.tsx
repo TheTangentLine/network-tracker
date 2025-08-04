@@ -1,35 +1,42 @@
 import SideBar from "../../components/SideBar";
 import { useSideBar } from "../../hooks/useSideBar";
+import ChatBot from "../../components/chatbot/ChatBot";
 
 const ChatBotPage: React.FC = () => {
-    // ------------------- State Management ------------------------->
+  // ------------------- State Management ------------------------->
 
-    const { isSidebarVisible, toggleSidebar } = useSideBar();
+  const { isSidebarVisible, toggleSidebar } = useSideBar();
 
-    // =========================== Rendering ===============================>
+  // =========================== Rendering ===============================>
 
-    return (
-        <div className="relative h-screen">
+  return (
+    <div className="relative h-screen">
+      {/**------------------------- Side Bar ------------------------------- **/}
 
-            {/**------------------------- Side Bar ------------------------------- **/}
+      <div
+        className={`transition-all duration-300 ease-in-out  fixed top-0 left-0 h-full ${
+          isSidebarVisible ? "w-64" : "w-22"
+        }`}
+      >
+        <SideBar
+          toggleSidebar={toggleSidebar}
+          isSidebarVisible={isSidebarVisible}
+        />
+      </div>
 
-            <div className={`transition-all duration-300 ease-in-out  fixed top-0 left-0 h-full ${isSidebarVisible ? 'w-64' : 'w-22'}`}>
-                <SideBar
-                    toggleSidebar={toggleSidebar}
-                    isSidebarVisible={isSidebarVisible}
-                />
-            </div>
+      {/**-------------------------- Testing area ----------------------------- **/}
 
-            {/**-------------------------- Testing area ----------------------------- **/}
+      <div
+        className={`flex-1 p-10 ${
+          isSidebarVisible ? "ml-64" : "ml-22"
+        } duration-300 `}
+      >
+        <ChatBot />
+      </div>
 
-            <div className={`flex-1 p-10 ${isSidebarVisible ? 'ml-64' : 'ml-22'} duration-300`}>
-                <p>Chat Bot</p>
-            </div>
-
-            {/**--------------------------------------------------------------------**/}
-
-        </div>
-    )
-}
+      {/**--------------------------------------------------------------------**/}
+    </div>
+  );
+};
 
 export default ChatBotPage;
