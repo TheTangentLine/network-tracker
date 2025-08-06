@@ -1,5 +1,3 @@
-import React from "react";
-
 export const WelcomeScreen = () => {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-4">
