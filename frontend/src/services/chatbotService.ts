@@ -4,21 +4,91 @@ interface MessageRequest {
   message: string;
 }
 
-interface MessageResponse {
-  text: string;
+interface WebSocketMessage {
+  type: 'content' | 'complete' | 'error';
+  content?: string;
 }
 
 export const chatbotService = {
-  async askQuestion(message: string): Promise<string> {
+  async checkServerHealth(): Promise<boolean> {
     try {
-      const response = await apiClient.post<MessageResponse>('/chatbot/ask', {
-        message
-      } as MessageRequest);
-      
-      return response.data.text;
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL || 'http://localhost:8000'}/chatbot/health`);
+      return response.ok;
     } catch (error) {
-      console.error('Error asking chatbot question:', error);
-      throw new Error('Failed to get response from chatbot');
+      return false;
     }
+  },
+
+  createWebSocketConnection(
+    message: string,
+    onContent: (content: string) => void,
+    onComplete: () => void,
+    onError: (error: string) => void
+  ): WebSocket {
+    // Get the base URL and convert to WebSocket
+    const baseUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:8000';
+    let wsUrl: string;
+    
+    if (baseUrl.startsWith('https://')) {
+      wsUrl = baseUrl.replace('https://', 'wss://');
+    } else if (baseUrl.startsWith('http://')) {
+      wsUrl = baseUrl.replace('http://', 'ws://');
+    } else {
+      wsUrl = `ws://${baseUrl}`;
+    }
+    
+    const fullWsUrl = `${wsUrl}/chatbot/ask`;
+    
+    // Log the WebSocket URL for debugging
+    console.log('Attempting WebSocket connection to:', fullWsUrl);
+    
+    const ws = new WebSocket(fullWsUrl);
+
+    ws.onopen = () => {
+      console.log('WebSocket connected successfully');
+      ws.send(JSON.stringify({ message }));
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const data: WebSocketMessage = JSON.parse(event.data);
+        
+        switch (data.type) {
+          case 'content':
+            if (data.content) {
+              onContent(data.content);
+            }
+            break;
+          case 'complete':
+            console.log('WebSocket stream completed');
+            onComplete();
+            ws.close(1000, 'Stream completed');
+            break;
+          case 'error':
+            console.error('WebSocket error received:', data.content);
+            onError(data.content || 'Unknown error');
+            ws.close(1000, 'Error occurred');
+            break;
+        }
+      } catch (error) {
+        console.error('Failed to parse WebSocket message:', error);
+        onError('Failed to parse response');
+        ws.close(1000, 'Parse error');
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+      onError('WebSocket connection failed');
+    };
+
+    ws.onclose = (event) => {
+      console.log('WebSocket closed with code:', event.code, 'reason:', event.reason);
+      if (event.code !== 1000) {
+        onError(`Connection closed unexpectedly (code: ${event.code})`);
+      }
+    };
+
+    return ws;
   }
 };

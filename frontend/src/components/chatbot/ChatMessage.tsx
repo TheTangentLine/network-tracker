@@ -1,12 +1,11 @@
 import { MarkdownRenderer } from "./MarkdownRenderer";
-import { TypingAnimation } from "./TypingAnimation";
 
 interface ChatMessageProps {
   id: number;
   text: string;
   sender: 'user' | 'ai';
   timestamp: Date;
-  isTyping?: boolean;
+  isStreaming?: boolean;
 }
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({ 
@@ -14,7 +13,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   text, 
   sender, 
   timestamp,
-  isTyping = false
+  isStreaming = false
 }) => {
   return (
     <div
@@ -30,18 +29,17 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
         }`}
       >
         {sender === "ai" ? (
-          isTyping ? (
-            <TypingAnimation 
-              content={text} 
-              speed={10}
-              className="text-base"
-            />
-          ) : (
+          <div className="text-base">
             <MarkdownRenderer 
               content={text} 
               className="text-base"
             />
-          )
+            {isStreaming && (
+              <span className="inline-block w-0.5 h-5 bg-emerald-500 ml-0.5 animate-pulse">
+                &nbsp;
+              </span>
+            )}
+          </div>
         ) : (
           <p className="text-sm whitespace-pre-wrap">{text}</p>
         )}
