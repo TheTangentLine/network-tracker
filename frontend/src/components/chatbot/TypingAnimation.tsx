@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { MarkdownRenderer } from './MarkdownRenderer';
 
 interface TypingAnimationProps {
   content: string;
@@ -40,12 +39,14 @@ export const TypingAnimation: React.FC<TypingAnimationProps> = ({
 
   return (
     <div className={`typing-animation ${className}`}>
-      <MarkdownRenderer content={displayedContent} />
-      {isTyping && (
-        <span className="inline-block w-2 h-4 bg-emerald-500 ml-1 animate-pulse">
-          &nbsp;
-        </span>
-      )}
+      <span className="whitespace-pre-wrap">
+        {displayedContent}
+        {isTyping && (
+          <span className="inline-block w-0.5 h-5 bg-emerald-500 ml-0.5 animate-pulse">
+            &nbsp;
+          </span>
+        )}
+      </span>
     </div>
   );
 }; 

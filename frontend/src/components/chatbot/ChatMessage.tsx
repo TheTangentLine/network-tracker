@@ -23,10 +23,10 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
       }`}
     >
       <div
-        className={`max-w-[70%] px-4 py-3 rounded-xl relative shadow-md ${
+        className={`px-4 py-3 rounded-xl relative ${
           sender === "user"
-            ? "bg-emerald-500 text-white rounded-br-none ml-auto"
-            : "bg-gray-200 text-gray-900 rounded-bl-none"
+            ? "bg-emerald-500 text-white rounded-br-none ml-auto max-w-[70%] shadow-md"
+            : "text-gray-900 w-full max-w-none"
         }`}
       >
         {sender === "ai" ? (
@@ -34,20 +34,17 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             <TypingAnimation 
               content={text} 
               speed={10}
-              className="text-sm"
+              className="text-base"
             />
           ) : (
             <MarkdownRenderer 
               content={text} 
-              className="text-sm"
+              className="text-base"
             />
           )
         ) : (
           <p className="text-sm whitespace-pre-wrap">{text}</p>
         )}
-        <p className="mt-1 text-xs opacity-60 text-right">
-          {timestamp.toLocaleTimeString()}
-        </p>
       </div>
     </div>
   );

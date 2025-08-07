@@ -25,7 +25,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           inList = false;
         }
         elements.push(
-          <h3 key={index} className="text-lg font-montserrat-bold text-gray-800 mt-4 mb-2">
+          <h3 key={index} className="text-xl font-montserrat-bold text-gray-800 mt-4 mb-2">
             {line.replace('### ', '')}
           </h3>
         );
@@ -39,7 +39,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           inList = false;
         }
         elements.push(
-          <h2 key={index} className="text-xl font-montserrat-bold text-gray-800 mt-6 mb-3">
+          <h2 key={index} className="text-2xl font-montserrat-bold text-gray-800 mt-6 mb-3">
             {line.replace('## ', '')}
           </h2>
         );
@@ -53,7 +53,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           inList = false;
         }
         elements.push(
-          <h1 key={index} className="text-2xl font-montserrat-bold text-gray-800 mt-6 mb-3">
+          <h1 key={index} className="text-3xl font-montserrat-bold text-gray-800 mt-6 mb-3">
             {line.replace('# ', '')}
           </h1>
         );
@@ -68,7 +68,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           inList = false;
         }
         elements.push(
-          <div key={index} className="bg-gray-100 p-3 rounded-lg my-2 font-mono text-sm">
+          <div key={index} className="bg-gray-100 p-3 rounded-lg my-2 font-mono text-base">
             {line.replace('```', '')}
           </div>
         );
@@ -81,7 +81,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           inList = true;
         }
         currentList.push(
-          <li key={index} className="mb-1">
+          <li key={index} className="mb-2 text-base">
             {renderInlineMarkdown(line.replace(/^[-•]\s*/, ''))}
           </li>
         );
@@ -93,7 +93,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           inList = true;
         }
         currentList.push(
-          <li key={index} className="mb-1">
+          <li key={index} className="mb-2 text-base">
             {renderInlineMarkdown(line.replace(/^\d+\.\s*/, ''))}
           </li>
         );
@@ -116,10 +116,10 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
         }
         const parts = line.split('`');
         elements.push(
-          <p key={index} className="mb-2">
+          <p key={index} className="mb-3 text-base">
             {parts.map((part, partIndex) => 
               partIndex % 2 === 1 ? (
-                <code key={partIndex} className="bg-gray-100 px-1 rounded text-sm font-mono">
+                <code key={partIndex} className="bg-gray-100 px-1 rounded text-base font-mono">
                   {part}
                 </code>
               ) : (
@@ -150,7 +150,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
       }
       
       elements.push(
-        <p key={index} className="mb-2">
+        <p key={index} className="mb-3 text-base">
           {renderInlineMarkdown(line)}
         </p>
       );
