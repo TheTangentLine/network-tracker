@@ -3,22 +3,31 @@ import React from "react";
 interface NotifyProps {
     message: string;
     onClose: () => void;
-    isSuccess: boolean;  // To determine if it's a success or error message
+    isSuccess: boolean;
+    title?: string;
 }
 
-const Notify: React.FC<NotifyProps> = ({ message, onClose, isSuccess }) => {
+const Notify: React.FC<NotifyProps> = ({ message, onClose, isSuccess, title }) => {
     return (
-        <div className="fixed inset-0 z-50 bg-opacity-50 backdrop-blur-lg flex justify-center items-center duration-300 font-bold">
-            <div
-                className={`flex flex-col justify-center items-center bg-white text-black rounded-4xl shadow-2xl w-xl h-64`}
-            >
-                <p>{message}</p>
+        <div className="fixed inset-0 z-50 backdrop-blur-md flex justify-center items-center duration-300 font-montserrat">
+            <div className="flex flex-col justify-between items-center bg-white text-gray-800 rounded-2xl shadow-2xl w-140 h-80 p-8 mx-4">
+                <div className="text-center">
+                    {title && (
+                        <h3 className={`text-3xl font-bold ${isSuccess ? 'text-green-600' : 'text-red-600'}`}>
+                            {title}
+                        </h3>
+                    )}
+                </div>
+                <p className="text-center text-3xl text-gray-700 leading-relaxed">{message}</p>
                 <button
                     onClick={onClose}
-                    className={`mt-12 bg${isSuccess ? '-emerald-600' : '-amber-600'} text-white text-3xl
-                     px-7 py-2 rounded-xl hover:scale-125 duration-300 cursor-pointer`}
+                    className={`cursor-pointer px-8 py-3 rounded-lg text-white font-semibold transition-all duration-200 hover:scale-105 text-lg ${
+                        isSuccess 
+                            ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700' 
+                            : 'bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700'
+                    }`}
                 >
-                    Ok
+                    OK
                 </button>
             </div>
         </div>
