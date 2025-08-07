@@ -9,6 +9,7 @@ import { useFilter } from '../../hooks/reports/useFilter'
 import FilterArea from "./FilterArea";
 import type { SpeedTestResult } from "../../entities/Network";
 import PdfPreviewModal from "./PdfPreviewModal";
+import { useNavigate } from "react-router-dom";
 
 const History: React.FC = () => {
     const { page, totalPages, setPage, data, readReports, deleteReports, previewModalOpen,
@@ -19,6 +20,7 @@ const History: React.FC = () => {
 
     const { filter, setFilter } = useFilter();
     const [searchText, setSearchText] = useState<string>("")
+    const navigate = useNavigate();
 
     useEffect(() => {
         readReports(filter, searchText);
@@ -39,7 +41,7 @@ const History: React.FC = () => {
     }
 
     const handleChatbot = (input: SpeedTestResult) => {
-        console.log(input);
+        navigate('/chatbot', {state: input});
     }
 
     const listOfPages = generatePageNumbers(page, totalPages);
