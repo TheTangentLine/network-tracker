@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from "react";
 import { ChatMessage } from "./ChatMessage";
 
 interface Message {
@@ -5,7 +6,7 @@ interface Message {
   text: string;
   sender: 'user' | 'ai';
   timestamp: Date;
-  isTyping?: boolean;
+  isStreaming?: boolean;
 }
 
 interface ChatMessagesProps {
@@ -13,6 +14,16 @@ interface ChatMessagesProps {
 }
 
 export const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
     <div className="flex-1 space-y-4 py-4 px-4">
       <div className="max-w-6xl mx-auto">
@@ -23,9 +34,10 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
             text={message.text}
             sender={message.sender}
             timestamp={message.timestamp}
-            isTyping={message.isTyping}
+            isStreaming={message.isStreaming}
           />
         ))}
+        <div ref={messagesEndRef} />
       </div>
     </div>
   );

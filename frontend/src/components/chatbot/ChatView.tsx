@@ -7,6 +7,7 @@ interface Message {
   text: string;
   sender: 'user' | 'ai';
   timestamp: Date;
+  isTyping?: boolean;
 }
 
 interface ChatViewProps {
@@ -27,7 +28,7 @@ export const ChatView: React.FC<ChatViewProps> = ({
   isWaitingForReply
 }) => {
   return (
-    <div className="flex flex-col w-full h-full overflow-y-auto">
+    <div className="flex flex-col w-full h-full">
       <ChatHeader
         title="Network Assistant"
         subtitle="AI-powered network analysis"
@@ -35,7 +36,9 @@ export const ChatView: React.FC<ChatViewProps> = ({
         isCompact={true}
       />
       
-      <ChatMessages messages={messages} />
+      <div className="flex-1 overflow-y-auto">
+        <ChatMessages messages={messages} />
+      </div>
 
       <div className="bg-white border-t border-gray-200 px-4 py-4 flex-shrink-0">
         <div className="max-w-6xl mx-auto">

@@ -1,32 +1,51 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import useAuth from "../../hooks/auth/useAuth";
 import { useSaveReport } from "../../hooks/reports/useSaveReport";
 import { useSpeed } from "../../hooks/network/useSpeed";
-import Notify from "../../components/Notify";  // Import the Notify component
+import { useSpeedSimulation, type SpeedHistory } from "../../hooks/network/useSpeedSimulation";
+import { useTestProgress } from "../../hooks/network/useTestProgress";
+import Notify from "../../components/Notify";
+import SpeedGraph from "./SpeedGraph";
+import SpeedMetrics from "./SpeedMetrics";
+import ProgressBar from "./ProgressBar";
+import ActionButtons from "./ActionButtons";
 
 const NetworkTest: React.FC = () => {
+    // Hooks
     const { result, setResult, loading: speedLoading, error: speedError, runTest } = useSpeed();
     const { saveFile, loading: saveLoading, error: saveError } = useSaveReport();
     const { user } = useAuth();
-
+    const { speedHistory, resetHistory, startSimulation } = useSpeedSimulation();
+    const { progress, resetProgress, startTest, completeTest, getPhaseText } = useTestProgress(speedLoading);
+    
+    // State
     const [isNotificationVisible, setNotificationVisible] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState("");
-    const [isSuccess, setIsSuccess] = useState(true);  // Track success or failure
+    const [isSuccess, setIsSuccess] = useState(true);
 
-    const handleTestClick = async () => {
+    // Event handlers
+    const handleTestClick = useCallback(async () => {
+        startTest();
+        resetHistory();
+        
+        // Start simulation
+        startSimulation();
+        
+        // Run actual test
         await runTest();
-    };
+        completeTest();
+    }, [startTest, resetHistory, startSimulation, runTest, completeTest]);
 
-    const handleSaveClick = async () => {
+    const handleSaveClick = useCallback(async () => {
         const data = {
-            username: user?.username, // Assuming result contains username or user is accessible via another method
-            network_data: result,     // Pass the result data directly
-            date: new Date().toISOString().split("T")[0], // Format: YYYY-MM-DD
-            time: new Date().toTimeString().slice(0, 5),  // Format: HH:mm:ss
+            username: user?.username,
+            network_data: result,
+            date: new Date().toISOString().split("T")[0],
+            time: new Date().toTimeString().slice(0, 5),
         };
 
         try {
-            await saveFile(data);  // Pass the data to save
+            await saveFile(data);
             setIsSuccess(true);
             setNotificationMessage("Report saved successfully!");
             setNotificationVisible(true);
@@ -35,105 +54,83 @@ const NetworkTest: React.FC = () => {
             setNotificationMessage("Failed to save the report. Please try again.");
             setNotificationVisible(true);
         }
-    };
+    }, [user?.username, result, saveFile]);
 
-    const handleNotificationClose = () => {
+    const handleNotificationClose = useCallback(() => {
         setNotificationVisible(false);
         if (isSuccess) {
             setResult({ ping: 0, upload_mbps: 0, download_mbps: 0 });
+            resetProgress();
         }
-    };
+    }, [isSuccess, setResult, resetProgress]);
 
-    const isSaveButtonDisabled = () => {
+    // Utility functions
+    const isSaveButtonDisabled = useCallback(() => {
         return (
-            speedLoading || // Disable Save if speed test is still running
-            !result ||       // Disable Save if there's no result
-            !result.ping ||  // Disable Save if result is incomplete
+            speedLoading ||
+            !result ||
+            !result.ping ||
             !result.download_mbps ||
             !result.upload_mbps
         );
-    };
+    }, [speedLoading, result]);
 
     return (
-        <>
-            <div className="w-full h-screen flex flex-col items-center justify-center font-montserrat text-4xl">
-                {/* Speed Test Result */}
-                <div className="grid mb-8 w-2xl h-70 rounded-4xl bg-gray-200 p-5 shadow-emerald-700 shadow-2xl">
-                    <div className="flex flex-row justify-between p-3">
-                        <label className="font-bold mr-10">Ping:</label>
-                        <p>
-                            {speedLoading ? (
-                                "Loading..."
-                            ) : speedError ? (
-                                speedError
-                            ) : result && result.ping !== 0 && result.upload_mbps !== 0 && result.download_mbps !== 0 ? (
-                                `${result.ping.toFixed(2)} ms`
-                            ) : (
-                                ""
-                            )}
-                        </p>
-                    </div>
-                    <div className="flex flex-row justify-between p-3">
-                        <label className="font-bold mr-10">Download speed:</label>
-                        <p>
-                            {speedLoading ? (
-                                "Loading..."
-                            ) : speedError ? (
-                                speedError
-                            ) : result && result.ping !== 0 && result.upload_mbps !== 0 && result.download_mbps !== 0 ? (
-                                `${result.download_mbps.toFixed(2)} Mbps`
-                            ) : (
-                                ""
-                            )}
-                        </p>
-                    </div>
-                    <div className="flex flex-row justify-between p-3">
-                        <label className="font-bold mr-10">Upload speed:</label>
-                        <p>
-                            {speedLoading ? (
-                                "Loading..."
-                            ) : speedError ? (
-                                speedError
-                            ) : result && result.ping !== 0 && result.upload_mbps !== 0 && result.download_mbps !== 0 ? (
-                                `${result.upload_mbps.toFixed(2)} Mbps`
-                            ) : (
-                                ""
-                            )}
-                        </p>
-                    </div>
+        <div className="min-h-screen bg-white flex flex-col font-montserrat">
+            {/* Header */}
+            <div className="bg-white border-b border-gray-200 px-6 py-6">
+                <div className="max-w-6xl mx-auto">
+                    <h1 className="text-2xl font-bold text-green-700 mb-1">Network Speed Test</h1>
+                    <p className="text-gray-600">Test your internet connection performance</p>
                 </div>
+            </div>
 
-                {/* Speed Test Controls */}
-                <div className="flex flex-row items-center justify-center mb-8">
-                    <button
-                        className="w-2xs h-17 bg-emerald-700 text-white font-bold rounded-2xl hover:scale-125 transition-all duration-300 cursor-pointer disabled:bg-emerald-900 disabled:scale-100"
-                        disabled={speedLoading}
-                        onClick={handleTestClick}
-                    >
-                        {speedLoading ? "Testing..." : "Test"}
-                    </button>
-                    <div className="flex flex-col">
-                        <button
-                            className="w-2xs h-17 bg-amber-700 text-white font-bold rounded-2xl hover:scale-125 transition-all duration-300 cursor-pointer ml-10 disabled:bg-amber-950 disabled:text-gray-300 disabled:hover:scale-100 disabled:cursor-not-allowed"
-                            disabled={isSaveButtonDisabled()}
-                            onClick={handleSaveClick}
-                        >
-                            {saveLoading ? "Saving..." : "Save"}
-                        </button>
-                        {saveError && <p className="text-red-500">{saveError}</p>}
+            {/* Main Content */}
+            <div className="flex-1 max-w-6xl mx-auto w-full px-6 py-8">
+                <ProgressBar 
+                    isLoading={speedLoading}
+                    progress={progress}
+                    phaseText={getPhaseText()}
+                />
+                
+                <SpeedGraph 
+                    speedHistory={speedHistory}
+                    isLoading={speedLoading}
+                />
+                
+                <SpeedMetrics 
+                    result={result}
+                    loading={speedLoading}
+                    error={speedError}
+                />
+                
+                <ActionButtons 
+                    onTestClick={handleTestClick}
+                    onSaveClick={handleSaveClick}
+                    isTestLoading={speedLoading}
+                    isSaveLoading={saveLoading}
+                    isSaveDisabled={isSaveButtonDisabled()}
+                    result={result}
+                />
+
+                {/* Error Display */}
+                {saveError && (
+                    <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-center">
+                        {saveError}
                     </div>
-                </div>
-
-                {/* Notification (Visible if saving is successful or failed) */}
-                {isNotificationVisible && (
-                    <Notify
-                        message={notificationMessage}
-                        onClose={handleNotificationClose}
-                        isSuccess={isSuccess}
-                    />
                 )}
             </div>
-        </>
+
+            {/* Notification */}
+            {isNotificationVisible && (
+                <Notify
+                    title={isSuccess ? "Success" : "Error"}
+                    message={notificationMessage}
+                    onClose={handleNotificationClose}
+                    isSuccess={isSuccess}
+                />
+            )}
+        </div>
     );
 };
 

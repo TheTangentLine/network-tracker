@@ -20,10 +20,8 @@ export async function downloadSpeed() {
 // --------------- Check Upload Speed ------------->
 
 export async function uploadSpeed(file: Blob) {
-    const start = performance.now()
     const formData = new FormData()
     formData.append('file', file)
 
     await apiClient.post('/speed/upload', formData)
-    return { start }
 }
