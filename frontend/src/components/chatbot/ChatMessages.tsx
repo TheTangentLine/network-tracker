@@ -5,6 +5,7 @@ interface Message {
   text: string;
   sender: 'user' | 'ai';
   timestamp: Date;
+  isTyping?: boolean;
 }
 
 interface ChatMessagesProps {
@@ -22,6 +23,7 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
             text={message.text}
             sender={message.sender}
             timestamp={message.timestamp}
+            isTyping={message.isTyping}
           />
         ))}
       </div>

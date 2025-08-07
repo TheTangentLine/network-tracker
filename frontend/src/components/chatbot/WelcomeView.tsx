@@ -28,6 +28,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
           onSubmit={onSubmit}
           isWaitingForReply={isWaitingForReply}
           maxWidth="w-full"
+          isLarge={true}
         />
       </div>
     </div>

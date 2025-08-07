@@ -8,6 +8,7 @@ interface ChatInputProps {
   isWaitingForReply: boolean;
   placeholder?: string;
   maxWidth?: string;
+  isLarge?: boolean;
 }
 
 export const ChatInput: React.FC<ChatInputProps> = ({
@@ -17,7 +18,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   onStopReply,
   isWaitingForReply,
   placeholder = "Ask me anything",
-  maxWidth = "max-w-2xl"
+  maxWidth = "max-w-2xl",
+  isLarge = false
 }) => {
   return (
     <div className={`w-full ${maxWidth}`}>
@@ -28,7 +30,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           onChange={(e) => onMessageChange(e.target.value)}
           placeholder={isWaitingForReply ? "Waiting for reply..." : placeholder}
           disabled={isWaitingForReply}
-          className={`w-full !border !border-gray-300 bg-white text-gray-900 ring-4 ring-transparent placeholder:text-gray-500 focus:!border-emerald-500 focus:!border-t-emerald-500 focus:ring-emerald-500/20 rounded-lg p-3 pr-14 ${
+          className={`w-full !border !border-gray-300 bg-white text-gray-900 ring-4 ring-transparent placeholder:text-gray-500 focus:!border-emerald-500 focus:!border-t-emerald-500 focus:ring-emerald-500/20 rounded-lg ${
+            isLarge ? 'p-6 text-xl' : 'p-3'
+          } pr-14 ${
             isWaitingForReply ? "opacity-50 cursor-not-allowed" : ""
           }`}
         />
@@ -36,8 +40,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           type={isWaitingForReply ? "button" : "submit"}
           onClick={isWaitingForReply ? onStopReply : undefined}
           disabled={!isWaitingForReply && message.trim() === ""}
-          className={`w-8 h-8 absolute right-2 top-1/2 -translate-y-1/2 rounded-md flex items-center justify-center transition-colors
-          ${
+          className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-md flex items-center justify-center transition-colors ${
+            isLarge ? 'w-12 h-12' : 'w-8 h-8'
+          } ${
             isWaitingForReply
               ? "bg-red-500 cursor-pointer hover:bg-red-600"
               : message.trim() === ""
@@ -46,9 +51,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           }`}
         >
           {isWaitingForReply ? (
-            <IoStop className="h-5 w-5 text-white" />
+            <IoStop className={`${isLarge ? 'h-6 w-6' : 'h-5 w-5'} text-white`} />
           ) : (
-            <IoSend className="h-5 w-5 text-white" />
+            <IoSend className={`${isLarge ? 'h-6 w-6' : 'h-5 w-5'} text-white`} />
           )}
         </button>
       </form>
