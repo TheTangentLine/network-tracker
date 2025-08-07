@@ -1,33 +1,31 @@
-import { useState } from 'react'
-import type { SpeedTestResult } from '../../entities/Network'
+import { useState } from 'react';
+import type { SpeedTestResult } from '../../entities/Network';
+import { runSpeedTest } from '../../utils/checkSpeed';
 
-import { checkDownload, checkUpload, checkPing } from '../../utils/checkSpeed'
+export const useSpeed = () => {
+    const [result, setResult] = useState<SpeedTestResult>({ ping: 0, upload_mbps: 0, download_mbps: 0 });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-import type { HttpServer } from 'vite'
-
-export function useSpeed() {
-    const [result, setResult] = useState<SpeedTestResult | null>(null)
-
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string>("")
-
-    // Run both tests and store result
     const runTest = async () => {
         setLoading(true);
-        setError("");
+        setError(null);
+        
         try {
-            const ping = await checkPing()
-            const download_mbps = await checkDownload()
-            const upload_mbps = await checkUpload()
-
-            setResult({ ping, download_mbps, upload_mbps })
-
-        } catch (e: HttpServer) {
-            setError(e.response.detail || "Error")
+            const speedResult = await runSpeedTest();
+            setResult(speedResult);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Speed test failed');
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
-    return { result, setResult, loading, error, runTest }
-}
+    return {
+        result,
+        setResult,
+        loading,
+        error,
+        runTest,
+    };
+};
