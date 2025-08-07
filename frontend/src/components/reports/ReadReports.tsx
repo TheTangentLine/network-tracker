@@ -22,7 +22,7 @@ const History: React.FC = () => {
 
     useEffect(() => {
         readReports(filter, searchText);
-    }, [page]);
+    }, [page, filter]);
 
     const handlePageClick = (newPage: number) => {
         setPage(newPage);
@@ -35,6 +35,10 @@ const History: React.FC = () => {
 
     const handleGeneratePdf = (input: SpeedTestResult) => {
         generatePdf(input);
+    }
+
+    const handleChatbot = (input: SpeedTestResult) => {
+        console.log(input);
     }
 
     const listOfPages = generatePageNumbers(page, totalPages);
@@ -119,7 +123,7 @@ const History: React.FC = () => {
                                         <div className={`${bgColor} p-2`}>{d.time}</div>
                                         <div className={`${bgColor} flex justify-center space-x-5 p-2 text-2xl text-emerald-900`}>
                                             <button onClick={() => handleDelete(d._id)} className="cursor-pointer"><MdDelete /></button>
-                                            <button ><TbMessageChatbotFilled /></button>
+                                            <button onClick={() => handleChatbot(d.network_data)} className="cursor-pointer"><TbMessageChatbotFilled /></button>
                                             <button onClick={() => handleGeneratePdf(d.network_data)} className="cursor-pointer text-xl"><FaFilePdf /></button>
                                         </div>
                                     </React.Fragment>
