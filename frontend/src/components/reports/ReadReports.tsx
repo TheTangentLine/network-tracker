@@ -9,6 +9,7 @@ import { useFilter } from '../../hooks/reports/useFilter'
 import FilterArea from "./FilterArea";
 import type { SpeedTestResult } from "../../entities/Network";
 import PdfPreviewModal from "./PdfPreviewModal";
+import { useNavigate } from "react-router-dom";
 
 const History: React.FC = () => {
     const { page, totalPages, setPage, data, readReports, deleteReports, previewModalOpen,
@@ -19,10 +20,11 @@ const History: React.FC = () => {
 
     const { filter, setFilter } = useFilter();
     const [searchText, setSearchText] = useState<string>("")
+    const navigate = useNavigate();
 
     useEffect(() => {
         readReports(filter, searchText);
-    }, [page]);
+    }, [page, filter]);
 
     const handlePageClick = (newPage: number) => {
         setPage(newPage);
@@ -31,10 +33,15 @@ const History: React.FC = () => {
 
     const handleDelete = (id: string) => {
         deleteReports(id);
+        readReports(filter, searchText);
     }
 
     const handleGeneratePdf = (input: SpeedTestResult) => {
         generatePdf(input);
+    }
+
+    const handleChatbot = (input: SpeedTestResult) => {
+        navigate('/chatbot', {state: input});
     }
 
     const listOfPages = generatePageNumbers(page, totalPages);
@@ -119,7 +126,7 @@ const History: React.FC = () => {
                                         <div className={`${bgColor} p-2`}>{d.time}</div>
                                         <div className={`${bgColor} flex justify-center space-x-5 p-2 text-2xl text-emerald-900`}>
                                             <button onClick={() => handleDelete(d._id)} className="cursor-pointer"><MdDelete /></button>
-                                            <button ><TbMessageChatbotFilled /></button>
+                                            <button onClick={() => handleChatbot(d.network_data)} className="cursor-pointer"><TbMessageChatbotFilled /></button>
                                             <button onClick={() => handleGeneratePdf(d.network_data)} className="cursor-pointer text-xl"><FaFilePdf /></button>
                                         </div>
                                     </React.Fragment>

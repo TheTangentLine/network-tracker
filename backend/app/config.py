@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     # HASHING
     HASHING: str = Field(...)
 
+    # CHATBOT
+    API_KEY: str = Field(...)
+
     # CORS (required)
     CORS_ORIGINS: List[str] = Field(...)
 

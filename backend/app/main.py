@@ -11,6 +11,7 @@ from .routers.auth_router import router as auth_router
 from .routers.users_router import router as users_router
 from .routers.reports_router import router as reports_router
 from .routers.speed_router import router as speed_router
+from .routers.chatbot_router import router as chatbot_router
 
 # ------------------------- Lifespan ------------------------>
 
@@ -44,3 +45,4 @@ app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(reports_router)
 app.include_router(speed_router)
+app.include_router(chatbot_router)
