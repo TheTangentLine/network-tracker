@@ -17,3 +17,4 @@ beanie
 
 xhtml2pdf
 groq
+aiohttp
