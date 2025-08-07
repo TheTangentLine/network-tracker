@@ -10,11 +10,11 @@ const ChatBotPage: React.FC = () => {
   // =========================== Rendering ===============================>
 
   return (
-    <div className="relative h-screen">
+    <div className="relative h-screen flex font-montserrat">
       {/**------------------------- Side Bar ------------------------------- **/}
 
       <div
-        className={`transition-all duration-300 ease-in-out  fixed top-0 left-0 h-full ${
+        className={`transition-all duration-300 ease-in-out h-full ${
           isSidebarVisible ? "w-64" : "w-22"
         }`}
       >
@@ -24,12 +24,12 @@ const ChatBotPage: React.FC = () => {
         />
       </div>
 
-      {/**-------------------------- Testing area ----------------------------- **/}
+      {/**-------------------------- Chat area ----------------------------- **/}
 
       <div
-        className={`flex-1 p-10 ${
-          isSidebarVisible ? "ml-64" : "ml-22"
-        } duration-300 `}
+        className={`flex-1 h-full ${
+          isSidebarVisible ? "ml-0" : "ml-0"
+        } duration-300`}
       >
         <ChatBot />
       </div>
