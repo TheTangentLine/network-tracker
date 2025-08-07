@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { chatbotService } from "../../services/chatbotService";
 
 interface Message {
   id: number;
   text: string;
   sender: 'user' | 'ai';
   timestamp: Date;
+  isTyping?: boolean;
 }
 
 export const useChat = () => {
@@ -16,7 +18,7 @@ export const useChat = () => {
   const hasSubmittedFromState = useRef<boolean>(false);
   const location = useLocation();
 
-  const submitMessage = (messageText: string) => {
+  const submitMessage = async (messageText: string) => {
     if (messageText.trim() === "" || isWaitingForReply) return;
     
     const userMessage: Message = {
@@ -28,18 +30,67 @@ export const useChat = () => {
     setMessages((prevArray) => [...prevArray, userMessage]);
     setIsWaitingForReply(true);
     
-    // Simulate AI delay
-    timeoutRef.current = window.setTimeout(() => {
-      const fakeAiResponse: Message = {
-        id: messages.length + 2,
-        text: "I'm just a placeholder AI, but I'm here to help!",
+    try {
+      // Create a placeholder AI message that will be typed
+      const aiMessageId = messages.length + 2;
+      const placeholderMessage: Message = {
+        id: aiMessageId,
+        text: "",
         sender: "ai",
         timestamp: new Date(Date.now() - 3600000),
+        isTyping: true,
+      };
+      
+      setMessages((prevArray) => [...prevArray, placeholderMessage]);
+      
+      // Get real AI response from backend
+      const aiResponse = await chatbotService.askQuestion(messageText);
+      
+      // Update the message with the real response and start typing
+      setMessages((prevArray) => 
+        prevArray.map(msg => 
+          msg.id === aiMessageId 
+            ? { ...msg, text: aiResponse, isTyping: true }
+            : msg
+        )
+      );
+      
+      // After typing animation completes, remove the typing state
+      setTimeout(() => {
+        setMessages((prevArray) => 
+          prevArray.map(msg => 
+            msg.id === aiMessageId 
+              ? { ...msg, isTyping: false }
+              : msg
+          )
+        );
+      }, aiResponse.length * 10 + 300); // Calculate typing duration + buffer
+      
+    } catch (error) {
+      // Fallback to error message if API fails
+      const errorMessage: Message = {
+        id: messages.length + 2,
+        text: "Sorry, I'm having trouble connecting to the server. Please try again later.",
+        sender: "ai",
+        timestamp: new Date(Date.now() - 3600000),
+        isTyping: true,
       };
 
-      setMessages((prevArray) => [...prevArray, fakeAiResponse]);
+      setMessages((prevArray) => [...prevArray, errorMessage]);
+      
+      // Remove typing state after error message
+      setTimeout(() => {
+        setMessages((prevArray) => 
+          prevArray.map(msg => 
+            msg.id === errorMessage.id 
+              ? { ...msg, isTyping: false }
+              : msg
+          )
+        );
+      }, errorMessage.text.length * 10 + 300);
+    } finally {
       setIsWaitingForReply(false);
-    }, 1500);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
