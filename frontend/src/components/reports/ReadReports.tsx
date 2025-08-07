@@ -31,6 +31,7 @@ const History: React.FC = () => {
 
     const handleDelete = (id: string) => {
         deleteReports(id);
+        readReports(filter, searchText);
     }
 
     const handleGeneratePdf = (input: SpeedTestResult) => {
