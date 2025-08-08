@@ -20,6 +20,11 @@ export const useChat = () => {
   const isConnectingRef = useRef<boolean>(false);
   const currentAiMessageId = useRef<number | null>(null);
 
+  // Helper function to convert messages to previous_messages format
+  const getPreviousMessages = (): string[] => {
+    return messages.map(msg => `${msg.sender}: ${msg.text}`).filter(text => text.trim() !== '');
+  };
+
   const submitMessage = async (messageText: string) => {
     if (messageText.trim() === "" || isWaitingForReply || isConnectingRef.current) return;
     
@@ -29,7 +34,8 @@ export const useChat = () => {
       sender: "user",
       timestamp: new Date(Date.now() - 3600000),
     };
-    setMessages((prevArray) => [...prevArray, userMessage]);
+    const newArray = [...messages, userMessage]
+    setMessages(newArray);
     setIsWaitingForReply(true);
     isConnectingRef.current = true;
     
@@ -54,9 +60,24 @@ export const useChat = () => {
         wsRef.current = null;
       }
       
+      // Get previous messages for context (include current user message)
+      const allMessages = [...messages, userMessage];
+      const previousMessages = allMessages.map(msg => {
+        if (msg.sender === 'user') {
+          return `User Question: ${msg.text}`;
+        } else {
+          return `AI Response: ${msg.text}`;
+        }
+      }).filter(text => text.trim() !== '');
+      
+      // Debug logging
+      console.log('Previous messages being sent to backend:', previousMessages);
+      console.log('Current message:', messageText);
+      
       // Create WebSocket connection for streaming
       wsRef.current = chatbotService.createWebSocketConnection(
         messageText,
+        previousMessages,
         // onContent callback
         (content: string) => {
           setMessages((prevArray) => 
@@ -153,7 +174,9 @@ export const useChat = () => {
   useEffect(() => {
     if (location.state && !hasSubmittedFromState.current) {
       const networkData = location.state;
-      const formattedMessage = `Network Performance Analysis Request\n\nPlease analyze the following network metrics:\n\n Ping: ${networkData.ping.toFixed(2)} ms\n  Upload Speed: ${networkData.upload_mbps.toFixed(2)} Mbps\n  Download Speed: ${networkData.download_mbps.toFixed(2)} Mbps\n\nCould you provide insights on:\n• Overall connection quality\n• Performance recommendations\n• Potential improvements`;
+      const formattedMessage = `Please analyze my network performance: Ping ${networkData.ping.toFixed(2)}ms, Upload ${networkData.upload_mbps.toFixed(2)}Mbps, Download ${networkData.download_mbps.toFixed(2)}Mbps. Provide insights on connection quality, recommendations, and improvements.`;
+      
+      console.log('Initial network data message:', formattedMessage);
       
       hasSubmittedFromState.current = true;
       // Use setTimeout to ensure component is fully mounted
