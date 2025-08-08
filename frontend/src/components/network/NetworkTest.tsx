@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import useAuth from "../../hooks/auth/useAuth";
 import { useSaveReport } from "../../hooks/reports/useSaveReport";
 import { useSpeed } from "../../hooks/network/useSpeed";
-import { useSpeedSimulation, type SpeedHistory } from "../../hooks/network/useSpeedSimulation";
+import { useSpeedSimulation } from "../../hooks/network/useSpeedSimulation";
 import { useTestProgress } from "../../hooks/network/useTestProgress";
 import Notify from "../../components/Notify";
 import SpeedGraph from "./SpeedGraph";
