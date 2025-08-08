@@ -27,8 +27,10 @@ async def websocket_endpoint(websocket: WebSocket):
         data = await websocket.receive_text()
         request_data = json.loads(data)
         
-        # Create MessageRequest object
-        request = MessageRequest(message=request_data["message"])
+        request = MessageRequest(
+            previous_messages=request_data["previous_messages"], 
+            message=request_data["message"]
+        )
         
         # Stream the response
         await ask_questions_service(websocket, request)
