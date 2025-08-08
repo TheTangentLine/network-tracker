@@ -56,7 +56,7 @@ const History: React.FC = () => {
             />
             
             {/* Header */}
-            <div className="bg-white border-b border-gray-200 px-6 py-6">
+            <div className="border-b border-gray-200 px-6 py-6">
                 <div className="max-w-6xl mx-auto">
                     <h1 className="text-2xl font-bold text-green-700 mb-1">Test History</h1>
                     <p className="text-gray-600">View and manage your network speed test results</p>
