@@ -1,8 +1,9 @@
 import SideBar from "../../components/SideBar";
 import { useSideBar } from "../../hooks/useSideBar";
+// import LoadingPage from "./LoadingPage";
 
-import InformationPanel from "../../components/auth/settings/InformationPanel";
-import HandleEditor from "../../components/auth/settings/HandleEditor";
+// import InformationPanel from "../../components/auth/settings/InformationPanel";
+// import HandleEditor from "../../components/auth/settings/HandleEditor";
 
 const SettingsPage: React.FC = () => {
     // ------------------- State Management ------------------------->
@@ -25,9 +26,11 @@ const SettingsPage: React.FC = () => {
 
             {/**-------------------------- Testing area ----------------------------- **/}
 
-            <div className={`flex-1 p-10 ${isSidebarVisible ? 'ml-64' : 'ml-22'} duration-300`}>
-                <InformationPanel />
-                <HandleEditor />
+            <div className={`flex-1 px-10 ${isSidebarVisible ? 'ml-64' : 'ml-22'} duration-300`}>
+                {/* <InformationPanel />
+                <HandleEditor /> */}
+                Coming soon
+                {/* <LoadingPage/> */}
             </div>
 
             {/**--------------------------------------------------------------------**/}

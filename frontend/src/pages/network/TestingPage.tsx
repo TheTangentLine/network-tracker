@@ -27,7 +27,7 @@ const TestingPage: React.FC = () => {
 
             {/**-------------------------- Testing area ----------------------------- **/}
 
-            <div className={`flex-1 p-10 ${isSidebarVisible ? 'ml-64' : 'ml-22'} duration-300`}>
+            <div className={`flex-1 px-10 ${isSidebarVisible ? 'ml-64' : 'ml-22'} duration-300`}>
                 <NetworkTest />
             </div>
 

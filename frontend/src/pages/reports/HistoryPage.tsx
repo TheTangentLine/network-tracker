@@ -27,7 +27,7 @@ const HistoryPage: React.FC = () => {
 
             {/**-------------------------- History area ----------------------------- **/}
 
-            <div className={`flex-1 p-10 transition-all duration-300 ${isSidebarVisible ? "ml-64" : "ml-22"} h-full`}>
+            <div className={`flex-1 px-10 transition-all duration-300 ${isSidebarVisible ? "ml-64" : "ml-22"} h-full`}>
                 <History />
             </div>
 

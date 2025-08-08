@@ -41,7 +41,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             )}
           </div>
         ) : (
-          <p className="text-sm whitespace-pre-wrap">{text}</p>
+          <p className="text-md whitespace-pre-wrap">{text}</p>
         )}
       </div>
     </div>
