@@ -1,17 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { ChatMessage } from "./ChatMessage";
-
-interface Message {
-  id: number;
-  text: string;
-  sender: 'user' | 'ai';
-  timestamp: Date;
-  isStreaming?: boolean;
-}
-
-interface ChatMessagesProps {
-  messages: Message[];
-}
+import type { ChatMessagesProps } from "../../entities/Chat";
 
 export const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);

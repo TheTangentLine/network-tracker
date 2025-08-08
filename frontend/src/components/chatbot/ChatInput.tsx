@@ -1,15 +1,5 @@
 import { IoSend, IoStop } from "react-icons/io5";
-
-interface ChatInputProps {
-  message: string;
-  onMessageChange: (value: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  onStopReply?: () => void;
-  isWaitingForReply: boolean;
-  placeholder?: string;
-  maxWidth?: string;
-  isLarge?: boolean;
-}
+import type { ChatInputProps } from "../../entities/Chat";
 
 export const ChatInput: React.FC<ChatInputProps> = ({
   message,

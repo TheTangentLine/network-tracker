@@ -9,6 +9,7 @@ const ChatBot = () => {
     messages,
     isWaitingForReply,
     handleSubmit,
+    handleWelcomeSubmit,
     handleStopReply,
   } = useChat();
 
@@ -18,7 +19,7 @@ const ChatBot = () => {
         <WelcomeView
           message={message}
           onMessageChange={setMessage}
-          onSubmit={handleSubmit}
+          onSubmit={handleWelcomeSubmit}
           isWaitingForReply={isWaitingForReply}
         />
       ) : (

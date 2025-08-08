@@ -1,23 +1,7 @@
 import { ChatHeader } from "./ChatHeader";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
-
-interface Message {
-  id: number;
-  text: string;
-  sender: 'user' | 'ai';
-  timestamp: Date;
-  isTyping?: boolean;
-}
-
-interface ChatViewProps {
-  messages: Message[];
-  message: string;
-  onMessageChange: (value: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  onStopReply: () => void;
-  isWaitingForReply: boolean;
-}
+import type { ChatViewProps } from "../../entities/Chat";
 
 export const ChatView: React.FC<ChatViewProps> = ({
   messages,
