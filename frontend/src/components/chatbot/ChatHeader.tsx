@@ -1,9 +1,4 @@
-interface ChatHeaderProps {
-  title: string;
-  subtitle: string;
-  messageCount?: number;
-  isCompact?: boolean;
-}
+import type { ChatHeaderProps } from "../../entities/Chat";
 
 export const ChatHeader: React.FC<ChatHeaderProps> = ({ 
   title, 

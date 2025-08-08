@@ -1,34 +1,27 @@
 import { MarkdownRenderer } from "./MarkdownRenderer";
-
-interface ChatMessageProps {
-  id: number;
-  text: string;
-  sender: 'user' | 'ai';
-  timestamp: Date;
-  isStreaming?: boolean;
-}
+import type { ChatMessageProps } from "../../entities/Chat";
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({ 
-  id, 
   text, 
   sender, 
-  timestamp,
   isStreaming = false
 }) => {
+  const isUser = sender === "user";
+  
   return (
     <div
       className={`flex items-start gap-4 mb-4 ${
-        sender === "user" ? "justify-end" : "justify-start"
+        isUser ? "justify-end" : "justify-start"
       }`}
     >
       <div
         className={`px-4 py-3 rounded-xl relative ${
-          sender === "user"
+          isUser
             ? "bg-emerald-500 text-white rounded-br-none ml-auto max-w-[70%] shadow-md"
             : "text-gray-900 w-full max-w-none"
         }`}
       >
-        {sender === "ai" ? (
+        {!isUser ? (
           <div className="text-base">
             <MarkdownRenderer 
               content={text} 

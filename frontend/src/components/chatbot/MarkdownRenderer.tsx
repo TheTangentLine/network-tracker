@@ -1,9 +1,5 @@
 import React from 'react';
-
-interface MarkdownRendererProps {
-  content: string;
-  className?: string;
-}
+import type { MarkdownRendererProps } from '../../entities/Chat';
 
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ 
   content, 

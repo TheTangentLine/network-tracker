@@ -1,6 +1,5 @@
-import apiClient from './apiClient';
-
 interface MessageRequest {
+  previous_messages: string[];
   message: string;
 }
 
@@ -21,6 +20,7 @@ export const chatbotService = {
 
   createWebSocketConnection(
     message: string,
+    previousMessages: string[],
     onContent: (content: string) => void,
     onComplete: () => void,
     onError: (error: string) => void
@@ -46,7 +46,11 @@ export const chatbotService = {
 
     ws.onopen = () => {
       console.log('WebSocket connected successfully');
-      ws.send(JSON.stringify({ message }));
+      const requestData: MessageRequest = {
+        previous_messages: previousMessages,
+        message: message
+      };
+      ws.send(JSON.stringify(requestData));
     };
 
     ws.onmessage = (event) => {

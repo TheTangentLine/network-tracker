@@ -1,12 +1,6 @@
 import { ChatHeader } from "./ChatHeader";
 import { ChatInput } from "./ChatInput";
-
-interface WelcomeViewProps {
-  message: string;
-  onMessageChange: (value: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  isWaitingForReply: boolean;
-}
+import type { WelcomeViewProps } from "../../entities/Chat";
 
 export const WelcomeView: React.FC<WelcomeViewProps> = ({
   message,
@@ -14,6 +8,11 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
   onSubmit,
   isWaitingForReply
 }) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(message);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-full px-4 font-montserrat space-y-10">
       <ChatHeader
@@ -25,7 +24,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
         <ChatInput
           message={message}
           onMessageChange={onMessageChange}
-          onSubmit={onSubmit}
+          onSubmit={handleFormSubmit}
           isWaitingForReply={isWaitingForReply}
           maxWidth="w-full"
           isLarge={true}
