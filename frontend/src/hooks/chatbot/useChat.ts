@@ -1,18 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { chatbotService } from "../../services/chatbotService";
-
-interface Message {
-  id: number;
-  text: string;
-  sender: 'user' | 'ai';
-  timestamp: Date;
-  isStreaming?: boolean;
-}
+import type { ChatMessage } from "../../entities/Chat";
 
 export const useChat = () => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isWaitingForReply, setIsWaitingForReply] = useState(false);
   const hasSubmittedFromState = useRef<boolean>(false);
   const location = useLocation();
@@ -20,15 +13,10 @@ export const useChat = () => {
   const isConnectingRef = useRef<boolean>(false);
   const currentAiMessageId = useRef<number | null>(null);
 
-  // Helper function to convert messages to previous_messages format
-  const getPreviousMessages = (): string[] => {
-    return messages.map(msg => `${msg.sender}: ${msg.text}`).filter(text => text.trim() !== '');
-  };
-
   const submitMessage = async (messageText: string) => {
     if (messageText.trim() === "" || isWaitingForReply || isConnectingRef.current) return;
     
-    const userMessage: Message = {
+    const userMessage: ChatMessage = {
       id: messages.length + 1,
       text: messageText,
       sender: "user",
@@ -43,7 +31,7 @@ export const useChat = () => {
     const aiMessageId = messages.length + 2;
     currentAiMessageId.current = aiMessageId;
     
-    const aiMessage: Message = {
+    const aiMessage: ChatMessage = {
       id: aiMessageId,
       text: "",
       sender: "ai",
@@ -149,6 +137,13 @@ export const useChat = () => {
     setMessage("");
   };
 
+  const handleWelcomeSubmit = (messageText: string) => {
+    if (messageText.trim() === "" || isWaitingForReply) return;
+    
+    submitMessage(messageText);
+    setMessage("");
+  };
+
   const handleStopReply = () => {
     if (wsRef.current) {
       wsRef.current.close(1000, 'User stopped');
@@ -174,9 +169,7 @@ export const useChat = () => {
   useEffect(() => {
     if (location.state && !hasSubmittedFromState.current) {
       const networkData = location.state;
-      const formattedMessage = `Please analyze my network performance: Ping ${networkData.ping.toFixed(2)}ms, Upload ${networkData.upload_mbps.toFixed(2)}Mbps, Download ${networkData.download_mbps.toFixed(2)}Mbps. Provide insights on connection quality, recommendations, and improvements.`;
-      
-      console.log('Initial network data message:', formattedMessage);
+      const formattedMessage = `Network Performance Analysis Request\n\nPlease analyze the following network metrics:\n\n Ping: ${networkData.ping.toFixed(2)} ms\n  Upload Speed: ${networkData.upload_mbps.toFixed(2)} Mbps\n  Download Speed: ${networkData.download_mbps.toFixed(2)} Mbps\n\nCould you provide insights on:\n• Overall connection quality\n• Performance recommendations\n• Potential improvements`;
       
       hasSubmittedFromState.current = true;
       // Use setTimeout to ensure component is fully mounted
@@ -204,6 +197,7 @@ export const useChat = () => {
     messages,
     isWaitingForReply,
     handleSubmit,
+    handleWelcomeSubmit,
     handleStopReply,
   };
 }; 
