@@ -58,10 +58,6 @@ export const useChat = () => {
         }
       }).filter(text => text.trim() !== '');
       
-      // Debug logging
-      console.log('Previous messages being sent to backend:', previousMessages);
-      console.log('Current message:', messageText);
-      
       // Create WebSocket connection for streaming
       wsRef.current = chatbotService.createWebSocketConnection(
         messageText,

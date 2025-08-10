@@ -28,18 +28,13 @@ export const checkUpload = async () => {
     const totalBytes = 10 * 1024 * 1024
     const buffer = generateRandomBuffer(totalBytes)
     const blob = new Blob([buffer])
-
-    console.log(`Upload test: ${totalBytes} bytes (${totalBytes / (1024 * 1024)} MB)`)
     
     const startTime = performance.now()
     await uploadSpeed(blob)
     const endTime = performance.now()
     
     const durationSec = (endTime - startTime) / 1000
-    console.log(`Upload duration: ${durationSec} seconds`)
-
     const mbps = (totalBytes * 8) / durationSec / 1024 / 1024
-    console.log(`Calculated upload speed: ${mbps} Mbps`)
     
     return mbps
 }
