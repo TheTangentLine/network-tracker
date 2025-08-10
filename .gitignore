@@ -88,6 +88,7 @@ htmlcov/
 # Environment variables
 .env
 .env.*.local
+*pem
 
 # ------------------------- OS / Docker --------------------------->
 
