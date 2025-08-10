@@ -7,10 +7,6 @@ export const GRAPH_CONFIG = {
     padding: 40,
 };
 
-// Graph rendering functions
-
-
-
 export const drawResultGraph = (canvasRef: React.RefObject<HTMLCanvasElement | null>, result: SpeedTestResult) => {
     const canvas = canvasRef.current;
     if (!canvas || !result) return;
