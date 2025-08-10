@@ -95,6 +95,7 @@ const NetworkTest: React.FC = () => {
                 
                 <SpeedGraph 
                     speedHistory={speedHistory}
+                    result={result}
                     isLoading={speedLoading}
                 />
                 

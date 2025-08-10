@@ -1,4 +1,5 @@
 import { FaFilter } from "react-icons/fa";
+import { BsCalendarDateFill } from "react-icons/bs";
 
 import type { Filter } from "../../entities/Filter";
 
@@ -29,7 +30,7 @@ const FilterArea: React.FC<Filter> = ({
                         <option value="latest">Latest</option>
                         <option value="oldest">Oldest</option>
                     </select>
-                    <FaFilter className="absolute top-3.5 left-3" />
+                    <BsCalendarDateFill className="absolute top-3 left-3" />
                 </div>
 
                 <div className="relative">
@@ -63,7 +64,6 @@ const FilterArea: React.FC<Filter> = ({
                         }}
                         className="text-xl rounded-xl bg-gray-200 p-2 pl-8"
                     />
-                    <FaFilter className="absolute top-3.5 left-2" />
                 </div>
                 <span className="text-xl">to</span>
                 <div className="relative">
@@ -77,7 +77,6 @@ const FilterArea: React.FC<Filter> = ({
                         }}
                         className="text-xl rounded-xl bg-gray-200 p-2 pl-8"
                     />
-                    <FaFilter className="absolute left-2 top-3.5" />
                 </div>
             </div>
         </div>

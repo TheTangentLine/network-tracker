@@ -39,13 +39,9 @@ export const chatbotService = {
     
     const fullWsUrl = `${wsUrl}/chatbot/ask`;
     
-    // Log the WebSocket URL for debugging
-    console.log('Attempting WebSocket connection to:', fullWsUrl);
-    
     const ws = new WebSocket(fullWsUrl);
 
     ws.onopen = () => {
-      console.log('WebSocket connected successfully');
       const requestData: MessageRequest = {
         previous_messages: previousMessages,
         message: message
@@ -64,30 +60,25 @@ export const chatbotService = {
             }
             break;
           case 'complete':
-            console.log('WebSocket stream completed');
             onComplete();
             ws.close(1000, 'Stream completed');
             break;
           case 'error':
-            console.error('WebSocket error received:', data.content);
             onError(data.content || 'Unknown error');
             ws.close(1000, 'Error occurred');
             break;
         }
       } catch (error) {
-        console.error('Failed to parse WebSocket message:', error);
         onError('Failed to parse response');
         ws.close(1000, 'Parse error');
       }
     };
 
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
+    ws.onerror = () => {
       onError('WebSocket connection failed');
     };
 
     ws.onclose = (event) => {
-      console.log('WebSocket closed with code:', event.code, 'reason:', event.reason);
       if (event.code !== 1000) {
         onError(`Connection closed unexpectedly (code: ${event.code})`);
       }

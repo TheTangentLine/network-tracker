@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
 import type { SpeedTestResult } from '../../entities/Network';
+import { getQualityRating } from '../../utils/getQualityColor';
 
 interface SpeedMetricsProps {
     result: SpeedTestResult;
@@ -8,24 +8,6 @@ interface SpeedMetricsProps {
 }
 
 const SpeedMetrics: React.FC<SpeedMetricsProps> = ({ result, loading, error }) => {
-    const getSpeedColor = useCallback((speed: number, type: 'download' | 'upload') => {
-        if (type === 'download') {
-            if (speed >= 100) return 'text-green-600';
-            if (speed >= 50) return 'text-yellow-600';
-            return 'text-red-600';
-        } else {
-            if (speed >= 50) return 'text-green-600';
-            if (speed >= 20) return 'text-yellow-600';
-            return 'text-red-600';
-        }
-    }, []);
-
-    const getPingColor = useCallback((ping: number) => {
-        if (ping <= 20) return 'text-green-600';
-        if (ping <= 50) return 'text-yellow-600';
-        return 'text-red-600';
-    }, []);
-
     const renderMetricValue = (value: number, type: 'download' | 'upload' | 'ping') => {
         if (loading) {
             return <div className="animate-pulse text-gray-400">--</div>;
@@ -39,10 +21,10 @@ const SpeedMetrics: React.FC<SpeedMetricsProps> = ({ result, loading, error }) =
             return <span className="text-gray-400">--</span>;
         }
 
-        const colorClass = type === 'ping' ? getPingColor(value) : getSpeedColor(value, type as 'download' | 'upload');
+        const colorDisplay = getQualityRating(value, type);
         const displayValue = type === 'ping' ? value.toFixed(0) : value.toFixed(2);
         
-        return <span className={colorClass}>{displayValue}</span>;
+        return <span className={`${colorDisplay.color}`}>{displayValue}</span>;
     };
 
     const renderMetricSubtext = (value: number, type: 'download' | 'upload' | 'ping') => {
@@ -51,8 +33,10 @@ const SpeedMetrics: React.FC<SpeedMetricsProps> = ({ result, loading, error }) =
         if (type === 'ping') {
             return <p className="text-sm text-gray-500">Response time</p>;
         }
-        
-        return <p className="text-sm text-gray-500">Max. {value.toFixed(2)}</p>;
+
+        const quality = getQualityRating(value, type);
+
+        return <p className={`text-sm font-medium ${quality.color}`}>{quality.text}</p>;
     };
 
     return (
