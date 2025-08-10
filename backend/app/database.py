@@ -13,7 +13,22 @@ client: AsyncIOMotorClient | None = None
 
 async def init_db() -> None:
     global client
-    client = AsyncIOMotorClient(settings.MONGODB_URI)
+    
+    # Prepare connection options
+    connection_options = {
+        "tls": True,
+        "tlsCertificateKeyFile": settings.MONGODB_CERT_FILE,
+        "serverSelectionTimeoutMS": 5000,
+        "connectTimeoutMS": 10000,
+        "socketTimeoutMS": 10000
+    }
+    
+    # Configure MongoDB client with SSL and X.509 settings
+    client = AsyncIOMotorClient(
+        settings.MONGODB_URI,
+        **connection_options
+    )
+    
     await init_beanie(
         database=client[settings.MONGODB_DB],
         document_models=[
