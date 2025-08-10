@@ -28,9 +28,9 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
     };
 
     return (
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button
-                className="cursor-pointer px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg transition-all duration-200 hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                className="w-full sm:w-auto cursor-pointer px-8 py-3 bg-emerald-600 text-white font-semibold rounded-xl transition-all duration-200 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
                 disabled={isTestLoading}
                 onClick={onTestClick}
             >
@@ -45,7 +45,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
             </button>
 
             <button
-                className="cursor-pointer px-8 py-3 bg-yellow-600 text-white font-semibold rounded-lg transition-all duration-200 hover:bg-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                className="w-full sm:w-auto cursor-pointer px-8 py-3 bg-emerald-500 text-white font-semibold rounded-xl transition-all duration-200 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
                 disabled={isSaveDisabled}
                 onClick={onSaveClick}
             >
@@ -60,11 +60,11 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
             </button>
 
             <button
-                className="cursor-pointer px-8 py-3 bg-orange-700 text-white font-semibold rounded-lg transition-all duration-200 hover:bg-orange-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                className="w-full sm:w-auto cursor-pointer px-8 py-3 bg-emerald-700 text-white font-semibold rounded-xl transition-all duration-200 hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
                 disabled={!result || !result.ping || !result.download_mbps || !result.upload_mbps}
                 onClick={handleAnalyzeClick}
             >
-                Analyze
+                Analyze Results
             </button>
         </div>
     );
