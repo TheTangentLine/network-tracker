@@ -14,7 +14,7 @@ const TestingPage: React.FC = () => {
     // =========================== Rendering ===============================>
 
     return (
-        <div className="relative h-screen">
+        <div className="relative h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
 
             {/**------------------------- Side Bar ------------------------------- **/}
 
@@ -27,7 +27,7 @@ const TestingPage: React.FC = () => {
 
             {/**-------------------------- Testing area ----------------------------- **/}
 
-            <div className={`flex-1 px-10 ${isSidebarVisible ? 'ml-64' : 'ml-22'} duration-300`}>
+            <div className={`flex-1 h-full transition-all duration-300 ${isSidebarVisible ? 'ml-64' : 'ml-22'}`}>
                 <NetworkTest />
             </div>
 

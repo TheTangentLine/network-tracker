@@ -1,9 +1,6 @@
 import SideBar from "../../components/SideBar";
 import { useSideBar } from "../../hooks/useSideBar";
-// import LoadingPage from "./LoadingPage";
-
-// import InformationPanel from "../../components/auth/settings/InformationPanel";
-// import HandleEditor from "../../components/auth/settings/HandleEditor";
+import Settings from "../../components/auth/settings/Settings";
 
 const SettingsPage: React.FC = () => {
     // ------------------- State Management ------------------------->
@@ -13,28 +10,27 @@ const SettingsPage: React.FC = () => {
     // =========================== Rendering ===============================>
 
     return (
-        <div className="relative h-screen">
-
+        <div className="relative h-screen flex font-montserrat bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
             {/**------------------------- Side Bar ------------------------------- **/}
 
-            <div className={`transition-all duration-300 ease-in-out  fixed top-0 left-0 h-full ${isSidebarVisible ? 'w-64' : 'w-22'}`}>
+            <div
+                className={`transition-all duration-300 ease-in-out fixed top-0 left-0 h-full z-50 ${
+                    isSidebarVisible ? "w-64" : "w-22"
+                }`}
+            >
                 <SideBar
                     toggleSidebar={toggleSidebar}
                     isSidebarVisible={isSidebarVisible}
                 />
             </div>
 
-            {/**-------------------------- Testing area ----------------------------- **/}
+            {/**-------------------------- Settings area ----------------------------- **/}
 
-            <div className={`flex-1 px-10 ${isSidebarVisible ? 'ml-64' : 'ml-22'} duration-300`}>
-                {/* <InformationPanel />
-                <HandleEditor /> */}
-                Coming soon
-                {/* <LoadingPage/> */}
+            <div className={`flex-1 h-full transition-all duration-300 ${isSidebarVisible ? "ml-64" : "ml-22"}`}>
+                <Settings />
             </div>
 
             {/**--------------------------------------------------------------------**/}
-
         </div>
     )
 }
