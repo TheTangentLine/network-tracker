@@ -56,9 +56,9 @@ const History: React.FC = () => {
             />
             
             {/* Header */}
-            <div className="border-b border-gray-200 px-6 py-6">
+            <div className="border-b bg-white border-gray-200 px-6 py-6 w-full">
                 <div className="max-w-6xl mx-auto">
-                    <h1 className="text-2xl font-bold text-green-700 mb-1">Test History</h1>
+                    <h1 className="text-2xl font-bold text-emerald-700 mb-1">Test History</h1>
                     <p className="text-gray-600">View and manage your network speed test results</p>
                 </div>
             </div>
@@ -86,7 +86,7 @@ const History: React.FC = () => {
                     </div>
                     <button
                         type="submit"
-                        className="text-xl bg-green-600 rounded-2xl font-montserrat-bold text-white px-5 cursor-pointer hover:bg-green-800 duration-300"
+                        className="cursor-pointer px-6 py-3 bg-emerald-600 text-white font-montserrat-bold rounded-xl transition-all duration-300 hover:bg-emerald-700 shadow-lg shadow-emerald-600/30 hover:shadow-xl"
                     >
                         Search
                     </button>
@@ -113,7 +113,7 @@ const History: React.FC = () => {
                                 {["Ping", "Upload", "Download", "Date", "Time", "Action"].map(header => (
                                     <div
                                         key={header}
-                                        className="flex items-center justify-center bg-green-800 text-white text-xl font-montserrat-bold p-2"
+                                        className="flex items-center justify-center bg-emerald-800 text-white text-xl font-montserrat-bold p-2"
                                     >
                                         {header}
                                     </div>
@@ -147,7 +147,7 @@ const History: React.FC = () => {
                                             key={p}
                                             onClick={() => handlePageClick(p)}
                                             className={`h-10 w-10 rounded-full text-white ${page === p ? "bg-emerald-900" : "bg-emerald-600"
-                                                } hover:bg-emerald-900 transition`}
+                                                } hover:bg-emerald-700 transition-all duration-300 shadow-lg shadow-emerald-600/30 hover:shadow-xl`}
                                         >
                                             {p}
                                         </button>

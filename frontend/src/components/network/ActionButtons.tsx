@@ -30,7 +30,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
     return (
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button
-                className="w-full sm:w-auto cursor-pointer px-8 py-3 bg-emerald-600 text-white font-semibold rounded-xl transition-all duration-200 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                className="w-full sm:w-auto cursor-pointer px-8 py-4 bg-emerald-600 text-white font-montserrat-bold rounded-xl transition-all duration-300 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-600/30 hover:shadow-xl"
                 disabled={isTestLoading}
                 onClick={onTestClick}
             >
@@ -45,7 +45,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
             </button>
 
             <button
-                className="w-full sm:w-auto cursor-pointer px-8 py-3 bg-emerald-500 text-white font-semibold rounded-xl transition-all duration-200 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                className="w-full sm:w-auto cursor-pointer px-8 py-4 bg-emerald-500 text-white font-montserrat-bold rounded-xl transition-all duration-300 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/30 hover:shadow-xl"
                 disabled={isSaveDisabled}
                 onClick={onSaveClick}
             >
@@ -60,7 +60,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
             </button>
 
             <button
-                className="w-full sm:w-auto cursor-pointer px-8 py-3 bg-emerald-700 text-white font-semibold rounded-xl transition-all duration-200 hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                className="w-full sm:w-auto cursor-pointer px-8 py-4 bg-emerald-700 text-white font-montserrat-bold rounded-xl transition-all duration-300 hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-700/30 hover:shadow-xl"
                 disabled={!result || !result.ping || !result.download_mbps || !result.upload_mbps}
                 onClick={handleAnalyzeClick}
             >
