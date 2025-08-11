@@ -14,7 +14,7 @@ const HistoryPage: React.FC = () => {
     // =========================== Rendering ===============================>
 
     return (
-        <div className="relative h-screen font-montserrat">
+        <div className="relative h-screen font-montserrat bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
 
             {/**------------------------- Side Bar ------------------------------- **/}
 
@@ -27,7 +27,7 @@ const HistoryPage: React.FC = () => {
 
             {/**-------------------------- History area ----------------------------- **/}
 
-            <div className={`flex-1 px-10 transition-all duration-300 ${isSidebarVisible ? "ml-64" : "ml-22"} h-full`}>
+            <div className={`flex-1 h-full transition-all duration-300 ${isSidebarVisible ? "ml-64" : "ml-22"}`}>
                 <History />
             </div>
 
