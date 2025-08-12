@@ -20,7 +20,6 @@ interface SpeedGraphProps {
 }
 
 const SpeedGraph: React.FC<SpeedGraphProps> = ({ 
-    speedHistory, 
     result, 
     isLoading = false, 
     progress = 0, 

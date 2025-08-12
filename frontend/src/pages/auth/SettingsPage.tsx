@@ -1,5 +1,6 @@
-import SideBar from "../../components/SideBar";
 import { useSideBar } from "../../hooks/useSideBar";
+
+import SideBar from "../../components/SideBar";
 import Settings from "../../components/auth/settings/Settings";
 
 const SettingsPage: React.FC = () => {
@@ -13,11 +14,7 @@ const SettingsPage: React.FC = () => {
         <div className="relative h-screen flex font-montserrat bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
             {/**------------------------- Side Bar ------------------------------- **/}
 
-            <div
-                className={`transition-all duration-300 ease-in-out fixed top-0 left-0 h-full z-50 ${
-                    isSidebarVisible ? "w-64" : "w-22"
-                }`}
-            >
+            <div className={`transition-all duration-300 ease-in-out fixed top-0 left-0 h-full z-50 ${isSidebarVisible ? "w-64" : "w-22"}`}>
                 <SideBar
                     toggleSidebar={toggleSidebar}
                     isSidebarVisible={isSidebarVisible}
