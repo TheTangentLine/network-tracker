@@ -92,7 +92,7 @@ const NetworkTest: React.FC = () => {
                         <div className="bg-white rounded-2xl shadow-xl shadow-emerald-900/10 border border-emerald-100 overflow-hidden">
                             <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-4">
                                 <h2 className="text-2xl font-montserrat-bold text-white flex items-center gap-3">
-                                    Speed Graph
+                                    Speed Test
                                 </h2>
                             </div>
                             <div className="p-6">

@@ -31,7 +31,7 @@ const SpeedGraph: React.FC<SpeedGraphProps> = ({
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h2 className="text-xl font-bold text-emerald-800">Speed Test Results</h2>
+                        <h2 className="text-xl font-bold text-emerald-800">Speed Test Graph</h2>
                         <p className="text-sm text-gray-600">
                             Running speed test...
                         </p>
@@ -57,7 +57,7 @@ const SpeedGraph: React.FC<SpeedGraphProps> = ({
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h2 className="text-xl font-bold text-emerald-800">Speed Test Results</h2>
+                        <h2 className="text-xl font-bold text-emerald-800">Speed Test Graph</h2>
                         <p className="text-sm text-gray-600">
                             No test results available
                         </p>
@@ -77,7 +77,7 @@ const SpeedGraph: React.FC<SpeedGraphProps> = ({
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h2 className="text-xl font-bold text-emerald-800">Speed Test Results</h2>
+                    <h2 className="text-xl font-bold text-emerald-800">Speed Test Graph</h2>
                     <p className="text-sm text-gray-600">
                         Final network performance analysis
                     </p>
