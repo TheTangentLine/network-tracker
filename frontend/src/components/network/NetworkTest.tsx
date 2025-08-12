@@ -7,7 +7,6 @@ import { useTestProgress } from "../../hooks/network/useTestProgress";
 import Notify from "../../components/Notify";
 import SpeedGraph from "./SpeedGraph";
 import SpeedMetrics from "./SpeedMetrics";
-import ProgressBar from "./ProgressBar";
 import ActionButtons from "./ActionButtons";
 
 const NetworkTest: React.FC = () => {
@@ -15,7 +14,7 @@ const NetworkTest: React.FC = () => {
     const { result, setResult, loading: speedLoading, error: speedError, runTest } = useSpeed();
     const { saveFile, loading: saveLoading, error: saveError } = useSaveReport();
     const { user } = useAuth();
-    const { speedHistory, resetHistory, startSimulation } = useSpeedSimulation();
+    const { speedHistory, resetHistory } = useSpeedSimulation();
     const { progress, resetProgress, startTest, completeTest, getPhaseText } = useTestProgress(speedLoading);
     
     // State
