@@ -7,7 +7,7 @@ interface ActionButtonsProps {
     onSaveClick: () => void;
     isTestLoading: boolean;
     isSaveLoading: boolean;
-    isSaveDisabled: boolean;
+    isButtonDisabled: boolean;
     result?: SpeedTestResult;
 }
 
@@ -16,7 +16,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
     onSaveClick,
     isTestLoading,
     isSaveLoading,
-    isSaveDisabled,
+    isButtonDisabled,
     result
 }) => {
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
 
             <button
                 className="w-full sm:w-auto cursor-pointer px-8 py-4 bg-emerald-500 text-white font-montserrat-bold rounded-xl transition-all duration-300 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/30 hover:shadow-xl"
-                disabled={isSaveDisabled}
+                disabled={isButtonDisabled}
                 onClick={onSaveClick}
             >
                 {isSaveLoading ? (
@@ -61,7 +61,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
 
             <button
                 className="w-full sm:w-auto cursor-pointer px-8 py-4 bg-emerald-700 text-white font-montserrat-bold rounded-xl transition-all duration-300 hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-700/30 hover:shadow-xl"
-                disabled={!result || !result.ping || !result.download_mbps || !result.upload_mbps}
+                disabled={isButtonDisabled}
                 onClick={handleAnalyzeClick}
             >
                 Analyze Results

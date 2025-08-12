@@ -40,7 +40,7 @@ const SpeedMetrics: React.FC<SpeedMetricsProps> = ({ result, loading, error }) =
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Download Speed */}
             <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
                 <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">
