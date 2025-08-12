@@ -14,7 +14,7 @@ const NetworkTest: React.FC = () => {
     const { result, setResult, loading: speedLoading, error: speedError, runTest } = useSpeed();
     const { saveFile, loading: saveLoading, error: saveError } = useSaveReport();
     const { user } = useAuth();
-    const { speedHistory, resetHistory } = useSpeedSimulation();
+    const { resetHistory } = useSpeedSimulation();
     const { progress, resetProgress, startTest, completeTest, getPhaseText } = useTestProgress(speedLoading);
     
     // State
@@ -97,7 +97,6 @@ const NetworkTest: React.FC = () => {
                             </div>
                             <div className="p-6">
                                 <SpeedGraph 
-                                    speedHistory={speedHistory}
                                     result={result}
                                     isLoading={speedLoading}
                                     progress={progress}
