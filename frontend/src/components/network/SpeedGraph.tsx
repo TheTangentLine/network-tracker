@@ -3,16 +3,7 @@ import type { SpeedTestResult } from '../../entities/Network';
 import { drawResultGraph, GRAPH_CONFIG } from '../../utils/graphGenerator';
 import ProgressBar from './ProgressBar';
 
-// Types
-interface SpeedHistory {
-    download: number[];
-    upload: number[];
-    ping: number[];
-    time: number[];
-}
-
 interface SpeedGraphProps {
-    speedHistory?: SpeedHistory;
     result?: SpeedTestResult;
     isLoading?: boolean;
     progress?: number;
