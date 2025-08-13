@@ -53,6 +53,7 @@ export function useReadReports() {
         }
         catch (e: any) {
             setError(e.response.data.detail)
+            throw e; // Re-throw the error so the calling component can handle it
         }
         finally {
             setLoading(false)
