@@ -7,7 +7,6 @@ import { useTestProgress } from "../../hooks/network/useTestProgress";
 import Notify from "../../components/Notify";
 import SpeedGraph from "./SpeedGraph";
 import SpeedMetrics from "./SpeedMetrics";
-import ProgressBar from "./ProgressBar";
 import ActionButtons from "./ActionButtons";
 
 const NetworkTest: React.FC = () => {
@@ -15,7 +14,7 @@ const NetworkTest: React.FC = () => {
     const { result, setResult, loading: speedLoading, error: speedError, runTest } = useSpeed();
     const { saveFile, loading: saveLoading, error: saveError } = useSaveReport();
     const { user } = useAuth();
-    const { speedHistory, resetHistory, startSimulation } = useSpeedSimulation();
+    const { resetHistory } = useSpeedSimulation();
     const { progress, resetProgress, startTest, completeTest, getPhaseText } = useTestProgress(speedLoading);
     
     // State
@@ -28,13 +27,13 @@ const NetworkTest: React.FC = () => {
         startTest();
         resetHistory();
         
-        // Start simulation
-        startSimulation();
+        // Disable real-time simulation - only run the actual test
+        // startSimulation();
         
         // Run actual test
         await runTest();
         completeTest();
-    }, [startTest, resetHistory, startSimulation, runTest, completeTest]);
+    }, [startTest, resetHistory, runTest, completeTest]);
 
     const handleSaveClick = useCallback(async () => {
         const data = {
@@ -65,7 +64,7 @@ const NetworkTest: React.FC = () => {
     }, [isSuccess, setResult, resetProgress]);
 
     // Utility functions
-    const isSaveButtonDisabled = useCallback(() => {
+    const isButtonDisabled = useCallback(() => {
         return (
             speedLoading ||
             !result ||
@@ -85,42 +84,57 @@ const NetworkTest: React.FC = () => {
                 </div>
             </div>
 
-
             {/* Main Content */}
-            <div className="flex-1 max-w-6xl mx-auto w-full px-6 py-8">
-                <ProgressBar 
-                    isLoading={speedLoading}
-                    progress={progress}
-                    phaseText={getPhaseText()}
-                />
-                
-                <SpeedGraph 
-                    speedHistory={speedHistory}
-                    result={result}
-                    isLoading={speedLoading}
-                />
-                
-                <SpeedMetrics 
-                    result={result}
-                    loading={speedLoading}
-                    error={speedError}
-                />
-                
-                <ActionButtons 
-                    onTestClick={handleTestClick}
-                    onSaveClick={handleSaveClick}
-                    isTestLoading={speedLoading}
-                    isSaveLoading={saveLoading}
-                    isSaveDisabled={isSaveButtonDisabled()}
-                    result={result}
-                />
+            <div className="flex-1 overflow-auto p-6">
+                <div className="max-w-6xl mx-auto">
+                    <div className="space-y-8">
+                        {/* Speed Graph Section */}
+                        <div className="bg-white rounded-2xl shadow-xl shadow-emerald-900/10 border border-emerald-100 overflow-hidden">
+                            <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-4">
+                                <h2 className="text-2xl font-montserrat-bold text-white flex items-center gap-3">
+                                    Speed Test
+                                </h2>
+                            </div>
+                            <div className="p-6">
+                                <SpeedGraph 
+                                    result={result}
+                                    isLoading={speedLoading}
+                                    progress={progress}
+                                    phaseText={getPhaseText()}
+                                />
+                            </div>
+                            <div className="p-6">
+                                <SpeedMetrics 
+                                    result={result}
+                                    loading={speedLoading}
+                                    error={speedError}
+                                />
+                            </div>
+                        </div>
+                        
+                        {/* Action Buttons Section */}
 
-                {/* Error Display */}
-                {saveError && (
-                    <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-center">
-                        {saveError}
+                        <div className="p-6">
+                            <ActionButtons 
+                                onTestClick={handleTestClick}
+                                onSaveClick={handleSaveClick}
+                                isTestLoading={speedLoading}
+                                isSaveLoading={saveLoading}
+                                isButtonDisabled={isButtonDisabled()}
+                                result={result}
+                            />
+                        </div>
+      
+                 
+
+                        {/* Error Display */}
+                        {saveError && (
+                            <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-red-700 text-center font-montserrat">
+                                {saveError}
+                            </div>
+                        )}
                     </div>
-                )}
+                </div>
             </div>
 
             {/* Notification */}

@@ -3,7 +3,7 @@ import { useSideBar } from "../../hooks/useSideBar";
 
 // ---- Components ----
 import SideBar from "../../components/SideBar";
-import History from "../../components/reports/ReadReports";
+import History from "../../components/reports/History";
 
 const HistoryPage: React.FC = () => {
 

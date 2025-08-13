@@ -1,47 +1,85 @@
 import { useRef, useEffect } from 'react';
 import type { SpeedTestResult } from '../../entities/Network';
 import { drawResultGraph, GRAPH_CONFIG } from '../../utils/graphGenerator';
-
-// Types
-interface SpeedHistory {
-    download: number[];
-    upload: number[];
-    ping: number[];
-    time: number[];
-}
+import ProgressBar from './ProgressBar';
 
 interface SpeedGraphProps {
-    speedHistory?: SpeedHistory;
     result?: SpeedTestResult;
     isLoading?: boolean;
+    progress?: number;
+    phaseText?: string;
 }
 
-const SpeedGraph: React.FC<SpeedGraphProps> = ({ speedHistory, result, isLoading = false }) => {
+const SpeedGraph: React.FC<SpeedGraphProps> = ({ 
+    result, 
+    isLoading = false, 
+    progress = 0, 
+    phaseText = "" 
+}) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
-        if (result) {
+        // Only draw the graph when we have final results, not during real-time updates
+        if (result && !isLoading) {
             drawResultGraph(canvasRef, result);
-        } else if (speedHistory && speedHistory.download.length > 0) {
-            drawResultGraph(canvasRef, {
-                download_mbps: speedHistory.download[speedHistory.download.length - 1] || 0,
-                upload_mbps: speedHistory.upload[speedHistory.upload.length - 1] || 0,
-                ping: speedHistory.ping[speedHistory.ping.length - 1] || 0
-            });
         }
-    }, [result, speedHistory]);
+    }, [result, isLoading]);
 
-    if (!isLoading && !result && (!speedHistory || speedHistory.download.length === 0)) {
-        return null;
+    // Show progress bar while loading
+    if (isLoading) {
+        return (
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 className="text-xl font-bold text-emerald-800">Speed Test Graph</h2>
+                        <p className="text-sm text-gray-600">
+                            Running speed test...
+                        </p>
+                    </div>
+                </div>
+                
+                <div className="w-full h-80 relative flex items-center justify-center">
+                    <div className="w-full max-w-md">
+                        <ProgressBar 
+                            isLoading={isLoading}
+                            progress={progress}
+                            phaseText={phaseText}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Don't show anything if no results
+    if (!result) {
+        return (
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 className="text-xl font-bold text-emerald-800">Speed Test Graph</h2>
+                        <p className="text-sm text-gray-600">
+                            No test results available
+                        </p>
+                    </div>
+                </div>
+                
+                <div className="w-full h-80 relative flex items-center justify-center">
+                    <div className="text-gray-400 text-lg">
+                        Run a test to see results
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
-        <div className="mb-8 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h2 className="text-xl font-bold text-emerald-800">Speed Test Results</h2>
+                    <h2 className="text-xl font-bold text-emerald-800">Speed Test Graph</h2>
                     <p className="text-sm text-gray-600">
-                        {result ? 'Final network performance analysis' : 'Real-time network performance analysis'}
+                        Final network performance analysis
                     </p>
                 </div>
                 <div className="flex items-center space-x-4 text-sm">

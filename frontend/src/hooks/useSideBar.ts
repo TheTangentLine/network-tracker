@@ -2,28 +2,31 @@ import { useState, useEffect, useCallback } from 'react';
 
 const STORAGE_KEY = 'sidebar_visible';
 
-export function useSideBar(defaultVisible = true) {
-    // Lazy initializer reads from localStorage once
+export function useSideBar(defaultVisible = false) {
+    
+    // -------------------------- State management ----------------------------->
+
     const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(() => {
-        if (typeof window === 'undefined') return defaultVisible;
+        if (typeof window === 'undefined') 
+            return defaultVisible;
+
         const stored = window.localStorage.getItem(STORAGE_KEY);
         return stored === null ? defaultVisible : stored === 'true';
     });
 
-    // Whenever visibility changes, persist it
+    // -------------------------- Store state of sidebar ----------------------->
+
     useEffect(() => {
-        try {
-            window.localStorage.setItem(STORAGE_KEY, String(isSidebarVisible));
-        } catch (err) {
-            // localStorage might be unavailable or quota exceeded
-            console.warn('Could not write sidebar visibility to localStorage', err);
-        }
+        window.localStorage.setItem(STORAGE_KEY, String(isSidebarVisible));
     }, [isSidebarVisible]);
 
-    // Always the same function identity for toggling
+    // -------------------------- Main function ------------------------>
+
     const toggleSidebar = useCallback(() => {
         setIsSidebarVisible(v => !v);
     }, []);
+
+    // ----------------------------------------------------------------->
 
     return { isSidebarVisible, toggleSidebar };
 }

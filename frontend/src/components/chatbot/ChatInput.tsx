@@ -7,12 +7,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   onSubmit,
   onStopReply,
   isWaitingForReply,
-  placeholder = "Ask me anything",
+  placeholder = "Ask me anything about network",
   maxWidth = "max-w-2xl",
   isLarge = false
 }) => {
   return (
-    <div className={`w-full ${maxWidth}`}>
+    <div className={`w-full ${maxWidth} p-2`}>
       <form onSubmit={onSubmit} className="relative flex">
         <input
           type="text"

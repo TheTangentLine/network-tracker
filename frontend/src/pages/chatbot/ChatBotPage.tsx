@@ -1,5 +1,6 @@
-import SideBar from "../../components/SideBar";
 import { useSideBar } from "../../hooks/useSideBar";
+
+import SideBar from "../../components/SideBar";
 import ChatBot from "../../components/chatbot/ChatBot";
 
 const ChatBotPage: React.FC = () => {
@@ -13,11 +14,7 @@ const ChatBotPage: React.FC = () => {
     <div className="relative h-screen flex font-montserrat">
       {/**------------------------- Side Bar ------------------------------- **/}
 
-      <div
-        className={`transition-all duration-300 ease-in-out h-full ${
-          isSidebarVisible ? "w-64" : "w-22"
-        }`}
-      >
+      <div className={`transition-all duration-300 ease-in-out h-full ${isSidebarVisible ? "w-64" : "w-22"}`}>
         <SideBar
           toggleSidebar={toggleSidebar}
           isSidebarVisible={isSidebarVisible}
@@ -26,11 +23,7 @@ const ChatBotPage: React.FC = () => {
 
       {/**-------------------------- Chat area ----------------------------- **/}
 
-      <div
-        className={`flex-1 h-full ${
-          isSidebarVisible ? "ml-0" : "ml-0"
-        } duration-300`}
-      >
+      <div className={`flex-1 h-full ${isSidebarVisible ? "ml-0" : "ml-0"} duration-300`}>
         <ChatBot />
       </div>
 

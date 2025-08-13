@@ -1,13 +1,22 @@
 import { Navigate } from "react-router-dom";
 import useFetch from "../../hooks/auth/useFetch";
-import LoadingPage from "./LoadingPage";
+
+import Loading from "../../components/Loading";
 
 const AuthDirect = () => {
+
+    // ---------------------- State management -------------------------->
+
     const { user, loading } = useFetch();
 
+    // --------------------- Waiting for data -------------------->
+
     if (loading) {
-        return <LoadingPage />;
+        return <Loading />;
     }
+
+    // --------------------- Handling navigation ------------------>
+
     if (user && user.username) {
         return <Navigate to="/testing" replace />;
     }

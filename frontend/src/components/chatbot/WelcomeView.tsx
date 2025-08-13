@@ -20,7 +20,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
         subtitle="Your AI-powered network analysis companion"
       />
       
-      <div className="w-full max-w-4xl mt-8">
+      <div className="w-full max-w-3xl mt-8">
         <ChatInput
           message={message}
           onMessageChange={onMessageChange}
