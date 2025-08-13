@@ -89,63 +89,72 @@ const LoginForm = () => {
     // ================================ Rendering =====================================>
 
     return (
-        <form
-            className="flex flex-col items-center justify-center shadow-2xl rounded-3xl shadow-green-400 p-12 m-2"
-            onSubmit={handleSubmit}
-        >
-            {/** -------------------------- Username -------------------------------  **/}
+        <div className="w-full max-w-md">
+            {/* Form Card */}
+            <div className="bg-white rounded-2xl shadow-2xl shadow-emerald-600/20 p-8 border border-emerald-200">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Username Field */}
+                    <InputFieldComponent
+                        label="Username or Email"
+                        value={user.username}
+                        onChange={(value) => setUser(prev => ({ ...prev, username: value }))}
+                        placeholder="Enter your username or email"
+                        type="text"
+                        error={fieldErrors.username}
+                    />
 
-            <InputFieldComponent
-                label="Username"
-                value={user.username}
-                onChange={(value) => setUser(prev => ({ ...prev, username: value }))}
-                placeholder="Enter your username or email"
-                type="text"
-                error={fieldErrors.username}
-            />
+                    {/* Password Field */}
+                    <InputFieldComponent
+                        label="Password"
+                        value={user.password}
+                        onChange={(value) => setUser(prev => ({ ...prev, password: value }))}
+                        placeholder="Enter your password"
+                        type={!showPassword ? "password" : "text"}
+                        error={fieldErrors.password}
+                        showButton={true}
+                        show={!showPassword ? false : true}
+                        onToggleShow={() => setShowPassword(prev => !prev)}
+                    />
 
-            {/** -------------------------- Password -------------------------------  **/}
+                    {/* Submit Button */}
+                    <button
+                        type="submit"
+                        disabled={loading || !isFormValid}
+                        className="cursor-pointer w-full flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-montserrat-bold text-lg py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
+                    >
+                        {loading ? (
+                            <div className="flex items-center gap-2">
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Signing In...
+                            </div>
+                        ) : (
+                            <>
+                                <FaSignInAlt className="mr-3" />
+                                Sign In
+                            </>
+                        )}
+                    </button>
 
-            <InputFieldComponent
-                label="Password"
-                value={user.password}
-                onChange={(value) => setUser(prev => ({ ...prev, password: value }))}
-                placeholder="Enter your password"
-                type={!showPassword ? "password" : "text"}
-                error={fieldErrors.password}
-                showButton={true}
-                show={!showPassword ? false : true}
-                onToggleShow={() => setShowPassword(prev => !prev)}
-            />
+                    {/* Error Message */}
+                    {error && (
+                        <p className="text-red-600 font-montserrat-bold text-center">{error}</p>
+                    )}
 
-            {/** -------------------------- Button -------------------------------  **/}
-
-            <button
-                className="flex items-center justify-center bg-emerald-700 w-3xs text-white font-bold text-xl p-4 rounded-2xl mt-6 cursor-pointer hover:scale-110 duration-155 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={loading || !isFormValid}
-            >
-                {loading ? "Loading..." : (<><FaSignInAlt className="mr-4" /> Sign In</>)}
-            </button>
-
-            {/** -------------------------- Error -------------------------------  **/}
-
-            {error && <p className="font-bold text-red-600 mt-5">{error}</p>}
-
-            {/** ---------------------- Redirect to Register page --------------------------  **/}
-
-            <div className="mt-5">
-                <label>Haven't got an account?</label>
-                <a
-                    href="/register"
-                    className="text-emerald-950 font-bold underline pl-2 cursor-pointer hover:text-xl duration-155"
-                >
-                    Register
-                </a>
+                    {/* Register Link */}
+                    <div className="text-center pt-4 border-t border-emerald-100">
+                        <p className="text-emerald-600 font-montserrat">
+                            Haven't got an account?{" "}
+                            <a
+                                href="/register"
+                                className="text-emerald-700 font-montserrat-bold hover:text-emerald-900 transition-colors duration-200 underline"
+                            >
+                                Register here
+                            </a>
+                        </p>
+                    </div>
+                </form>
             </div>
-
-            {/** ----------------------------------------------------------------------------  **/}
-
-        </form>
+        </div>
     );
 };
 
