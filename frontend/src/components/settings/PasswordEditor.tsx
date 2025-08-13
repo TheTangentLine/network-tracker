@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FiLock, FiEye, FiEyeOff, FiShield, FiSave } from "react-icons/fi";
 import { z } from "zod";
 import Reassure from "../Reassure";
+import Notify from "../Notify";
 
 // ----------------------------------- Zod for validation ------------------------------->
 
@@ -19,16 +20,21 @@ const passwordChangeSchema = z
 type FieldErrors = Record<string, string>;
 
 interface PasswordEditorProps {
-    onSave?: (data: any) => void;
+    onSave?: (data: any) => Promise<boolean>;
+    error?: string | null;
+    loading?: boolean;
 }
 
-const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave }) => {
+const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave, error, loading }) => {
     const [showPasswords, setShowPasswords] = useState({
         current: false,
         new: false,
         confirm: false
     });
     const [showReassure, setShowReassure] = useState(false);
+    const [showNotify, setShowNotify] = useState(false);
+    const [notifyMessage, setNotifyMessage] = useState("");
+    const [isSuccess, setIsSuccess] = useState(false);
     const [formData, setFormData] = useState({
         currentPassword: "",
         newPassword: "",
@@ -71,29 +77,51 @@ const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave }) => {
         setShowReassure(true);
     };
 
-    const handleConfirmSave = () => {
+    const handleConfirmSave = async () => {
         setShowReassure(false);
         
-        // Execute the save function passed as prop
         if (onSave) {
-            onSave(formData);
+            const success = await onSave(formData);
+            if (success) {
+                setNotifyMessage("Password updated successfully!");
+                setIsSuccess(true);
+                setShowNotify(true);
+                // Reset form after successful save
+                setFormData({
+                    currentPassword: "",
+                    newPassword: "",
+                    confirmPassword: ""
+                });
+                setFieldErrors({});
+            } else {
+                // Error will be handled by the parent component
+                // The error prop will contain the backend error message
+            }
         } else {
             // Default behavior if no onSave prop provided
             console.log('Password change requested', formData);
+            setNotifyMessage("Password change requested (no save handler)");
+            setIsSuccess(true);
+            setShowNotify(true);
         }
-        
-        // Reset form after successful save
-        setFormData({
-            currentPassword: "",
-            newPassword: "",
-            confirmPassword: ""
-        });
-        setFieldErrors({});
     };
 
     const handleCancelSave = () => {
         setShowReassure(false);
     };
+
+    const handleNotifyClose = () => {
+        setShowNotify(false);
+    };
+
+    // Show error notification when error prop changes
+    useEffect(() => {
+        if (error) {
+            setNotifyMessage(error);
+            setIsSuccess(false);
+            setShowNotify(true);
+        }
+    }, [error]);
 
     return (
         <>
@@ -103,11 +131,11 @@ const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave }) => {
                     <h4 className="text-lg font-montserrat-bold text-emerald-900">Change Password</h4>
                     <button 
                         onClick={handleSaveClick}
-                        disabled={!isFormValid}
-                        className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-montserrat-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={!isFormValid || loading}
+                        className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-montserrat-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <FiSave className="text-sm" />
-                        Update Password
+                        {loading ? "Updating..." : "Update Password"}
                     </button>
                 </div>
 
@@ -138,7 +166,7 @@ const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave }) => {
                             <button
                                 type="button"
                                 onClick={() => togglePasswordVisibility('current')}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-emerald-600 hover:text-emerald-700"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-emerald-600 hover:text-emerald-700 cursor-pointer"
                             >
                                 {showPasswords.current ? <FiEyeOff className="text-lg" /> : <FiEye className="text-lg" />}
                             </button>
@@ -170,13 +198,6 @@ const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave }) => {
                                 }`}
                                 placeholder="Enter your new password"
                             />
-                            <button
-                                type="button"
-                                onClick={() => togglePasswordVisibility('new')}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-emerald-600 hover:text-emerald-700"
-                            >
-                                {showPasswords.new ? <FiEyeOff className="text-lg" /> : <FiEye className="text-lg" />}
-                            </button>
                         </div>
                         {fieldErrors.newPassword && (
                             <span className="text-red-600 text-sm mt-1">{fieldErrors.newPassword}</span>
@@ -205,13 +226,6 @@ const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave }) => {
                                 }`}
                                 placeholder="Confirm your new password"
                             />
-                            <button
-                                type="button"
-                                onClick={() => togglePasswordVisibility('confirm')}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-emerald-600 hover:text-emerald-700"
-                            >
-                                {showPasswords.confirm ? <FiEyeOff className="text-lg" /> : <FiEye className="text-lg" />}
-                            </button>
                         </div>
                         {fieldErrors.confirmPassword && (
                             <span className="text-red-600 text-sm mt-1">{fieldErrors.confirmPassword}</span>
@@ -247,6 +261,15 @@ const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave }) => {
                 onCancel={handleCancelSave}
                 confirmText="Update Password"
                 cancelText="Cancel"
+            />
+
+            {/* Notify Modal */}
+            <Notify
+                isOpen={showNotify}
+                message={notifyMessage}
+                onClose={handleNotifyClose}
+                isSuccess={isSuccess}
+                title={isSuccess ? "Success" : "Error"}
             />
         </>
     )
