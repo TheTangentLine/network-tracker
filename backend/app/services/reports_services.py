@@ -45,7 +45,6 @@ async def read_by_id(input: str):
         raise HTTPException(status_code=404, detail="Report not found")
     return report
 
-
 # Read all reports by user ID
 async def read_all_by_id(input: str):
 
@@ -59,11 +58,15 @@ async def read_all_by_id(input: str):
         raise HTTPException(status_code=404, detail="No reports found for this user")
     return user_reports
 
-
-
+# Read reports by username
 async def read_by_name(username: str, page: int, sortDate: str = "", sortMetric: str = "", dateStart: str = "", dateEnd: str = "", searchText: str = ""):
+
+    # ------------------------- Constant --------------------------->
+
     LIMIT = 10
-    number_offset = 10 * (page - 1)
+    NUMBER_OFFSET = 10 * (page - 1)
+
+    # ------------------------- Confirm user ------------------------->
 
     user = await User.find_one(User.username == username)
     if not user:
@@ -71,10 +74,12 @@ async def read_by_name(username: str, page: int, sortDate: str = "", sortMetric:
     
     user_id = str(user.id)
 
-    # Base query for the user
+    # ----------------------------- Base query ------------------------------->
+
     base_queries = Report.find(Report.user_id == user_id)
 
-    # Search filter
+    # ---------------------------- Search filter ----------------------------->
+
     if searchText != '':
         base_queries = base_queries.find(
             {
@@ -88,46 +93,51 @@ async def read_by_name(username: str, page: int, sortDate: str = "", sortMetric:
             }
         )
 
-    # Date range filter
+    # ------------------------ Date range filter -------------------------->
     if dateStart != '':
         base_queries = base_queries.find(Report.date >= dateStart)
 
     if dateEnd != '':
         base_queries = base_queries.find(Report.date <= dateEnd)
 
-    # Sorting by Date (oldest or newest first)
+    # -------------------------- Sorting by Date (oldest or newest first) ------------------------->
+
     sort_params = []
     if sortDate:
         if sortDate == 'oldest':
-            sort_params.append((Report.date, pymongo.ASCENDING))  # Ascending order for oldest first
-            sort_params.append((Report.time, pymongo.ASCENDING))  # Ascending order for oldest first
+            sort_params.append((Report.date, pymongo.ASCENDING)) 
+            sort_params.append((Report.time, pymongo.ASCENDING))  
         else:
-            sort_params.append((Report.date, pymongo.DESCENDING))  # Descending order for newest first
-            sort_params.append((Report.time, pymongo.DESCENDING))  # Ascending order for oldest first
+            sort_params.append((Report.date, pymongo.DESCENDING))  
+            sort_params.append((Report.time, pymongo.DESCENDING))  
 
-    # Sorting by metrics (ping, upload, download)
+    # --------------------------- Sorting by metrics (ping, upload, download) -------------------------->
+    
     if sortMetric:
         if sortMetric == 'ping':
-            sort_params.append((Report.network_data.ping, pymongo.DESCENDING))  # Descending order for ping
+            sort_params.append((Report.network_data.ping, pymongo.DESCENDING))  
         elif sortMetric == 'upload':
-            sort_params.append((Report.network_data.upload_mbps, pymongo.DESCENDING))  # Descending order for upload speed
+            sort_params.append((Report.network_data.upload_mbps, pymongo.DESCENDING))  
         elif sortMetric == 'download':
-            sort_params.append((Report.network_data.download_mbps, pymongo.DESCENDING))  # Descending order for download speed
+            sort_params.append((Report.network_data.download_mbps, pymongo.DESCENDING))  
 
-    # Apply sorting
+    # ================================= Apply sorting ===================================>
+
     if sort_params:
         base_queries = base_queries.sort(sort_params)
 
-    # Count total users and calculate total pages
-    total_users = await base_queries.count()
-    total_pages = math.ceil(total_users / LIMIT)
+    # ---------------------------- Count total reports and calculate total pages ------------------------------>
 
-    # Pagination: Skip offset and apply limit
-    list_user = await base_queries.skip(number_offset).limit(LIMIT).to_list()
+    total_reports = await base_queries.count()
+    total_pages = math.ceil(total_reports / LIMIT)
+
+    # ------------------------------- Pagination -------------------------------->
+
+    list_reports = await base_queries.skip(NUMBER_OFFSET).limit(LIMIT).to_list()
 
     return {
         "total_pages": total_pages,
-        "list_user": list_user
+        "list_reports": list_reports
     }
 
 
