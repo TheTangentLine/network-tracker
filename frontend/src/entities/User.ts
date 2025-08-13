@@ -16,3 +16,11 @@ export interface UserRegister {
     password: string;
     nationality: string;
 }
+
+export interface UserUpdatePassword {
+    username: string;
+    phone: string;
+    email: string;
+    current_password: string;
+    new_password: string;
+}
