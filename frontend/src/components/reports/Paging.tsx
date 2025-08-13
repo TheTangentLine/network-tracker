@@ -21,9 +21,9 @@ const Paging: React.FC<PagingProps> = ({
                     <button
                         key={p}
                         onClick={() => handlePageClick(p)}
-                        className={`h-12 w-12 rounded-xl text-white font-montserrat-bold transition-all duration-300 ${
+                        className={`h-12 w-12 rounded-xl font-montserrat-bold transition-all duration-300 cursor-pointer ${
                             page === p 
-                                ? "bg-emerald-600 shadow-lg shadow-emerald-600/30" 
+                                ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/30" 
                                 : "bg-white text-emerald-700 border-2 border-emerald-200 hover:bg-emerald-50 hover:border-emerald-300"
                         } hover:scale-105`}
                     >
