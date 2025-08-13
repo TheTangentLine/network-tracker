@@ -4,7 +4,7 @@ from bson import ObjectId
 from app.schemas.users_schema import *
 from app.models.users_model import User
 
-from app.core.security.hashing import hash_password
+from app.core.security.hashing import hash_password, verify_password
 
 # ------------------------- Create ------------------------->
 
@@ -46,22 +46,25 @@ async def read_by_id(input: str):
         raise HTTPException(status_code=404, detail="User not found")
     return UserRead(
         username=user.username,
-        email=user.email
+        email=user.email,
+        phone=user.phone
     )
 
 # ------------------------- Update ------------------------->
 
 async def update(input: UserUpdate):
+
     # Check if user exists
     user = await User.find_one(User.username == input.username)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Update user attributes
-    user.phone = input.phone or user.phone
-    user.email = input.email or user.email
-    user.password = hash_password(input.password) if input.password else user.password
-    user.nationality = input.nationality or user.nationality
+    # Check if password is correct
+    if not verify_password(input.current_password, user.password):
+        raise HTTPException(status_code=401, detail="Incorrect password")
+
+    # Update new password
+    user.password = hash_password(input.new_password)
 
     # Save user into database
     await user.save()

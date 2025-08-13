@@ -38,10 +38,10 @@ class UserRead(BaseModel):
 
 class UserUpdate(BaseModel):
     username: Annotated[str, Field(min_length=3, max_length=50)]  
-    phone: Annotated[str, Field(min_length=10, max_length=15)] | None = None
-    email: Annotated[EmailStr, Field()] | None = None
-    password: Annotated[str, Field(min_length=6)] | None = None
-    nationality: Annotated[str, Field()] | None = None
+    email: Annotated[EmailStr, Field()]
+    phone: Annotated[str, Field(min_length=10, max_length=15)] 
+    current_password: Annotated[str, Field(min_length=6)] 
+    new_password: Annotated[str, Field(min_length=6)] 
 
 # ------------------------ Delete ------------------------>
 
