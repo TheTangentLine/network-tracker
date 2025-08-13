@@ -1,6 +1,9 @@
+// ---- Hook ----
+import { useChat } from "../../hooks/chatbot/useChat";
+
+// ---- Components ----
 import { WelcomeView } from "./WelcomeView";
 import { ChatView } from "./ChatView";
-import { useChat } from "../../hooks/chatbot/useChat";
 
 const ChatBot = () => {
   const {

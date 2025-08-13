@@ -1,6 +1,9 @@
+// ---- Type ----
+import type { WelcomeViewProps } from "../../entities/Chat";
+
+// ---- Components ----
 import { ChatHeader } from "./ChatHeader";
 import { ChatInput } from "./ChatInput";
-import type { WelcomeViewProps } from "../../entities/Chat";
 
 export const WelcomeView: React.FC<WelcomeViewProps> = ({
   message,
@@ -14,12 +17,12 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full px-4 font-montserrat space-y-10">
+    <div className="flex flex-col items-center justify-center h-screen px-4 font-montserrat space-y-10">
       <ChatHeader
         title="Network Assistant"
         subtitle="Your AI-powered network analysis companion"
       />
-      
+
       <div className="w-full max-w-3xl mt-8">
         <ChatInput
           message={message}

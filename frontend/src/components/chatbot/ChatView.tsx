@@ -1,7 +1,10 @@
+// ---- Type ----
+import type { ChatViewProps } from "../../entities/Chat";
+
+// ---- Components ----
 import { ChatHeader } from "./ChatHeader";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
-import type { ChatViewProps } from "../../entities/Chat";
 
 export const ChatView: React.FC<ChatViewProps> = ({
   messages,
@@ -11,15 +14,19 @@ export const ChatView: React.FC<ChatViewProps> = ({
   onStopReply,
   isWaitingForReply
 }) => {
+
+  // ================================= Rendering ================================>
+
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-screen bg-gray-50">
+      
       <ChatHeader
         title="Network Assistant"
-        subtitle="AI-powered network analysis"
+        subtitle="Your AI-powered network analysis companion"
         messageCount={messages.length}
         isCompact={true}
       />
-      
+            
       <div className="flex-1 overflow-y-auto">
         <ChatMessages messages={messages} />
       </div>
@@ -36,6 +43,7 @@ export const ChatView: React.FC<ChatViewProps> = ({
           />
         </div>
       </div>
+
     </div>
   );
 }; 
