@@ -1,9 +1,9 @@
 // ---- Hooks ----
-import { useSideBar } from '../../hooks/useSideBar';
+import { useSideBar } from '../hooks/useSideBar';
 
 // ---- Components ----
-import SideBar from '../../components/SideBar';
-import NetworkTest from '../../components/network/NetworkTest';
+import SideBar from '../components/SideBar';
+import NetworkTest from '../components/network/NetworkTest';
 
 const TestingPage: React.FC = () => {
 

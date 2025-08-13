@@ -1,15 +1,18 @@
+// ---- Hooks ----
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFilter } from '../../hooks/reports/useFilter'
 import { useReadReports } from "../../hooks/reports/useReadReports";
 
+// ---- Type ----
 import type { SpeedTestResult } from "../../entities/Network";
 
+// ---- Components ----
+import PdfPreviewModal from "./PdfPreviewModal";
 import SearchBar from "./SearchBar";
 import FilterArea from "./FilterArea";
-import PdfPreviewModal from "./PdfPreviewModal";
-import Paging from "./Paging";
 import DataGrids from "./DataGrids";
+import Paging from "./Paging";
 
 
 const History: React.FC = () => {
@@ -49,7 +52,6 @@ const History: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setPage(1);
-        readReports(filter, searchText);
     }
     
     // ------------------------------ Delete function ------------------------------->

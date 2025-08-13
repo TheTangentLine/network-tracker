@@ -1,12 +1,12 @@
 import { useState } from "react";
+import useAuth from "../auth/useAuth";
 
 import { deleteReport, readReport, generatePdfFile } from "../../services/reportsService";
 
-import type { Report } from "../../entities/Report";
+import type { Report, ReportReturned } from "../../entities/Report";
 import type { Filter } from "../../entities/Filter"
 import type { SpeedTestResult } from "../../entities/Network";
 
-import useAuth from "../auth/useAuth";
 
 export function useReadReports() {
     const { user } = useAuth();
@@ -27,8 +27,8 @@ export function useReadReports() {
         setLoading(true);
         setError("");
         try {
-            const dataReturned = (await readReport(user?.username, page, filter, searchText)).data
-            const reportData = dataReturned.list_user
+            const dataReturned: ReportReturned = (await readReport(user?.username, page, filter, searchText)).data
+            const reportData = dataReturned.list_reports
             const pageData = dataReturned.total_pages
 
             setData(reportData)
@@ -90,9 +90,11 @@ export function useReadReports() {
 
 
     return {
-        page, totalPages, data, setData, setPage, loading, error, readReports, deleteReports, previewModalOpen,
-        pdfBlob,
-        setPreviewModalOpen,
+        loading, error,
+        page, totalPages, setPage,
+        data, setData, readReports,
+        setPreviewModalOpen, previewModalOpen, pdfBlob,
+        deleteReports, 
         generatePdf,
         handleSavePdf,
     }

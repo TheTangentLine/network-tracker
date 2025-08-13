@@ -26,7 +26,7 @@ async def login(input: UserLogin) -> dict:
     if not verify_password(input.password, user.password):
         raise HTTPException(status_code=401, detail="Wrong password")
     
-    payload = UserRead(username=user.username, email=user.email)
+    payload = UserRead(username=user.username, email=user.email, phone=user.phone)
     access_token = create_access_token(payload)
     refresh_token = create_refresh_token(payload)
 

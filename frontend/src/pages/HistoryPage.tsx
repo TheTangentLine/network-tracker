@@ -1,9 +1,9 @@
 // ---- Hooks ----
-import { useSideBar } from "../../hooks/useSideBar";
+import { useSideBar } from "../hooks/useSideBar";
 
 // ---- Components ----
-import SideBar from "../../components/SideBar";
-import History from "../../components/reports/History";
+import SideBar from "../components/SideBar";
+import History from "../components/reports/History";
 
 const HistoryPage: React.FC = () => {
 
@@ -14,7 +14,7 @@ const HistoryPage: React.FC = () => {
     // =========================== Rendering ===============================>
 
     return (
-        <div className="relative h-screen font-montserrat bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
+        <div className="relative min-h-screen font-montserrat bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
 
             {/**------------------------- Side Bar ------------------------------- **/}
 

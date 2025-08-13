@@ -1,5 +1,8 @@
-import { IoSend, IoStop } from "react-icons/io5";
+// ---- Type ----
 import type { ChatInputProps } from "../../entities/Chat";
+
+// ---- Icons ----
+import { IoSend, IoStop } from "react-icons/io5";
 
 export const ChatInput: React.FC<ChatInputProps> = ({
   message,

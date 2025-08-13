@@ -3,13 +3,13 @@ import { AuthProvider } from "./context/AuthContext"
 
 import LoginPage from "./pages/auth/LoginPage"
 import RegisterPage from "./pages/auth/RegisterPage"
-import TestingPage from "./pages/network/TestingPage"
-import HistoryPage from "./pages/reports/HistoryPage"
+import TestingPage from "./pages/TestingPage"
+import HistoryPage from "./pages/HistoryPage"
 
-import ChatBotPage from "./pages/chatbot/ChatBotPage"
+import ChatBotPage from "./pages/ChatBotPage"
 import PrivateRoute from "./components/auth/PrivateRoute"
 import AuthDirect from "./pages/auth/AuthDirect"
-import SettingsPage from "./pages/auth/SettingsPage"
+import SettingsPage from "./pages/SettingsPage"
 
 function App() {
   return (

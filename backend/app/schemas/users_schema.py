@@ -32,6 +32,7 @@ class UserLogin(BaseModel):
 class UserRead(BaseModel):
     username: Annotated[str, Field(min_length=3, max_length=50)]  
     email: Annotated[EmailStr, Field()]
+    phone: Annotated[str, Field(min_length=10, max_length=15)]
 
 # ------------------------ Update ------------------------>
 

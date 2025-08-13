@@ -1,16 +1,13 @@
 // ---- Hooks ----
 import { useLocation, useNavigate } from 'react-router-dom';
 import useLogout from '../hooks/auth/useLogout';
-import useAuth from '../hooks/auth/useAuth';
 
 // ---- Icons ----
 import { FiLogOut } from 'react-icons/fi';
 import { FaHistory, FaRobot } from "react-icons/fa";
 import { IoIosSettings } from "react-icons/io";
 import { SiSpeedtest } from "react-icons/si";
-import { TbLayoutSidebarFilled } from "react-icons/tb";
-import { TbLayoutSidebar } from "react-icons/tb";
-import { RxAvatar } from "react-icons/rx";
+import { TbLayoutSidebarFilled, TbLayoutSidebar } from "react-icons/tb";
 
 // ------------------------------ Props ---------------------------->
 
@@ -29,7 +26,6 @@ const SideBar: React.FC<SidebarProps> = ({
     // --------------------------- State management ------------------------->
 
     const { logout, loading: logoutLoading } = useLogout()
-    const { user } = useAuth();
 
     // --------------------------- Router management ------------------------>
 
@@ -129,18 +125,6 @@ const SideBar: React.FC<SidebarProps> = ({
             {/*--------------------------- Spacer to push content to the bottom -------------------------*/}
 
             <div className="flex-grow" />
-
-            {/*-------------------------------------- User Info -------------------------------------*/}
-
-            <div className="flex flex-row justify-center items-center text-white bg-emerald-900 p-5">
-                <div className='text-5xl'><RxAvatar /></div>
-                {isSidebarVisible &&
-                    <div className="flex flex-col bg-emerald-950 shadow-md shadow-emerald-900 rounded-2xl ml-2 p-3">
-                        <p className='font-montserrat-bold'>{user?.username || 'No name available'}</p>
-                        <p>{user?.email || 'No email available'}</p>
-                    </div>
-                }
-            </div>
 
             {/*------------------------------------ Logout Button ----------------------------------*/}
 

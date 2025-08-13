@@ -1,6 +1,11 @@
+// ---- Hooks ----
 import React, { useEffect, useRef } from "react";
-import { ChatMessage } from "./ChatMessage";
+
+// ---- Type ----
 import type { ChatMessagesProps } from "../../entities/Chat";
+
+// ---- Component ----
+import { ChatMessage } from "./ChatMessage";
 
 export const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);

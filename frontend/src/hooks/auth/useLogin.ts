@@ -19,7 +19,7 @@ export default function useLogin() {
 
         login(input)
             .then(u => {
-                setUser({ ...user, username: u.data.username, email: u.data.email });
+                setUser({ ...user, username: u.data.username, email: u.data.email, phone: u.data.phone });
                 navigate('/testing');
             })
             .catch(e => {

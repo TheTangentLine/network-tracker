@@ -1,7 +1,10 @@
+// ---- Type ----
+import type { Filter } from "../../entities/Filter";
+
+// ---- Icons ----
 import { FaFilter } from "react-icons/fa";
 import { BsCalendarDateFill } from "react-icons/bs";
 
-import type { Filter } from "../../entities/Filter";
 
 const FilterArea: React.FC<Filter> = ({
     sortDate,
