@@ -51,7 +51,7 @@ const HandleEditor: React.FC = () => {
                 </div>
             </div>
             {/* Tab Navigation */}
-            <div className="flex space-x-1 bg-emerald-100 p-2 rounded-xl">
+            <div className="flex space-x-1 bg-emerald-100 p-2 rounded-xl mt-10">
                 <button 
                     className={`flex items-center gap-3 px-6 py-3 rounded-lg font-montserrat-bold transition-all duration-300 cursor-pointer ${
                         showDetails 
