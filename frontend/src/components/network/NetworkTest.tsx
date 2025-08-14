@@ -124,8 +124,6 @@ const NetworkTest: React.FC = () => {
                                 result={result}
                             />
                         </div>
-      
-                 
 
                         {/* Error Display */}
                         {saveError && (
@@ -142,6 +140,7 @@ const NetworkTest: React.FC = () => {
                 <Notify
                     title={isSuccess ? "Success" : "Error"}
                     message={notificationMessage}
+                    isOpen={isSuccess}
                     onClose={handleNotificationClose}
                     isSuccess={isSuccess}
                 />

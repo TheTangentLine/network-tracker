@@ -1,6 +1,6 @@
 import apiClient from "./apiClient";
 
-import type { UserLogin, UserRegister } from "../entities/User";
+import type { UserLogin, UserRegister, UserUpdatePassword } from "../entities/User";
 
 // ------------------------- Login ------------------------->
 
@@ -25,3 +25,9 @@ export const logout = async () => {
 export const fetchUser = async () => {
     return apiClient.get("/auth/me");
 };
+
+// ------------------------- Update Password ------------------------>
+
+export const updatePassword = async (user: UserUpdatePassword) => {
+    return apiClient.put("/users/update", user);
+}

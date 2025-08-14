@@ -39,9 +39,9 @@ async def read_by_username(username: str, page: int, sortDate = "", sortMetric: 
 
 # ------------------------- Delete ------------------------->
 
-@router.post("/delete")
-async def delete_report(input: ReportDelete):
-    deleted_report = await delete(input)
+@router.delete("/delete/{report_id}")
+async def delete_report(report_id: str):
+    deleted_report = await delete(ReportDelete(id=report_id))
     return deleted_report
 
 # --------------------- Convert to PDF ----------------------->

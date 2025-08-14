@@ -13,6 +13,7 @@ import SearchBar from "./SearchBar";
 import FilterArea from "./FilterArea";
 import DataGrids from "./DataGrids";
 import Paging from "./Paging";
+import Notify from "../Notify";
 
 
 const History: React.FC = () => {
@@ -38,6 +39,7 @@ const History: React.FC = () => {
     } = useReadReports();
     const { filter, setFilter } = useFilter();
     const [searchText, setSearchText] = useState<string>("")
+    const [showDeleteSuccess, setShowDeleteSuccess] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -56,9 +58,15 @@ const History: React.FC = () => {
     
     // ------------------------------ Delete function ------------------------------->
     
-    const handleDelete = (id: string) => {
-        deleteReports(id);
-        readReports(filter, searchText);
+    const handleDelete = async (id: string) => {
+        try {
+            await deleteReports(id);
+            setShowDeleteSuccess(true);
+            readReports(filter, searchText);
+        } catch (error) {
+            // Error handling is already done in the useReadReports hook
+            console.error('Delete failed:', error);
+        }
     }
     
     // ------------------------------ PDF Generator function ------------------------------>
@@ -80,6 +88,12 @@ const History: React.FC = () => {
         window.scrollTo({ top: 0 });
     };
 
+    // ------------------------------ Notification handlers ------------------------------->
+    
+    const handleCloseDeleteSuccess = () => {
+        setShowDeleteSuccess(false);
+    };
+
     // =============================== Rendering ==============================>
 
     return (
@@ -89,6 +103,14 @@ const History: React.FC = () => {
                 pdfBlob={pdfBlob}
                 onClose={() => setPreviewModalOpen(false)}
                 onSave={handleSavePdf}
+            />
+            
+            <Notify
+                isOpen={showDeleteSuccess}
+                message="Report deleted successfully!"
+                onClose={handleCloseDeleteSuccess}
+                isSuccess={true}
+                title="Success"
             />
             
             {/*------------------------------------ Header ----------------------------------------*/}

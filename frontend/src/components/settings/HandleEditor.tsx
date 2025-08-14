@@ -3,40 +3,44 @@ import { FiUser, FiLock } from "react-icons/fi";
 import DetailsEditor from "./DetailsEditor";
 import PasswordEditor from "./PasswordEditor";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
+import useUpdatePassword from "../../hooks/auth/useUpdatePassword";
+import useFetch from "../../hooks/auth/useFetch";
+import type { UserUpdatePassword } from "../../entities/User";
 
 const HandleEditor: React.FC = () => {
     const [showDetails, setShowDetails] = useState(true);
     const [light, setLight] = useState(false)
+    const { updatePassword, error, loading } = useUpdatePassword();
+    const { user: currentUser } = useFetch();
 
     const handleClick = () => {
         setShowDetails(prev => !prev);
     }
 
-    // Save functions for both editors
-    const handleDetailsSave = (data: any) => {
-        // TODO: Implement details save functionality
-        console.log('Saving details:', data);
-        // Here you would typically make an API call to update user details
-    };
-
-    const handlePasswordSave = (data: any) => {
-        // TODO: Implement password save functionality
-        console.log('Saving password:', data);
-        // Here you would typically make an API call to update password
+    const handlePasswordSave = async (data: any) => {
+        if (!currentUser) {
+            return false;
+        }
+        
+        // Create the complete user update data with current user info
+        const updateData: UserUpdatePassword = {
+            username: currentUser.username,
+            email: currentUser.email,
+            phone: currentUser.phone,
+            current_password: data.currentPassword,
+            new_password: data.newPassword
+        };
+        
+        return await updatePassword(updateData);
     };
 
     return (
         <div className="space-y-6">
             <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
-                            {light ? <MdLightMode className="text-white text-lg" /> : <MdDarkMode className="text-white text-lg" />}
-                        </div>
-                        <div>
-                            <h3 className="text-lg font-montserrat-bold text-emerald-900">Theme</h3>
-                            <p className="text-emerald-600 font-montserrat text-sm">Choose your preferred theme</p>
-                        </div>
+                    <div className="flex flex-col">
+                        <h3 className="text-lg font-montserrat-bold text-emerald-900">Theme</h3>
+                        <p className="text-emerald-600 font-montserrat text-sm">Choose your preferred theme</p>
                     </div>
                     <button 
                         onClick={() => setLight(prev => !prev)}
@@ -76,9 +80,13 @@ const HandleEditor: React.FC = () => {
             <div className="bg-gradient-to-br from-emerald-50 to-white rounded-xl border border-emerald-200 overflow-hidden">
                 <div className="p-6">
                     {showDetails ? (
-                        <DetailsEditor onSave={handleDetailsSave} />
+                        <DetailsEditor />
                     ) : (
-                        <PasswordEditor onSave={handlePasswordSave} />
+                        <PasswordEditor 
+                            onSave={handlePasswordSave} 
+                            error={error}
+                            loading={loading}
+                        />
                     )}
                 </div>
             </div>
