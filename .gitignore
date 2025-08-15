@@ -8,17 +8,21 @@ jspm_packages/
 /build/
 /dist/
 
-# Debug logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
 # Environment variables
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
 # Miscellaneous
 .DS_Store
@@ -88,6 +92,7 @@ htmlcov/
 # Environment variables
 .env
 .env.*.local
+.env.*
 *pem
 
 # ------------------------- OS / Docker --------------------------->
