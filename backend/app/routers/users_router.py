@@ -1,38 +1,28 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends
 
-from app.models.users_model import *
-from app.schemas.users_schema import *
+from app.schemas.users_schema import UserUpdate
 
-from app.services.users_services import *
+from app.core.dependencies import get_user_service
+from app.services.users_services import UserService
 
-# ------------------------- Router ------------------------>
+# --------------------- Router -------------------->
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-# ------------------------- Create ------------------------->
+# ------------------- Get user information ------------------->
 
-@router.post("/create")
-async def create_user(input: UserRegister):
-    returned_message = await create(input)
-    return returned_message
+@router.get("/{user_id}")
+async def get_user(
+    user_id: str,
+    user_service: UserService = Depends(get_user_service)
+):
+    return await user_service.read_by_id(user_id)
 
-# ------------------------- Read ------------------------->
-
-@router.post("/read/{input}")
-async def read_user(input: str):
-    user = await read_by_id(input)
-    return user
-
-# ------------------------- Update ------------------------->
+# -------------------- Update user information ------------------->
 
 @router.put("/update")
-async def update_user(input: UserUpdate):
-    updated_user = await update(input)
-    return updated_user
-
-# ------------------------- Delete ------------------------->
-
-@router.delete("/delete")
-async def delete_user(input: UserDelete):
-    deleted_user = await delete(input)
-    return deleted_user
+async def update_user(
+    input: UserUpdate,
+    user_service: UserService = Depends(get_user_service)
+):
+    return await user_service.update(input)

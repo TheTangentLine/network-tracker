@@ -1,52 +1,71 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import StreamingResponse
-
-from app.schemas.reports_schema import *
-
-from app.services.reports_services import *
-from app.services.convert_to_pdf_services import *
-
 import io
 
+from app.schemas.reports_schema import ReportCreate, ReportDelete, NetworkData
 
-# ------------------------- Router ------------------------->
+from app.core.dependencies import get_report_service
+from app.services.reports_services import ReportService
+from app.services.convert_to_pdf_services import convert_to_pdf as convert_to_pdf_service
+
+# --------------------- Router -------------------->
 
 router = APIRouter(prefix="/reports", tags=["reports"])
 
-# ------------------------- Create ------------------------->
+# ------------------------ Create -------------------------->
 
 @router.post("/create")
-async def create_report(input: ReportCreate):
-    returned_report = await create(input)
-    return returned_report
+async def create_report(
+    input: ReportCreate,
+    report_service: ReportService = Depends(get_report_service)
+):
+    return await report_service.create(input)
 
-# ------------------------- Read --------------------------->
+# --------------------------- Read ----------------------------->
 
 @router.get("/read/{report_id}")
-async def read_report(report_id: str):
-    report = await read_by_id(report_id)
-    return report
+async def read_report(
+    report_id: str,
+    report_service: ReportService = Depends(get_report_service)
+):
+    return await report_service.read_by_id(report_id)
 
 @router.get("/read/{user_id}/all")
-async def read_all_reports(user_id: str):
-    reports = await read_all_by_id(user_id)
-    return reports
+async def read_all_reports(
+    user_id: str,
+    report_service: ReportService = Depends(get_report_service)
+):
+    return await report_service.read_all_by_id(user_id)
 
 @router.get("/read")
-async def read_by_username(username: str, page: int, sortDate = "", sortMetric: str = "", dateStart: str = "", dateEnd: str = "", searchText: str = ""):
-    reports = await read_by_name(username, page, sortDate, sortMetric, dateStart, dateEnd, searchText)
-    return reports
+async def read_by_username(
+    username: str, 
+    page: int, 
+    sortDate: str = "", 
+    sortMetric: str = "", 
+    dateStart: str = "", 
+    dateEnd: str = "", 
+    searchText: str = "",
+    report_service: ReportService = Depends(get_report_service)
+):
+    return await report_service.read_by_username(username, page, sortDate, sortMetric, dateStart, dateEnd, searchText)
 
-# ------------------------- Delete ------------------------->
+# --------------------------- Delete ---------------------------->
 
 @router.delete("/delete/{report_id}")
-async def delete_report(report_id: str):
-    deleted_report = await delete(ReportDelete(id=report_id))
-    return deleted_report
+async def delete_report(
+    report_id: str,
+    report_service: ReportService = Depends(get_report_service)
+):
+    return await report_service.delete(ReportDelete(id=report_id))
 
-# --------------------- Convert to PDF ----------------------->
+# --------------------------- Convert to PDF ------------------------>
 
 @router.post("/genpdf")
-async def generate_pdf(input: NetworkData):
-    file_returned = convert_to_pdf(input)
-    return StreamingResponse(io.BytesIO(file_returned), media_type="application/pdf")
+async def convert_to_pdf(input: NetworkData):
+    pdf_bytes = convert_to_pdf_service(input)
+    return StreamingResponse(
+        io.BytesIO(pdf_bytes),
+        media_type="application/pdf",
+        headers={"Content-Disposition": "attachment; filename=network_report.pdf"}
+    )
