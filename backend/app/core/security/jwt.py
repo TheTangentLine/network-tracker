@@ -1,7 +1,8 @@
 from fastapi import HTTPException
 
-from app.schemas.users_schema import UserRead
+from app.models.users_model import User
 
+from bson import ObjectId
 from jose import jwt
 from datetime import datetime, timedelta, timezone
 
@@ -19,8 +20,8 @@ REFRESH_TOKEN_EXPIRE_MINUTES=settings.REFRESH_TOKEN_EXPIRE_MINUTES
 
 # ------------------------ Access Token -------------------------------->
 
-def create_access_token(input: UserRead) -> dict:
-    payload = input.model_dump()
+def create_access_token(input: str) -> dict:
+    payload: dict = {"user_id": input}
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     payload.update({"exp": expire})
@@ -31,17 +32,25 @@ def create_access_token(input: UserRead) -> dict:
         "exp": expire,
     }
 
-def verify_access_token(token: str) -> dict:
+async def verify_access_token(token: str) -> dict:
     try:
         payload = jwt.decode(token, ACCESS_SECRET_KEY, algorithms=[ALGORITHM])
-        return payload
-    except:
+        user = await User.find_one(User.id == ObjectId(payload['user_id']))
+
+        if user is None:
+            raise HTTPException(status_code=401, detail="No user found")
+        
+        return user.model_dump()
+    
+    except HTTPException as e:
+        raise e
+    except :   
         raise HTTPException(status_code=401, detail="Invalid access token")
 
 # ------------------------ Refresh Token ------------------------------>
 
-def create_refresh_token(input: UserRead) -> dict:
-    payload = input.model_dump()
+def create_refresh_token(input: str) -> dict:
+    payload: dict = {"user_id": input}
     expire = datetime.now(timezone.utc) + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
 
     payload.update({"exp": expire})
@@ -52,16 +61,29 @@ def create_refresh_token(input: UserRead) -> dict:
         "exp": expire,
     }
 
-def verify_refresh_token(token: str) -> dict:
+async def verify_refresh_token(token: str) -> dict:
     try:
         payload = jwt.decode(token, REFRESH_SECRET_KEY, algorithms=[ALGORITHM])
-        return payload
+        user = await User.find_one(User.id == ObjectId(payload['user_id']))
+
+        if user is None:
+            raise HTTPException(status_code=401, detail="No user found")
+        
+        return user.model_dump()
+    
+    except HTTPException as e:
+        raise e
     except:
         raise HTTPException(status_code=401, detail="Invalid refresh token")
     
 # ------------------------ Token Refresh ------------------------------>
 
-def refresh_access_token(input: str) -> dict:
-    payload = UserRead(**verify_refresh_token(input))
-    new_access_token = create_access_token(payload)
-    return new_access_token
+def refresh_access_token(refresh_token: str) -> dict:
+    try:
+        payload = jwt.decode(refresh_token, REFRESH_SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload['user_id']
+        
+        new_access_token = create_access_token(user_id)
+        return new_access_token
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
