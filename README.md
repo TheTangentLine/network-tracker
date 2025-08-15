@@ -1,76 +1,100 @@
 # Network Speed Tester
 
-**Objective:** Build a web application to check network speed.
+**Objective:** Build a web application to check network speed with comprehensive reporting and AI-powered chatbot assistance.
 
+## **Project Overview**
 
-## **Initial Workflow Diagram**
+A web application for network speed testing with the following features:
 
-<div style="display: flex; justify-content: center; align-items: center;">
-  <img src="https://github.com/user-attachments/assets/436455be-8ab4-4cb3-9b61-26f3067dc822" width="500"/>
-</div>
+- **Real-time speed testing** with detailed metrics
+- **Comprehensive reporting** with filtering and pagination
+- **AI-powered chatbot** for network-related questions
+- **User authentication** with JWT tokens
+- **PDF report generation**
 
 ## **Folder Structure**
-*Folder structure details will be updated soon.*
 
-## **Steps to Setup the Project**
-
-### 1. **Clone the Repository**
-   First, clone the project repository from GitHub:
-
-   ```bash
-   git clone https://github.com/TheTangentLine/network-tracker.git
-   ```
-
-### 2. **Frontend setup**
-
-```bash
-cd frontend
-npm install
-npm run dev
+```
+network-tracker/
+├── backend/
+│   ├── app/
+│   │   ├── core/
+│   │   │   ├── exceptions.py          # Custom exceptions
+│   │   │   ├── dependencies.py        # Dependency injection
+│   │   │   ├── middlewares/           # Security, CORS, Auth
+│   │   │   └── security/              # JWT, Hashing
+│   │   ├── models/                    # Data entities
+│   │   ├── repositories/              # Data access layer
+│   │   ├── routers/                   # HTTP endpoints
+│   │   ├── schemas/                   # Data validation
+│   │   ├── services/                  # Business logic
+│   │   ├── config.py                  # Configuration
+│   │   ├── database.py                # Database setup
+│   │   └── main.py                    # Application entry
+│   ├── requirements.txt
+│   └── .env
+│   └── .env.development
+│   └── .env.production
+└── frontend/
+    ├── src/
+    │   ├── components/                # React components
+    │   ├── hooks/                     # Custom hooks
+    │   ├── services/                  # API services
+    │   ├── pages/                     # Page components
+    │   └── utils/                     # Utility functions
+    ├── package.json
+    └── .env
 ```
 
-### 3. **Backend setup**
+## **Setup Instructions**
+
+### 1. **Clone the Repository**
+
+```bash
+git clone https://github.com/TheTangentLine/network-tracker.git
+cd network-tracker
+```
+
+### 2. **Backend Setup**
 
 ```bash
 cd backend
+
+# Create virtual environment
 python3 -m venv .venv
-source .venv/bin/activate  # For Mac/ Linux
-.venv\Scripts\activate  # For Windows
+source .venv/bin/activate  # For Mac/Linux
+# .venv\Scripts\activate   # For Windows
+
+# Install dependencies
 pip install -r requirements.txt
+
 ```
 
-### 4.**Environment Variable Setup**
-a. **Frontend setup**
+### 3. **Frontend Setup**
 
-Create a **.env** file in the **frontend** directory and configure the server URL:
 ```bash
-VITE_SERVER_URL=http://localhost:8000
+cd frontend
+
+# Install dependencies
+npm install
 ```
 
-b. **Backend setup**
+### 4. **Run the Application**
 
-Create a **.env** file in the **backend** directory and set the environment variables for the backend:
+#### **Backend**
+
 ```bash
-# Application Configuration
-APP_NAME=network_tracker
-DEBUG=False
+cd backend
+source .venv/bin/activate
 
-# Database Configuration (MongoDB)
-MONGODB_URI=mongodb://localhost:27017/network_tracker
-MONGODB_DB=network_tracker
+export ENVIRONMENT=development # ENVIRONMENT=production for deployment
 
-# JWT Token Configuration
-ALGORITHM=HS256
-ACCESS_SECRET_KEY=your_secret
-REFRESH_SECRET_KEY=still_your_secret
-ACCESS_TOKEN_EXPIRE_MINUTES=30      # 30 minutes
-REFRESH_TOKEN_EXPIRE_MINUTES=43200  # 1 month
+uvicorn app.main:app --reload
+```
 
-# Password Hashing Method
-HASHING=bcrypt
+#### **Frontend**
 
-# CORS Configuration (Allow cross-origin requests from frontend)
-CORS_ORIGINS=["http://localhost:5173","http://localhost:3000"]
-
-
+```bash
+cd frontend
+npm run dev
 ```
