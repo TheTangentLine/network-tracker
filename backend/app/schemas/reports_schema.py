@@ -28,7 +28,6 @@ class ReportCreate(BaseModel):
     date: Annotated[str, Field(min_length=10, max_length=10)]  # Format YYYY-MM-DD
     time: Annotated[str, Field(min_length=5, max_length=5)]   # Format HH:MM
 
-
 # ------------------------- Read ------------------------>
 
 class ReportRead(BaseModel):
@@ -37,13 +36,11 @@ class ReportRead(BaseModel):
     date: Annotated[str, Field(min_length=10, max_length=10)]  # Format YYYY-MM-DD
     time: Annotated[str, Field(min_length=5, max_length=5)]   # Format HH:MM
 
-
 class ReportFilter(BaseModel):
     sortDate: bool = True
     sortMetric: Literal['ping', 'upload', 'download', ''] = ''
     dateStart: str
     dateEnd: str
-
 
 # ------------------------- Delete ------------------------>
 
