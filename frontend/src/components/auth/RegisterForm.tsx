@@ -15,6 +15,44 @@ import { FaSignInAlt } from "react-icons/fa";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 
+// ----------------------------------- Password Strength Checker ------------------------------->
+
+interface PasswordRequirement {
+    label: string;
+    test: (password: string) => boolean;
+    met: boolean;
+}
+
+const createPasswordRequirements = (): PasswordRequirement[] => [
+    {
+        label: "At least 12 characters long",
+        test: (password: string) => password.length >= 12,
+        met: false
+    },
+    {
+        label: "Contains at least one uppercase letter",
+        test: (password: string) => /[A-Z]/.test(password),
+        met: false
+    },
+    {
+        label: "Contains at least one lowercase letter",
+        test: (password: string) => /[a-z]/.test(password),
+        met: false
+    },
+    {
+        label: "Contains at least one number",
+        test: (password: string) => /\d/.test(password),
+        met: false
+    },
+    {
+        label: "Contains at least one special character",
+        test: (password: string) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+        met: false
+    },
+
+
+];
+
 // ----------------------------------- Zod for validation ------------------------------->
 
 const registerSchema = z
@@ -22,14 +60,18 @@ const registerSchema = z
         username: z
             .string()
             .min(3, { message: "Username must be 3-50 characters." })
-            .max(50, { message: "Username must be 3-50 characters." }),
+            .max(50, { message: "Username must be 3-50 characters." })
+            .regex(/^[a-zA-Z0-9_]+$/, { message: "Username can only contain letters, numbers, and underscores." }),
         phone: z
             .string()
-            .regex(/^[0-9]+$/, { message: "Phone must contain only numbers." })
-            .min(10, { message: "Please enter a valid phone number." })
-            .max(15, { message: "Please enter a valid phone number." }),
+            .regex(/^\+?[0-9]{10,15}$/, { message: "Please enter a valid phone number (10-15 digits, optionally starting with +)." }),
         email: z.string().email({ message: "Invalid email address." }),
-        password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+        password: z.string()
+            .min(12, { message: "Password must be at least 12 characters." })
+            .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter." })
+            .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter." })
+            .regex(/\d/, { message: "Password must contain at least one number." })
+            .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, { message: "Password must contain at least one special character." }),
         repassword: z.string().nonempty({ message: "Passwords do not match." }),
         nationality: z.string().nonempty({ message: "Nationality is required." }),
     })
@@ -55,11 +97,22 @@ const RegisterForm = () => {
     });
     const [repassword, setRepassword] = useState("");
     const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+    const [passwordRequirements, setPasswordRequirements] = useState(createPasswordRequirements());
     const { register, error, loading } = useRegister();
 
     const navigate = useNavigate()
 
-    // ---------------s-------------------- Live validation ------------------------------------>
+    // ----------------------------------- Password strength checker ------------------------------------>
+
+    useEffect(() => {
+        const updatedRequirements = passwordRequirements.map(req => ({
+            ...req,
+            met: req.test(user.password)
+        }));
+        setPasswordRequirements(updatedRequirements);
+    }, [user.password]);
+
+    // ------------------------------------ Live validation ------------------------------------>
 
     useEffect(() => {
         const data = { ...user, repassword };
@@ -166,6 +219,15 @@ const RegisterForm = () => {
                             <option value="">Select nationality</option>
                             <option value="Vietnam">Vietnam</option>
                             <option value="Australia">Australia</option>
+                            <option value="United States">United States</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Canada">Canada</option>
+                            <option value="Germany">Germany</option>
+                            <option value="France">France</option>
+                            <option value="Japan">Japan</option>
+                            <option value="South Korea">South Korea</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Other">Other</option>
                         </select>
                         {fieldErrors.nationality && (
                             <span className="text-red-600 text-sm font-montserrat mt-1">{fieldErrors.nationality}</span>
@@ -176,7 +238,7 @@ const RegisterForm = () => {
                     <button
                         type="submit"
                         disabled={loading || !isFormValid}
-                        className="cursor-pointer w-full flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-montserrat-bold text-lg py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
+                        className="mt-10 cursor-pointer w-full flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-montserrat-bold text-lg py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
                     >
                         {loading ? (
                             <div className="flex items-center gap-2">

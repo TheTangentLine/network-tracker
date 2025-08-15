@@ -10,7 +10,7 @@ pydantic[email]
 
 python-multipart
 
-bcrypt
+bcrypt==4.0.1
 
 motor
 beanie

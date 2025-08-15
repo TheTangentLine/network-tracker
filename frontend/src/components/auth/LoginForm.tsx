@@ -21,7 +21,12 @@ import useFetch from "../../hooks/auth/useFetch";
 const loginSchema = z
     .object({
         username: z.string().min(3, { message: "Username must be at least 3 characters" }),
-        password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+        password: z.string()
+            .min(12, { message: "Password must be at least 12 characters." })
+            .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter." })
+            .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter." })
+            .regex(/\d/, { message: "Password must contain at least one number." })
+            .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, { message: "Password must contain at least one special character." }),
     });
 
 type FieldErrors = Record<string, string>;
@@ -120,7 +125,7 @@ const LoginForm = () => {
                     <button
                         type="submit"
                         disabled={loading || !isFormValid}
-                        className="cursor-pointer w-full flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-montserrat-bold text-lg py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
+                        className="mt-10 cursor-pointer w-full flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-montserrat-bold text-lg py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
                     >
                         {loading ? (
                             <div className="flex items-center gap-2">

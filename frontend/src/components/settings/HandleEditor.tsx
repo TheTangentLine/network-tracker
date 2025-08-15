@@ -50,6 +50,9 @@ const HandleEditor: React.FC = () => {
                     </button>
                 </div>
             </div>
+
+            <hr className="text-emerald-200 shadow-emerald-300"/>
+
             {/* Tab Navigation */}
             <div className="flex space-x-1 bg-emerald-100 p-2 rounded-xl">
                 <button 
