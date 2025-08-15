@@ -1,11 +1,11 @@
-from fastapi import Request, Response, HTTPException
+from fastapi import Request, HTTPException
 
 from app.core.security.jwt import verify_access_token, refresh_access_token
+from app.core.exceptions import AuthenticationException
 
 UNPROTECTED_PATHS = [
     "/auth/login",
     "/auth/register",
-    "/auth/logout",
     "/openapi.json",
     "/docs",
     "/docs/oauth2-redirect",
@@ -14,34 +14,65 @@ UNPROTECTED_PATHS = [
 
 async def auth_middleware(request: Request, call_next):
 
-    if request.method.upper() == "OPTIONS":
-        return await call_next(request)
+    # -------------------------- Ignore paths and OPTIONS requests ------------------------->
 
-    if request.url.path in UNPROTECTED_PATHS:
+    if request.url.path in UNPROTECTED_PATHS or request.method == "OPTIONS":
         return await call_next(request)
+    
+    # -------------------------- Get cookies --------------------------->
 
     refresh_token = request.cookies.get("refresh_token")
     access_token = request.cookies.get("access_token")
 
-    response = Response("Unauthorized", status_code=401)
+    # -------------------------- Check refresh token ------------------------->
     
     if not refresh_token:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise AuthenticationException("No refresh token provided")
+    
+    # ------------------------- Check access token and refresh if needed ----------------------------->
 
-    if not access_token or not verify_access_token(access_token):
-        refreshed = refresh_access_token(refresh_token)
-        access_token = refreshed["access_token"]
-        expire_time = refreshed["exp"]
+    if not access_token:
+        try:
+            refreshed = refresh_access_token(refresh_token)
+            access_token = refreshed["access_token"]
+            expire_time = refreshed["exp"]
+            response = await call_next(request)
+            response.set_cookie(
+                key="access_token",
+                value=access_token,
+                expires=expire_time,
+                httponly=True,
+                secure=True,
+                samesite="lax"
+            )
+            return response
+        except HTTPException:
+            raise AuthenticationException("Invalid refresh token")
+    
+    try:
+        await verify_access_token(access_token)
         response = await call_next(request)
-        response.set_cookie(
-            key="access_token",
-            value=access_token,
-            expires=expire_time,
-            httponly=True,
-            secure=False,
-            samesite="lax"
-        )
         return response
+    
+    except HTTPException:
+        try:
+            refreshed = refresh_access_token(refresh_token)
+            access_token = refreshed["access_token"]
+            expire_time = refreshed["exp"]
+            response = await call_next(request)
+            response.set_cookie(
+                key="access_token",
+                value=access_token,
+                expires=expire_time,
+                httponly=True,
+                secure=True,
+                samesite="lax"
+            )
+            return response
+        except HTTPException:
+            raise AuthenticationException("Failed to refresh access token")
+        
+# --------------------------------- Link with the main file --------------------------------->
 
-    response = await call_next(request)
-    return response
+def add_auth_handler(app):
+    app.middleware("http")(auth_middleware)
