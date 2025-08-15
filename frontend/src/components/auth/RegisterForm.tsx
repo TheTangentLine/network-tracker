@@ -9,7 +9,7 @@ import InputFieldComponent from "./InputField";
 import type { UserRegister } from "../../entities/User";
 
 // ---- Icons ----
-import { FaSignInAlt, FaCheck, FaTimes } from "react-icons/fa";
+import { FaSignInAlt } from "react-icons/fa";
 
 // ---- Validation ----
 import { z } from "zod";
