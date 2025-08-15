@@ -13,24 +13,36 @@ client: AsyncIOMotorClient | None = None
 
 async def init_db() -> None:
     global client
+
+    # --------------------------- Base connection options ------------------------>
     
-    # Prepare connection options
-    connection_options = {
-        "tls": True,
-        "tlsCertificateKeyFile": settings.MONGODB_CERT_FILE,
+    connection_options: dict = {
         "serverSelectionTimeoutMS": 5000,
         "connectTimeoutMS": 10000,
         "socketTimeoutMS": 10000
     }
+
+    # -------------------------------- Production ----------------------------->
     
-    # Configure MongoDB client with SSL and X.509 settings
+    if settings.is_production and settings.MONGODB_CERT_FILE:
+        connection_options.update({
+            "tls": True,
+            "tlsCertificateKeyFile": settings.MONGODB_CERT_FILE,
+        })
+    elif settings.is_production:
+        connection_options.update({
+            "tls": True,
+        })
+
+    # -------------------------------- Initialize -------------------------------->
+    
     client = AsyncIOMotorClient(
-        settings.MONGODB_URI,
+        settings.mongodb_uri,  
         **connection_options
     )
     
     await init_beanie(
-        database=client[settings.MONGODB_DB],
+        database=client[settings.mongodb_db],  
         document_models=[
             User,
             Report
