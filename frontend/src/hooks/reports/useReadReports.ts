@@ -5,8 +5,6 @@ import { deleteReport, readReport, generatePdfFile } from "../../services/report
 
 import type { Report, ReportReturned } from "../../entities/Report";
 import type { Filter } from "../../entities/Filter"
-import type { SpeedTestResult } from "../../entities/Network";
-
 
 export function useReadReports() {
     const { user } = useAuth();
