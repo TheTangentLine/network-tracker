@@ -56,7 +56,7 @@ rate_limiter = RateLimiter()
 
 RATE_LIMIT_CONFIGS = {
     "auth": {
-        "login": {"max_requests": 5, "window_seconds": 300},      # 5 attempts per 5 minutes
+        "login": {"max_requests": 10, "window_seconds": 300},      # 5 attempts per 5 minutes
         "register": {"max_requests": 5, "window_seconds": 600},   # 3 attempts per 10 minutes
         "password_reset": {"max_requests": 3, "window_seconds": 3600},  # 3 attempts per hour
     },
