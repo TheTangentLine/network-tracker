@@ -36,14 +36,14 @@ const SideBar: React.FC<SidebarProps> = ({
     // ================================= Rendering =================================>
 
     return (
-        <div className="h-full bg-green-950 shadow-2xl shadow-emerald-700 flex flex-col font-montserrat">
+        <div className="h-full bg-gradient-to-b from-emerald-950 to-emerald-900 shadow-2xl shadow-emerald-700/50 flex flex-col font-montserrat">
 
             {/*------------------------------ Hide / Show side bar button ---------------------------------*/}
 
-            <div className={`flex ${isSidebarVisible ? 'justify-end' : 'justify-center'} bg-emerald-950
-                            drop-shadow-emerald-900 drop-shadow-xl`}>
+            <div className={`flex ${isSidebarVisible ? 'justify-end' : 'justify-center'} bg-emerald-950/80
+                            backdrop-blur-sm border-b border-emerald-800/50 my-1`}>
                 <button
-                    className="text-white text-5xl p-2 rounded-lg cursor-pointer transition-all"
+                    className="text-white text-4xl p-3 rounded-lg cursor-pointer transition-all duration-300 hover:bg-emerald-800/50 hover:scale-105"
                     onClick={toggleSidebar}
                 >
                     {isSidebarVisible ?
@@ -53,72 +53,68 @@ const SideBar: React.FC<SidebarProps> = ({
 
             {/*----------------------------------- Choosing options --------------------------------------*/}
 
-            <div className='flex flex-col justify-center font-montserrat-bold text-white'>
+            <div className='flex flex-col justify-center font-montserrat-bold text-white p-2'>
 
 
                 {/*----------------------------------- Chatbot ------------------------------------*/}
 
                 <button
-                    className={`grid ${isSidebarVisible ? 'grid-cols-3' : ''}  items-center w-full cursor-pointer p-4 
-                                ${currentPath === '/chatbot' ? 'bg-emerald-600 shadow-2xl shadow-emerald-600' : ''}
-                                hover:bg-emerald-600 hover:shadow-2xl hover:shadow-emerald-600 duration-300
-                                cursor-pointer`}
+                    className={`grid ${isSidebarVisible ? 'grid-cols-3' : ''} items-center w-full cursor-pointer p-4 mr-1 my-1 rounded-xl
+                                ${currentPath === '/chatbot' ? 'bg-emerald-600/90 shadow-lg shadow-emerald-600/50' : 'hover:bg-emerald-800/50'}
+                                transition-all duration-300 hover:scale-105`}
                     onClick={() => navigate('/chatbot')}
                 >
-                    <div className="flex justify-center items-center text-4xl">
+                    <div className="flex justify-center items-center text-3xl">
                         <FaRobot />
                     </div>
-                    {isSidebarVisible && <p className="text-xl ml-3 col-span-2">Chatbot</p>}
+                    {isSidebarVisible && <p className="text-lg col-span-2 font-montserrat-bold">Chatbot</p>}
                 </button>
 
 
                 {/*----------------------------------- Speed test ------------------------------------*/}
 
                 <button
-                    className={`grid ${isSidebarVisible ? 'grid-cols-3' : ''}  items-center w-full cursor-pointer p-4 
-                                ${currentPath === '/testing' ? 'bg-emerald-700 shadow-2xl shadow-emerald-700' : ''}
-                                hover:bg-emerald-700 hover:shadow-2xl hover:shadow-emerald-700 duration-300
-                                cursor-pointer`}
+                    className={`grid ${isSidebarVisible ? 'grid-cols-3' : ''} items-center w-full cursor-pointer p-4 mr-1 my-1 rounded-xl
+                                ${currentPath === '/testing' ? 'bg-emerald-700/90 shadow-lg shadow-emerald-700/50' : 'hover:bg-emerald-800/50'}
+                                transition-all duration-300 hover:scale-105`}
                     onClick={() => navigate('/testing')}
                 >
-                    <div className="flex justify-center items-center text-4xl">
+                    <div className="flex justify-center items-center text-3xl">
                         <SiSpeedtest />
                     </div>
-                    {isSidebarVisible && <p className="text-xl ml-3 col-span-2">Speed test</p>}
+                    {isSidebarVisible && <p className="text-lg col-span-2 font-montserrat-bold">Speed test</p>}
                 </button>
 
                 {/*------------------------------------ History -------------------------------------- */}
 
                 <button
-                    className={`grid ${isSidebarVisible ? 'grid-cols-3' : ''}  items-center w-full cursor-pointer p-4 
-                                ${currentPath === '/history' ? 'bg-emerald-800 shadow-2xl shadow-emerald-800' : ''}
-                                hover:bg-emerald-800 hover:shadow-2xl hover:shadow-emerald-800 duration-300
-                                cursor-pointer`}
+                    className={`grid ${isSidebarVisible ? 'grid-cols-3' : ''} items-center w-full cursor-pointer p-4 mr-1 my-1 rounded-xl
+                                ${currentPath === '/history' ? 'bg-emerald-800/90 shadow-lg shadow-emerald-800/50' : 'hover:bg-emerald-800/50'}
+                                transition-all duration-300 hover:scale-105`}
                     onClick={() => navigate('/history')}
                 >
 
-                    <div className="flex justify-center items-center text-4xl">
+                    <div className="flex justify-center items-center text-3xl">
                         <FaHistory />
                     </div>
 
-                    {isSidebarVisible && <p className="text-xl ml-3 col-span-2">History</p>}
+                    {isSidebarVisible && <p className="text-lg col-span-2 font-montserrat-bold">History</p>}
                 </button>
 
                 {/*------------------------------------ Settings -------------------------------------- */}
 
                 <button
-                    className={`grid ${isSidebarVisible ? 'grid-cols-3' : ''}  items-center w-full cursor-pointer p-4 
-                                ${currentPath === '/settings' ? 'bg-emerald-900 shadow-2xl shadow-emerald-900' : ''}
-                                hover:bg-emerald-900 hover:shadow-2xl hover:shadow-emerald-900 duration-300
-                                cursor-pointer`}
+                    className={`grid ${isSidebarVisible ? 'grid-cols-3' : ''} items-center w-full cursor-pointer p-4 mr-1 my-1 rounded-xl
+                                ${currentPath === '/settings' ? 'bg-emerald-900/90 shadow-lg shadow-emerald-900/50' : 'hover:bg-emerald-800/50'}
+                                transition-all duration-300 hover:scale-105`}
                     onClick={() => navigate('/settings')}
                 >
 
-                    <div className="flex justify-center items-center text-4xl">
+                    <div className="flex justify-center items-center text-3xl">
                         <IoIosSettings />
                     </div>
 
-                    {isSidebarVisible && <p className="text-xl ml-3 col-span-2">Settings</p>}
+                    {isSidebarVisible && <p className="text-lg col-span-2 font-montserrat-bold">Settings</p>}
                 </button>
             </div>
 
@@ -128,8 +124,8 @@ const SideBar: React.FC<SidebarProps> = ({
 
             {/*------------------------------------ Logout Button ----------------------------------*/}
 
-            <button className='flex justify-center text-white bg-emerald-950 p-5 font-montserrat-bold drop-shadow-2xl drop-shadow-amber-100
-                            hover:bg-emerald-600 duration-300 cursor-pointer'
+            <button className='flex justify-center text-white bg-emerald-950/80 backdrop-blur-sm p-4 m-2 rounded-xl font-montserrat-bold
+                            hover:bg-emerald-600/80 hover:scale-105 transition-all duration-300 cursor-pointer border border-emerald-800/50'
                 onClick={logout}
                 disabled={logoutLoading}
             >
@@ -140,8 +136,8 @@ const SideBar: React.FC<SidebarProps> = ({
                         '...'
                     ) : (
                         <>
-                            <FiLogOut className="text-4xl cursor-pointer" />
-                            {isSidebarVisible && <p className='text-xl ml-3'>Sign out</p>}
+                            <FiLogOut className="text-3xl cursor-pointer" />
+                            {isSidebarVisible && <p className='text-lg font-montserrat-bold'>Sign out</p>}
                         </>
                     )}
                 </div>
