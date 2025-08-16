@@ -14,7 +14,7 @@ const TestingPage: React.FC = () => {
     // =========================== Rendering ===============================>
 
     return (
-        <div className="relative h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
+        <div className="relative min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100 font-montserrat">
 
             {/**------------------------- Side Bar ------------------------------- **/}
 
