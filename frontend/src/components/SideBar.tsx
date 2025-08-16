@@ -1,6 +1,5 @@
 // ---- Hooks ----
 import { useLocation, useNavigate } from 'react-router-dom';
-import useLogout from '../hooks/auth/useLogout';
 
 // ---- Icons ----
 import { FiLogOut } from 'react-icons/fi';
@@ -14,6 +13,8 @@ import { TbLayoutSidebarFilled, TbLayoutSidebar } from "react-icons/tb";
 interface SidebarProps {
     toggleSidebar: () => void;
     isSidebarVisible: boolean;
+    onLogoutClick: () => void;
+    logoutLoading: boolean;
 }
 
 // ------------------------------ Main component ---------------------------->
@@ -21,11 +22,9 @@ interface SidebarProps {
 const SideBar: React.FC<SidebarProps> = ({
     toggleSidebar,
     isSidebarVisible,
+    onLogoutClick,
+    logoutLoading,
 }) => {
-
-    // --------------------------- State management ------------------------->
-
-    const { logout, loading: logoutLoading } = useLogout()
 
     // --------------------------- Router management ------------------------>
 
@@ -126,7 +125,7 @@ const SideBar: React.FC<SidebarProps> = ({
 
             <button className='flex justify-center text-white bg-emerald-950/80 backdrop-blur-sm p-4 m-2 rounded-xl font-montserrat-bold
                             hover:bg-emerald-600/80 hover:scale-105 transition-all duration-300 cursor-pointer border border-emerald-800/50'
-                onClick={logout}
+                onClick={onLogoutClick}
                 disabled={logoutLoading}
             >
                 <div
@@ -144,7 +143,6 @@ const SideBar: React.FC<SidebarProps> = ({
             </button>
 
             {/*---------------------------------------------------------------------------------------*/}
-
         </div>
     );
 };

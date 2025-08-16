@@ -1,15 +1,35 @@
 // ---- Hooks ----
 import { useSideBar } from "../hooks/useSideBar";
+import { useState } from 'react';
 
 // ---- Components ----
 import SideBar from "../components/SideBar";
 import History from "../components/reports/History";
+import Reassure from "../components/Reassure";
+import useLogout from "../hooks/auth/useLogout";
 
 const HistoryPage: React.FC = () => {
 
     // ------------------- State Management ------------------------->
 
     const { isSidebarVisible, toggleSidebar } = useSideBar(true);
+    const { logout, loading: logoutLoading } = useLogout();
+    const [showReassure, setShowReassure] = useState(false);
+
+    // ---------------------------------------------------------------------->
+
+    const handleLogoutClick = () => {
+        setShowReassure(true);
+    };
+
+    const handleConfirmLogout = async () => {
+        setShowReassure(false);
+        await logout();
+    };
+
+    const handleCancelLogout = () => {
+        setShowReassure(false);
+    };
 
     // =========================== Rendering ===============================>
 
@@ -22,6 +42,8 @@ const HistoryPage: React.FC = () => {
                 <SideBar
                     toggleSidebar={toggleSidebar}
                     isSidebarVisible={isSidebarVisible}
+                    onLogoutClick={handleLogoutClick}
+                    logoutLoading={logoutLoading}
                 />
             </div>
 
@@ -32,6 +54,17 @@ const HistoryPage: React.FC = () => {
             </div>
 
             {/**--------------------------------------------------------------------**/}
+
+            {/* Reassure modal at page level */}
+            <Reassure
+                isOpen={showReassure}
+                title="Log out"
+                message="Are you sure you want to log out?"
+                onConfirm={handleConfirmLogout}
+                onCancel={handleCancelLogout}
+                confirmText="Continue"
+                cancelText="Cancel"
+            />
 
         </div>
     );

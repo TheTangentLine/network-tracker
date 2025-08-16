@@ -12,8 +12,9 @@ export default function useLogout() {
 
     const navigate = useNavigate();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         setLoading(true);
+        let success = true;
 
         logout()
             .then(() => {
@@ -30,10 +31,12 @@ export default function useLogout() {
             })
             .catch(e => {
                 setError(e.response.detail || "Oops, try again later!")
+                success = false;
             })
             .finally(() => {
                 setLoading(false);
             })
+        return success;
     }
     return { logout: handleLogout, loading, error }
 
