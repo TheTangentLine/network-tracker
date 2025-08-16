@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Network Speed Test Report</title>
+    <style>
+      body {
+        font-family: "Times New Roman", sans-serif;
+        background: white;
+        color: black;
+        line-height: 1.3;
+        font-size: 11px;
+        margin: 0;
+      }
+
+      .report-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+      }
+
+      .header {
+        text-align: center;
+      }
+
+      .company-info {
+        font-size: 15px;
+        color: black;
+        font-weight: normal;
+      }
+
+      .title {
+        font-size: 20px;
+        font-weight: bold;
+        color: black;
+        text-transform: uppercase;
+      }
+
+      .report-date {
+        font-size: 10px;
+        color: black;
+      }
+
+      .content {
+        margin-bottom: 5px;
+      }
+
+      .section-title {
+        font-size: 14px;
+        font-weight: bold;
+        color: black;
+        text-transform: uppercase;
+      }
+
+      .metrics-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0;
+        font-size: 11px;
+      }
+
+      .metrics-table th {
+        background: #f0f0f0;
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 10px;
+      }
+
+      .metrics-table td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: right;
+      }
+
+      .metrics-table .metric-label {
+        text-align: left;
+        font-weight: normal;
+      }
+
+      .metrics-table .metric-value {
+        font-weight: bold;
+      }
+
+      .summary-section {
+        background: #f9f9f9;
+        padding: 12px;
+        margin: 12px 0;
+      }
+
+      .summary-title {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+
+      .summary-section p {
+        color: black;
+        line-height: 1.4;
+        font-size: 11px;
+      }
+
+      .technical-details {
+        background: white;
+        padding: 2px;
+      }
+
+      .technical-details p {
+        margin: 4px 0;
+        font-size: 11px;
+        color: black;
+      }
+
+      .technical-details strong {
+        color: black;
+        font-weight: bold;
+      }
+
+      .footer {
+        margin-top: 15px;
+        padding-top: 10px;
+        font-size: 9px;
+        color: black;
+      }
+
+      .footer-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 2px 0;
+      }
+
+      .report-id {
+        font-family: "Courier New", monospace;
+        background: #f0f0f0;
+        padding: 2px 6px;
+        font-weight: bold;
+      }
+
+      @media print {
+        body {
+          padding: 10px;
+        }
+
+        .report-container {
+          border: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="report-container">
+      <div class="header">
+        <div class="company-info">Network Tracker</div>
+        <div class="title">Speed Test Report</div>
+        <div class="report-date">Test Date: {date} | Time: {time}</div>
+      </div>
+
+      <div class="content">
+        <hr />
+        <div class="section-title">Test Results Summary</div>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Value</th>
+              <th>Unit</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="metric-label">Ping Latency</td>
+              <td class="metric-value">{speed}</td>
+              <td>ms</td>
+              <td>{ping_assessment}</td>
+            </tr>
+            <tr>
+              <td class="metric-label">Upload Speed</td>
+              <td class="metric-value">{upload}</td>
+              <td>Mbps</td>
+              <td>{upload_assessment}</td>
+            </tr>
+            <tr>
+              <td class="metric-label">Download Speed</td>
+              <td class="metric-value">{download}</td>
+              <td>Mbps</td>
+              <td>{download_assessment}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="section-title">Technical Details</div>
+        <div class="technical-details">
+          <p>
+            <strong>Test Method:</strong> Automated speed test using standard
+            protocols
+          </p>
+          <p><strong>Server Location:</strong> Nearest available test server</p>
+          <p><strong>Connection Type:</strong> Broadband</p>
+        </div>
+      </div>
+
+      <hr />
+      <div class="footer">
+        <div class="footer-row">
+          <span>Report Generated: {current_date}</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
