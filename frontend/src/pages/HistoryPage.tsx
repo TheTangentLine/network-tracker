@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 // ---- Components ----
 import SideBar from "../components/SideBar";
-import History from "../components/reports/History";
+import History from "../components/reports";
 import Reassure from "../components/Reassure";
 import useLogout from "../hooks/auth/useLogout";
 

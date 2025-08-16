@@ -2,7 +2,7 @@ import { useSideBar } from "../hooks/useSideBar";
 import { useState } from 'react';
 
 import SideBar from "../components/SideBar";
-import Settings from "../components/settings/Settings";
+import Settings from "../components/settings";
 import Reassure from "../components/Reassure";
 import useLogout from "../hooks/auth/useLogout";
 

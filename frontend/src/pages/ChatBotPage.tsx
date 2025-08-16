@@ -2,7 +2,7 @@ import { useSideBar } from "../hooks/useSideBar";
 import { useState } from 'react';
 
 import SideBar from "../components/SideBar";
-import ChatBot from "../components/chatbot/ChatBot";
+import ChatBot from "../components/chatbot";
 import Reassure from "../components/Reassure";
 import useLogout from "../hooks/auth/useLogout";
 

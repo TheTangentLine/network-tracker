@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 // ---- Components ----
 import SideBar from '../components/SideBar';
-import NetworkTest from '../components/network/NetworkTest';
+import NetworkTest from '../components/network';
 import Reassure from '../components/Reassure';
 import useLogout from '../hooks/auth/useLogout';
 
