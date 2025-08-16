@@ -99,7 +99,7 @@ const SpeedGraph: React.FC<SpeedGraphProps> = ({
                     ref={canvasRef}
                     width={GRAPH_CONFIG.width}
                     height={GRAPH_CONFIG.height}
-                    className="w-full h-full border border-gray-100 rounded-lg"
+                    className="w-full h-full"
                 />
             </div>
         </div>

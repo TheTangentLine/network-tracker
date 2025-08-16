@@ -20,11 +20,13 @@ export const drawResultGraph = (canvasRef: React.RefObject<HTMLCanvasElement | n
     ctx.clearRect(0, 0, width, height);
 
     // Set background
-    ctx.fillStyle = '#ffffff';
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    ctx.fillStyle = isDarkMode ? '#0f172a' : '#ffffff';
     ctx.fillRect(0, 0, width, height);
 
     // Draw subtle background grid
-    ctx.strokeStyle = '#f8fafc';
+    ctx.strokeStyle = isDarkMode ? '#1e293b' : '#f8fafc';
+    ctx.lineWidth = 1;
     ctx.lineWidth = 1;
     for (let i = 0; i <= 10; i++) {
         const y = padding + (height - 2 * padding) * (i / 10);

@@ -46,7 +46,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           {isWaitingForReply ? (
             <IoStop className={`${isLarge ? 'h-6 w-6' : 'h-5 w-5'} text-white`} />
           ) : (
-            <IoSend className={`${isLarge ? 'h-6 w-6' : 'h-5 w-5'} text-white`} />
+            <IoSend className={`${isLarge ? 'h-6 w-6' : 'h-5 w-5'} text-white dark:text-emerald-900`} />
           )}
         </button>
       </form>
