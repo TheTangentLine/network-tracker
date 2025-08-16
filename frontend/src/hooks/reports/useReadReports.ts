@@ -60,7 +60,7 @@ export function useReadReports() {
         }
     }
 
-    const generatePdf = async (input: SpeedTestResult) => {
+    const generatePdf = async (input: Report) => {
         setLoading(true);
         setError("");
         try {

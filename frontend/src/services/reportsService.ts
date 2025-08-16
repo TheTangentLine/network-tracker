@@ -1,7 +1,8 @@
 import apiClient from "./apiClient";
 import { generateUrlQuery } from "../utils/urlQuery";
-import type { SpeedTestReport, SpeedTestResult } from "../entities/Network";
+import type { SpeedTestReport } from "../entities/Network";
 import type { Filter } from "../entities/Filter"
+import type { Report } from "../entities/Report";
 
 // ------------------------------ Save report ------------------------------------->
 
@@ -24,6 +25,6 @@ export async function deleteReport(id: string) {
 
 // ------------------------------ Generate PDF file -------------------------------->
 
-export async function generatePdfFile(input: SpeedTestResult) {
+export async function generatePdfFile(input: Report) {
     return apiClient.post('/reports/genpdf', input);
 }
