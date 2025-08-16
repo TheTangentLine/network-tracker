@@ -32,7 +32,7 @@ const Reassure: React.FC<ReassureProps> = ({
                 <div className="flex space-x-4">
                     <button
                         onClick={onCancel}
-                        className="cursor-pointer px-8 py-3 rounded-lg text-gray-700 font-semibold transition-all duration-200 hover:scale-105 text-lg bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400"
+                        className="cursor-pointer px-8 py-3 rounded-lg text-gray-700 dark:text-gray-700 font-semibold transition-all duration-200 hover:scale-105 text-lg bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400"
                     >
                         {cancelText}
                     </button>
