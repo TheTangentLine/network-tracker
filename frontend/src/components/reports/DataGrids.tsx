@@ -11,7 +11,7 @@ import ActionButtons from "./ActionButtons";
 interface DataGridsProps {
     data: Report[],
     handleDelete: (id: string) => void,
-    handleGeneratePdf: (input: SpeedTestResult) => void,
+    handleGeneratePdf: (input: Report) => void,
     handleChatbot: (input: SpeedTestResult) => void
 }
 
