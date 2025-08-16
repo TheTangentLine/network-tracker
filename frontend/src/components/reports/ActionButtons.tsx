@@ -11,7 +11,7 @@ interface ActionButtonsProps {
     bgColor: "bg-white" | "bg-emerald-50",
     handleDelete: (id: string) => void,
     handleChatbot: (input: SpeedTestResult) => void,
-    handleGeneratePdf: (input: SpeedTestResult) => void
+    handleGeneratePdf: (input: Report) => void
     data: Report
 }
 
@@ -37,7 +37,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
                 <TbMessageChatbotFilled />
             </button>
             <button 
-                onClick={() => handleGeneratePdf(data.network_data)} 
+                onClick={() => handleGeneratePdf(data)} 
                 className="text-xl text-emerald-600 hover:text-emerald-800 transition-all duration-300 hover:scale-110 cursor-pointer"
             >
                 <FaFilePdf />

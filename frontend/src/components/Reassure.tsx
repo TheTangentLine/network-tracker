@@ -22,7 +22,7 @@ const Reassure: React.FC<ReassureProps> = ({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 backdrop-blur-md flex justify-center items-center duration-300 font-montserrat">
+        <div className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-md flex justify-center items-center duration-300 font-montserrat">
             <div className="bg-white text-gray-800 rounded-2xl shadow-2xl w-140 p-8 mx-4 flex flex-col items-center justify-center">
                 <div className="text-center mb-8">
                     <h3 className="text-2xl font-bold text-gray-800 mb-3">{title}</h3>
@@ -32,7 +32,7 @@ const Reassure: React.FC<ReassureProps> = ({
                 <div className="flex space-x-4">
                     <button
                         onClick={onCancel}
-                        className="cursor-pointer px-8 py-3 rounded-lg text-gray-700 font-semibold transition-all duration-200 hover:scale-105 text-lg bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400"
+                        className="cursor-pointer px-8 py-3 rounded-lg text-black font-semibold transition-all duration-200 hover:scale-105 text-lg bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400"
                     >
                         {cancelText}
                     </button>

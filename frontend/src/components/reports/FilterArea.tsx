@@ -33,7 +33,7 @@ const FilterArea: React.FC<Filter> = ({
                         <option value="latest">Latest</option>
                         <option value="oldest">Oldest</option>
                     </select>
-                    <BsCalendarDateFill className="absolute top-3 left-3" />
+                    <BsCalendarDateFill className="absolute top-3 left-3 dark:text-white" />
                 </div>
 
                 <div className="relative">
@@ -51,7 +51,7 @@ const FilterArea: React.FC<Filter> = ({
                         <option value="upload">Upload</option>
                         <option value="download">Download</option>
                     </select>
-                    <FaFilter className="absolute top-3.5 left-3" />
+                    <FaFilter className="absolute top-3.5 left-3 dark:text-white" />
                 </div>
             </div>
 

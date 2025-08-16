@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme {
   --font-montserrat: Montserrat;
   --font-montserrat-bold: Montserrat-bold;
@@ -17,4 +19,272 @@
   src: url(../font/Montserrat/Montserrat-Bold.ttf) format("truetype");
   font-weight: 400;
   font-style: normal;
+}
+
+/* Dark Mode Color Overrides */
+.dark {
+  /* Background colors */
+  --tw-bg-opacity: 1;
+  background-color: rgb(15 23 42 / var(--tw-bg-opacity));
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  
+  /* Override all emerald colors to be more subtle in dark mode */
+  --emerald-50: rgb(6 78 59 / 0.1);
+  --emerald-100: rgb(6 78 59 / 0.2);
+  --emerald-200: rgb(6 78 59 / 0.3);
+  --emerald-300: rgb(6 78 59 / 0.4);
+  --emerald-400: rgb(6 78 59 / 0.5);
+  --emerald-500: rgb(16 185 129 / 0.7);
+  --emerald-600: rgb(5 150 105 / 0.8);
+  --emerald-700: rgb(4 120 87 / 0.9);
+  --emerald-800: rgb(6 95 70 / 1);
+  --emerald-900: rgb(6 78 59 / 1);
+  
+  /* Override gray colors for better contrast */
+  --gray-50: rgb(15 23 42 / 1);
+  --gray-100: rgb(30 41 59 / 1);
+  --gray-200: rgb(51 65 85 / 1);
+  --gray-300: rgb(71 85 105 / 1);
+  --gray-400: rgb(100 116 139 / 1);
+  --gray-500: rgb(148 163 184 / 1);
+  --gray-600: rgb(203 213 225 / 1);
+  --gray-700: rgb(226 232 240 / 1);
+  --gray-800: rgb(241 245 249 / 1);
+  --gray-900: rgb(255 255 255 / 1);
+  
+  /* Override white and black */
+  --white: rgb(15 23 42 / 1);
+  --black: rgb(255 255 255 / 1);
+  
+  /* Override slate colors */
+  --slate-50: rgb(15 23 42 / 1);
+  --slate-100: rgb(30 41 59 / 1);
+  --slate-200: rgb(51 65 85 / 1);
+  --slate-300: rgb(71 85 105 / 1);
+  --slate-400: rgb(100 116 139 / 1);
+  --slate-500: rgb(148 163 184 / 1);
+  --slate-600: rgb(203 213 225 / 1);
+  --slate-700: rgb(226 232 240 / 1);
+  --slate-800: rgb(241 245 249 / 1);
+  --slate-900: rgb(255 255 255 / 1);
+}
+
+/* Dark mode specific component overrides */
+.dark .bg-white {
+  background-color: rgb(30 41 59 / 1);
+}
+
+.dark .bg-gray-50 {
+  background-color: rgb(15 23 42 / 1);
+}
+
+.dark .bg-gray-100 {
+  background-color: rgb(30 41 59 / 1);
+}
+
+.dark .text-gray-900 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .text-gray-800 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .text-gray-700 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .text-gray-600 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .border-gray-200 {
+  border-color: rgb(51 65 85 / 1);
+}
+
+.dark .border-gray-300 {
+  border-color: rgb(71 85 105 / 1);
+}
+
+/* Subtle emerald overrides for dark mode */
+.dark .bg-emerald-50 {
+  background-color: rgb(6 78 59 / 0.1);
+}
+
+.dark .hover\:bg-emerald-50:hover {
+  background-color: rgb(6 78 59 / 0.2);
+}
+
+.dark .bg-emerald-100 {
+  background-color: rgb(6 78 59 / 0.2);
+}
+
+.dark .bg-emerald-200 {
+  background-color: rgb(6 78 59 / 0.3);
+}
+
+.dark .text-emerald-600 {
+  color: rgb(16 185 129 / 1);
+}
+
+.dark .text-emerald-700 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .text-emerald-800 {
+  color: rgb(16 185 129 / 1);
+}
+
+.dark .text-emerald-900 {
+  color: rgb(255 255 255 / 1);
+}
+
+/* Additional text color overrides for maximum contrast */
+.dark .text-emerald-500 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .text-emerald-400 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .text-emerald-300 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .text-emerald-200 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .text-emerald-100 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .text-emerald-50 {
+  color: rgb(255 255 255 / 1);
+}
+
+/* Override green colors for better visibility */
+.dark .text-green-500,
+.dark .text-green-600,
+.dark .text-green-700,
+.dark .text-green-800,
+.dark .text-green-900 {
+  color: rgb(16 185 129 / 1);
+}
+
+/* Override any cyan/teal colors that might be used */
+.dark .text-cyan-500,
+.dark .text-cyan-600,
+.dark .text-cyan-700,
+.dark .text-cyan-800,
+.dark .text-cyan-900 {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark .text-teal-500,
+.dark .text-teal-600,
+.dark .text-teal-700,
+.dark .text-teal-800,
+.dark .text-teal-900 {
+  color: rgb(255 255 255 / 1);
+}
+
+/* Override any other text colors that might be used */
+.dark .text-slate-500,
+.dark .text-slate-600,
+.dark .text-slate-700,
+.dark .text-slate-800,
+.dark .text-slate-900 {
+  color: rgb(255 255 255 / 1);
+}
+
+/* Input text color overrides for dark mode */
+.dark input,
+.dark input::placeholder,
+.dark textarea,
+.dark textarea::placeholder,
+.dark select,
+.dark select option {
+  color: rgb(255 255 255 / 1);
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  color: rgb(255 255 255 / 1);
+}
+
+/* Filter area input and dropdown overrides for dark mode */
+.dark input[type="date"],
+.dark input[type="text"],
+.dark select {
+  background-color: rgb(30 41 59 / 1);
+  border-color: rgb(51 65 85 / 1);
+}
+
+.dark input[type="date"]::placeholder,
+.dark input[type="text"]::placeholder {
+  color: rgb(148 163 184 / 1);
+}
+
+/* Input border color overrides for dark mode */
+.dark .border-emerald-300 {
+  border-color: rgb(6 78 59 / 0.3);
+}
+
+.dark .focus\:border-emerald-500:focus {
+  border-color: rgb(16 185 129 / 1);
+}
+
+.dark .focus\:ring-emerald-200:focus {
+  --tw-ring-color: rgb(6 78 59 / 0.2);
+}
+
+
+
+.dark .border-emerald-200 {
+  border-color: rgb(6 78 59 / 0.3);
+}
+
+.dark .shadow-emerald-600\/20 {
+  box-shadow: 0 10px 15px -3px rgb(5 150 105 / 0.2), 0 4px 6px -4px rgb(5 150 105 / 0.2);
+}
+
+.dark .shadow-emerald-600\/30 {
+  box-shadow: 0 10px 15px -3px rgb(5 150 105 / 0.3), 0 4px 6px -4px rgb(5 150 105 / 0.3);
+}
+
+/* Gradient overrides for dark mode */
+.dark .bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+.dark .from-emerald-50 {
+  --tw-gradient-from: rgb(16 185 129 / 0.2);
+  --tw-gradient-to: rgb(16 185 129 / 0.2 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.dark .to-emerald-100 {
+  --tw-gradient-to: rgb(5 150 105 / 0.3);
+}
+
+.dark .to-white {
+  --tw-gradient-to: rgb(30 41 59 / 1);
+}
+
+.dark .from-emerald-50\/50 {
+  --tw-gradient-from: rgb(6 78 59 / 0.05);
+  --tw-gradient-to: rgb(6 78 59 / 0.05 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.dark .to-emerald-100\/50 {
+  --tw-gradient-to: rgb(6 78 59 / 0.1);
+}
+
+/* Ensure smooth transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }

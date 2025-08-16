@@ -4,12 +4,53 @@ import { z } from "zod";
 import Reassure from "../Reassure";
 import Notify from "../Notify";
 
+// ----------------------------------- Password Strength Checker ------------------------------->
+
+interface PasswordRequirement {
+    label: string;
+    test: (password: string) => boolean;
+    met: boolean;
+}
+
+const createPasswordRequirements = (): PasswordRequirement[] => [
+    {
+        label: "At least 12 characters long",
+        test: (password: string) => password.length >= 12,
+        met: false
+    },
+    {
+        label: "Contains at least one uppercase letter",
+        test: (password: string) => /[A-Z]/.test(password),
+        met: false
+    },
+    {
+        label: "Contains at least one lowercase letter",
+        test: (password: string) => /[a-z]/.test(password),
+        met: false
+    },
+    {
+        label: "Contains at least one number",
+        test: (password: string) => /\d/.test(password),
+        met: false
+    },
+    {
+        label: "Contains at least one special character",
+        test: (password: string) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+        met: false
+    },
+];
+
 // ----------------------------------- Zod for validation ------------------------------->
 
 const passwordChangeSchema = z
     .object({
         currentPassword: z.string().min(1, { message: "Current password is required." }),
-        newPassword: z.string().min(6, { message: "Password must be at least 6 characters." }),
+        newPassword: z.string()
+            .min(12, { message: "Password must be at least 12 characters." })
+            .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter." })
+            .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter." })
+            .regex(/\d/, { message: "Password must contain at least one number." })
+            .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, { message: "Password must contain at least one special character." }),
         confirmPassword: z.string().min(1, { message: "Please confirm your password." }),
     })
     .refine((data) => data.newPassword === data.confirmPassword, {
@@ -41,6 +82,17 @@ const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave, error, loading 
         confirmPassword: ""
     });
     const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+    const [passwordRequirements, setPasswordRequirements] = useState(createPasswordRequirements());
+
+    // ------------------------------------ Password strength checker ------------------------------------>
+
+    useEffect(() => {
+        const updatedRequirements = passwordRequirements.map(req => ({
+            ...req,
+            met: req.test(formData.newPassword)
+        }));
+        setPasswordRequirements(updatedRequirements);
+    }, [formData.newPassword]);
 
     // ------------------------------------ Live validation ------------------------------------>
 
@@ -186,19 +238,17 @@ const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave, error, loading 
                                 New Password
                             </label>
                         </div>
-                        <div className="relative">
-                            <input 
-                                type={showPasswords.new ? "text" : "password"}
-                                value={formData.newPassword}
-                                onChange={(e) => setFormData({...formData, newPassword: e.target.value})}
-                                className={`w-full px-4 py-3 pr-12 rounded-lg border-2 font-montserrat transition-all duration-300 ${
-                                    fieldErrors.newPassword
-                                        ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200'
-                                        : 'border-emerald-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200'
-                                }`}
-                                placeholder="Enter your new password"
-                            />
-                        </div>
+                        <input 
+                            type={showPasswords.new ? "text" : "password"}
+                            value={formData.newPassword}
+                            onChange={(e) => setFormData({...formData, newPassword: e.target.value})}
+                            className={`w-full px-4 py-3 pr-12 rounded-lg border-2 font-montserrat transition-all duration-300 ${
+                                fieldErrors.newPassword
+                                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200'
+                                    : 'border-emerald-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200'
+                            }`}
+                            placeholder="Enter your new password"
+                        />
                         {fieldErrors.newPassword && (
                             <span className="text-red-600 text-sm mt-1">{fieldErrors.newPassword}</span>
                         )}
@@ -214,19 +264,17 @@ const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave, error, loading 
                                 Confirm New Password
                             </label>
                         </div>
-                        <div className="relative">
-                            <input 
-                                type={showPasswords.confirm ? "text" : "password"}
-                                value={formData.confirmPassword}
-                                onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                                className={`w-full px-4 py-3 pr-12 rounded-lg border-2 font-montserrat transition-all duration-300 ${
-                                    fieldErrors.confirmPassword
-                                        ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200'
-                                        : 'border-emerald-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200'
-                                }`}
-                                placeholder="Confirm your new password"
-                            />
-                        </div>
+                        <input 
+                            type={showPasswords.confirm ? "text" : "password"}
+                            value={formData.confirmPassword}
+                            onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                            className={`w-full px-4 py-3 pr-12 rounded-lg border-2 font-montserrat transition-all duration-300 ${
+                                fieldErrors.confirmPassword
+                                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200'
+                                    : 'border-emerald-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200'
+                            }`}
+                            placeholder="Confirm your new password"
+                        />
                         {fieldErrors.confirmPassword && (
                             <span className="text-red-600 text-sm mt-1">{fieldErrors.confirmPassword}</span>
                         )}
@@ -240,14 +288,12 @@ const PasswordEditor: React.FC<PasswordEditorProps> = ({ onSave, error, loading 
                         Password Requirements
                     </h5>
                     <ul className="space-y-2 text-sm text-emerald-700 font-montserrat">
-                        <li className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
-                            <span>At least 6 characters long</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
-                            <span>Passwords must match</span>
-                        </li>
+                        {passwordRequirements.map((req, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                                <span className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${req.met ? 'bg-emerald-600' : 'bg-red-600'}`}></span>
+                                <span>{req.label}</span>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>

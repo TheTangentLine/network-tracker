@@ -12,7 +12,7 @@ const Notify: React.FC<NotifyProps> = ({ isOpen, message, onClose, isSuccess, ti
     if (!isOpen) return null;
     
     return (
-        <div className="fixed inset-0 z-50 backdrop-blur-md flex justify-center items-center duration-300 font-montserrat">
+        <div className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-md flex justify-center items-center duration-300 font-montserrat">
             <div className="flex flex-col justify-between items-center bg-white text-gray-800 rounded-2xl shadow-2xl w-140 h-80 p-8 mx-4">
                 <div className="text-center">
                     {title && (

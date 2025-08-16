@@ -4,7 +4,7 @@ import { useSaveReport } from "../../hooks/reports/useSaveReport";
 import { useSpeed } from "../../hooks/network/useSpeed";
 import { useSpeedSimulation } from "../../hooks/network/useSpeedSimulation";
 import { useTestProgress } from "../../hooks/network/useTestProgress";
-import Notify from "../../components/Notify";
+import Notify from "../Notify";
 import SpeedGraph from "./SpeedGraph";
 import SpeedMetrics from "./SpeedMetrics";
 import ActionButtons from "./ActionButtons";
@@ -26,11 +26,6 @@ const NetworkTest: React.FC = () => {
     const handleTestClick = useCallback(async () => {
         startTest();
         resetHistory();
-        
-        // Disable real-time simulation - only run the actual test
-        // startSimulation();
-        
-        // Run actual test
         await runTest();
         completeTest();
     }, [startTest, resetHistory, runTest, completeTest]);
@@ -75,11 +70,11 @@ const NetworkTest: React.FC = () => {
     }, [speedLoading, result]);
 
     return (
-        <div className="min-h-screen flex flex-col font-montserrat bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
+        <>
             {/* Header */}
             <div className="bg-white border-b border-gray-200 px-6 py-6 w-full">
                 <div className="max-w-6xl mx-auto w-full">
-                    <h1 className="text-2xl font-bold text-emerald-700 mb-1">Network Speed Test</h1>
+                    <h1 className="text-2xl font-bold text-green-700 mb-1">Network Speed Test</h1>
                     <p className="text-gray-600">Test your internet connection performance</p>
                 </div>
             </div>
@@ -145,7 +140,7 @@ const NetworkTest: React.FC = () => {
                     isSuccess={isSuccess}
                 />
             )}
-        </div>
+        </>
     );
 };
 

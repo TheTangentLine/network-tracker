@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query
 from fastapi.responses import StreamingResponse
 import io
 
-from app.schemas.reports_schema import ReportCreate, ReportDelete, NetworkData
+from app.schemas.reports_schema import ReportCreate, ReportDelete, ReportRead
 
 from app.core.dependencies import get_report_service
 from app.services.reports_services import ReportService
@@ -62,7 +62,7 @@ async def delete_report(
 # --------------------------- Convert to PDF ------------------------>
 
 @router.post("/genpdf")
-async def convert_to_pdf(input: NetworkData):
+async def convert_to_pdf(input: ReportRead):
     pdf_bytes = convert_to_pdf_service(input)
     return StreamingResponse(
         io.BytesIO(pdf_bytes),

@@ -29,25 +29,23 @@ const DetailsEditor: React.FC = () => {
         }
     }, [user]);
 
-    const copyToClipboard = async (text: string, fieldName: string) => {
+    const copyToClipboard = async (text: string, stateKey: string) => {
         try {
             await navigator.clipboard.writeText(text);
             
             // Set the copied state for the specific field
             setCopiedStates(prev => ({
                 ...prev,
-                [fieldName.toLowerCase().replace(' ', '')]: true
+                [stateKey]: true
             }));
 
             // Reset the copied state after 2 seconds
             setTimeout(() => {
                 setCopiedStates(prev => ({
                     ...prev,
-                    [fieldName.toLowerCase().replace(' ', '')]: false
+                    [stateKey]: false
                 }));
             }, 2000);
-
-            console.log(`${fieldName} copied to clipboard`);
         } catch (err) {
             console.error('Failed to copy text: ', err);
         }
@@ -83,7 +81,7 @@ const DetailsEditor: React.FC = () => {
                             />
                             <button
                                 type="button"
-                                onClick={() => copyToClipboard(formData.username, 'Username')}
+                                onClick={() => copyToClipboard(formData.username, 'username')}
                                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-emerald-600 hover:text-emerald-700 cursor-pointer transition-all duration-200"
                                 title="Copy username to clipboard"
                             >
@@ -120,7 +118,7 @@ const DetailsEditor: React.FC = () => {
                             />
                             <button
                                 type="button"
-                                onClick={() => copyToClipboard(formData.phone, 'Phone number')}
+                                onClick={() => copyToClipboard(formData.phone, 'phone')}
                                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-emerald-600 hover:text-emerald-700 cursor-pointer transition-all duration-200"
                                 title="Copy phone number to clipboard"
                             >
@@ -157,7 +155,7 @@ const DetailsEditor: React.FC = () => {
                             />
                             <button
                                 type="button"
-                                onClick={() => copyToClipboard(formData.email, 'Email address')}
+                                onClick={() => copyToClipboard(formData.email, 'email')}
                                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-emerald-600 hover:text-emerald-700 cursor-pointer transition-all duration-200"
                                 title="Copy email address to clipboard"
                             >
