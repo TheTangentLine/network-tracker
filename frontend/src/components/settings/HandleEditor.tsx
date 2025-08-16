@@ -6,10 +6,11 @@ import { MdDarkMode, MdLightMode } from "react-icons/md";
 import useUpdatePassword from "../../hooks/auth/useUpdatePassword";
 import useFetch from "../../hooks/auth/useFetch";
 import type { UserUpdatePassword } from "../../entities/User";
+import useDarkMode from "../../hooks/useDarkMode";
 
 const HandleEditor: React.FC = () => {
     const [showDetails, setShowDetails] = useState(true);
-    const [light, setLight] = useState(false)
+    const { toggleDarkMode, isDarkMode } = useDarkMode();
     const { updatePassword, error, loading } = useUpdatePassword();
     const { user: currentUser } = useFetch();
 
@@ -43,10 +44,10 @@ const HandleEditor: React.FC = () => {
                         <p className="text-emerald-600 font-montserrat text-sm">Choose your preferred theme</p>
                     </div>
                     <button 
-                        onClick={() => setLight(prev => !prev)}
+                        onClick={toggleDarkMode}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-xl shadow-lg shadow-emerald-600/30 transition-all duration-300 cursor-pointer"
                     >
-                        {light ? <MdLightMode className="text-xl" /> : <MdDarkMode className="text-xl" />}
+                        {!isDarkMode ? <MdLightMode className="text-xl" /> : <MdDarkMode className="text-xl" />}
                     </button>
                 </div>
             </div>
