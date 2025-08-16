@@ -117,7 +117,7 @@ const History: React.FC = () => {
 
             <div className="border-b bg-white border-gray-200 px-6 py-6 w-full">
                 <div className="max-w-6xl mx-auto">
-                    <h1 className="text-2xl font-bold text-emerald-700 mb-1">Test History</h1>
+                    <h1 className="text-2xl font-bold text-green-700 mb-1">Test History</h1>
                     <p className="text-gray-600">View and manage your network speed test results</p>
                 </div>
             </div>
